@@ -1,7 +1,8 @@
 import { Container, Stack } from "@mui/material";
+import CssBaseline from '@mui/material/CssBaseline';
+import RepoItem from "./components/RepoItem";
 import data from "./assets/data/sample_stars_github.json";
 import "./App.css";
-import RepoItem from "./components/RepoItem";
 
 export interface StarredRepo {
     full_name: string;
@@ -33,8 +34,9 @@ function App() {
 
     return (
         <>
-            <Container maxWidth="md">
-                <h1>GIT STARRED REPOS</h1>
+            <CssBaseline />
+            <Container maxWidth="md" id="app">
+                <h1>STARRED REPOS</h1>
                 <Stack spacing={3}>{cards}</Stack>
             </Container>
         </>
