@@ -5,6 +5,7 @@ h1 {
 .repo-details {
     padding-left: 1em;
     padding-right: 1em;
+    flex-direction: row !important;
     gap: .5em;
 }
 
@@ -18,4 +19,10 @@ h1 {
 
 .repo-details svg {
     font-size: 1em;
+}
+
+.repo-topics {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: .25em;
 }
