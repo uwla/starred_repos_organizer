@@ -1,5 +1,34 @@
 [
     {
+        "full_name": "qutebrowser/qutebrowser",
+        "name": "qutebrowser",
+        "description": "A keyboard-driven, vim-like browser based on Python and Qt.",
+        "topics": [
+            "browser",
+            "pyqt5",
+            "python",
+            "qt",
+            "qtwebengine",
+            "qutebrowser",
+            "vim",
+            "web"
+        ],
+        "html_url": "https://github.com/qutebrowser/qutebrowser",
+        "homepage": "https://www.qutebrowser.org/",
+        "lang": "Python",
+        "created": "2014-06-26T14:59:34Z",
+        "last_push": "2023-10-03T20:03:17Z",
+        "last_update": "2023-10-03T12:11:30Z",
+        "forked": false,
+        "archived": false,
+        "template": false,
+        "owner": "qutebrowser",
+        "owner_url": "https://github.com/qutebrowser",
+        "owner_img": "https://avatars.githubusercontent.com/u/21955151?v=4",
+        "owner_type": "Organization",
+        "stars": 8978
+    },
+    {
         "full_name": "unixfox/pupflare",
         "name": "pupflare",
         "description": "A webpage proxy that request through Chromium (puppeteer) - can be used to bypass Cloudflare anti bot / anti ddos on any application (like curl)",
@@ -5261,35 +5290,7 @@
         "owner_type": "User",
         "stars": 32
     },
-    {
-        "full_name": "qutebrowser/qutebrowser",
-        "name": "qutebrowser",
-        "description": "A keyboard-driven, vim-like browser based on Python and Qt.",
-        "topics": [
-            "browser",
-            "pyqt5",
-            "python",
-            "qt",
-            "qtwebengine",
-            "qutebrowser",
-            "vim",
-            "web"
-        ],
-        "html_url": "https://github.com/qutebrowser/qutebrowser",
-        "homepage": "https://www.qutebrowser.org/",
-        "lang": "Python",
-        "created": "2014-06-26T14:59:34Z",
-        "last_push": "2023-10-03T20:03:17Z",
-        "last_update": "2023-10-03T12:11:30Z",
-        "forked": false,
-        "archived": false,
-        "template": false,
-        "owner": "qutebrowser",
-        "owner_url": "https://github.com/qutebrowser",
-        "owner_img": "https://avatars.githubusercontent.com/u/21955151?v=4",
-        "owner_type": "Organization",
-        "stars": 8978
-    },
+
     {
         "full_name": "pinnaculum/galacteek",
         "name": "galacteek",
