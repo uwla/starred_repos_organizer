@@ -1,4 +1,4 @@
-import {  Container, Stack } from "@mui/material";
+import { Container, Stack } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import RepoItem from "./components/RepoItem";
 import SearchFilter from "./components/SearchFilter";
@@ -27,6 +27,33 @@ export interface StarredRepo {
     stars: number;
 }
 
+function filterRepo(repo: StarredRepo, normalizedQuery: string) {
+    const searchableKeys = [
+        "full_name",
+        "description",
+        "topics",
+        "lang",
+    ] as string[];
+
+    for (let key of searchableKeys) {
+        const field = (repo as any)[key];
+        let hasMatch = false;
+
+        // Search string field by checking if the value includes the query.
+        if (typeof field === "string") {
+            hasMatch = field.toLowerCase().includes(normalizedQuery);
+        }
+
+        // Search array field by checking if any value includes the query.
+        if (Array.isArray(field)) {
+            hasMatch = field.some((val: string) => val.toLowerCase().includes(normalizedQuery));
+        }
+
+        if (hasMatch) return true;
+    }
+    return false;
+}
+
 function App() {
     const repos = data as StarredRepo[];
 
@@ -34,35 +61,7 @@ function App() {
 
     let filteredRepos = repos;
     if (searchQuery != "") {
-        let normalizedQuery = searchQuery.toLowerCase();
-        filteredRepos = repos.filter((repo: any) => {
-            let searchableKeys = [
-                "full_name",
-                "description",
-                "topics",
-                "lang",
-            ] as string[];
-
-            for (let key of searchableKeys) {
-                let hasMatch = false;
-                let val = repo[key];
-
-                // Search string field by checking if the value includes the query.
-                if (typeof val === "string") {
-                    hasMatch = val.toLowerCase().includes(normalizedQuery);
-                }
-
-                // Search array field by checking if any value includes the query.
-                if (Array.isArray(repo[key])) {
-                    hasMatch = val.some((val: string) =>
-                        val.toLowerCase().includes(normalizedQuery)
-                    );
-                }
-
-                if (hasMatch) return true;
-            }
-            return false;
-        });
+        filteredRepos = repos.filter((repo: any) => filterRepo(repo, searchQuery.toLowerCase()));
     }
 
     const cards = filteredRepos.map((repo: StarredRepo) => {
