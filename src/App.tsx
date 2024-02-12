@@ -1,12 +1,14 @@
+/* eslint-disable prefer-const */
+import { useState } from "react";
 import { Container, Stack } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import RepoItem from "./components/RepoItem";
 import SearchFilter from "./components/SearchFilter";
+import Pagination from "./components/Pagination";
 import data from "./assets/data/sample_stars_github.json";
 import "./App.css";
-import { useState } from "react";
 
-export interface StarredRepo {
+export interface Repo {
     full_name: string;
     name: string;
     description: string;
@@ -27,7 +29,7 @@ export interface StarredRepo {
     stars: number;
 }
 
-function filterRepo(repo: StarredRepo, normalizedQuery: string) {
+function filterRepo(repo: Repo, normalizedQuery: string) {
     const searchableKeys = [
         "full_name",
         "description",
@@ -35,7 +37,7 @@ function filterRepo(repo: StarredRepo, normalizedQuery: string) {
         "lang",
     ] as string[];
 
-    for (let key of searchableKeys) {
+    for (const key of searchableKeys) {
         const field = (repo as any)[key];
         let hasMatch = false;
 
@@ -46,7 +48,9 @@ function filterRepo(repo: StarredRepo, normalizedQuery: string) {
 
         // Search array field by checking if any value includes the query.
         if (Array.isArray(field)) {
-            hasMatch = field.some((val: string) => val.toLowerCase().includes(normalizedQuery));
+            hasMatch = field.some((val: string) =>
+                val.toLowerCase().includes(normalizedQuery)
+            );
         }
 
         if (hasMatch) return true;
@@ -54,27 +58,78 @@ function filterRepo(repo: StarredRepo, normalizedQuery: string) {
     return false;
 }
 
+function filterRepos(repos: Repo[], search: string) {
+    if (search == "") return repos;
+    const normalizedQuery = search.toLowerCase();
+    return repos.filter((repo: Repo) => filterRepo(repo, normalizedQuery));
+}
+
 function App() {
-    const repos = data as StarredRepo[];
+    const repos = data as Repo[];
 
     let [searchQuery, setSearchQuery] = useState("");
+    let [filteredRepos, setFilteredRepos] = useState(
+        filterRepos(repos, searchQuery)
+    );
 
-    let filteredRepos = repos;
-    if (searchQuery != "") {
-        filteredRepos = repos.filter((repo: any) => filterRepo(repo, searchQuery.toLowerCase()));
+    let [reposPerPage, setReposPerPage] = useState(10);
+    let [page, setPage] = useState(0);
+    let visibleRepos = filteredRepos.slice(page, 10);
+    let initialCards = visibleRepos.map((r: Repo) => (
+        <RepoItem key={r.full_name} {...r} />
+    ));
+    let [cards, setCards] = useState(initialCards);
+
+    function handlePageChange(page: number) {
+        setPage(page);
+        const start = page * reposPerPage;
+        const end = start + reposPerPage;
+        visibleRepos = filteredRepos.slice(start, end);
+        setCards(
+            visibleRepos.map((r: Repo) => <RepoItem key={r.full_name} {...r} />)
+        );
     }
 
-    const cards = filteredRepos.map((repo: StarredRepo) => {
-        return <RepoItem {...repo} />;
-    });
+    function handlePerPageChange(perPage: number) {
+        let page = 0;
+        setPage(page);
+        setReposPerPage(perPage);
+        const start = page * reposPerPage;
+        const end = start + reposPerPage;
+        visibleRepos = filteredRepos.slice(start, end);
+        setCards(
+            visibleRepos.map((r: Repo) => <RepoItem key={r.full_name} {...r} />)
+        );
+    }
+
+    function handleSearch(text: string) {
+        setSearchQuery(text);
+        filteredRepos = filterRepos(repos, text);
+        setFilteredRepos(filteredRepos);
+        page = 0;
+        setPage(0);
+        const start = page * reposPerPage;
+        const end = start + reposPerPage;
+        visibleRepos = filteredRepos.slice(start, end);
+        cards = visibleRepos.map((r: Repo) => (
+            <RepoItem key={r.full_name} {...r} />
+        ));
+        setCards(cards);
+    }
 
     return (
         <>
             <CssBaseline />
             <Container maxWidth="md" id="app">
                 <h1>STARRED REPOS</h1>
-                <SearchFilter onSubmit={setSearchQuery} />
+                <SearchFilter onSubmit={handleSearch} />
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}
+                <Pagination
+                    page={page}
+                    count={filteredRepos.length}
+                    onPageChange={handlePageChange}
+                    onPerPageChange={handlePerPageChange}
+                />
                 <br />
                 <Stack spacing={3}>{cards}</Stack>
             </Container>

@@ -14,9 +14,9 @@ import {
 } from "@mui/icons-material";
 import { orange } from "@mui/material/colors";
 
-import { StarredRepo } from "../App";
+import { Repo } from "../App";
 
-function RepoItem(props: StarredRepo) {
+function RepoItem(props: Repo) {
     const repo = props;
     const topics = [...repo.topics].sort();
 
