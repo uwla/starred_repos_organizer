@@ -16,8 +16,13 @@ import { orange } from "@mui/material/colors";
 
 import { Repo } from "../App";
 
-function RepoItem(props: Repo) {
-    const repo = props;
+interface Props {
+    repo: Repo;
+    onTopicClick: (topic: string) => void;
+}
+
+function RepoItem(props: Props) {
+    const { repo, onTopicClick: onTopicClicked } = props;
     const topics = [...repo.topics].sort();
 
     // Tactic to avoid nested JSX.
@@ -29,7 +34,8 @@ function RepoItem(props: Repo) {
                 size="small"
                 color="primary"
                 variant="outlined"
-                sx={{ borderRadius: ".25em"}}
+                sx={{ borderRadius: ".25em" }}
+                onClick={ () => onTopicClicked(topic) }
             />
         );
     });
@@ -37,21 +43,21 @@ function RepoItem(props: Repo) {
     // Tactic to avoid nested JSX.
     const repoLinks = [];
     repoLinks.push(
-        <Link href={repo.html_url} underline="hover">
+        <Link key="1" href={repo.html_url} underline="hover">
             <IconGitHub fontSize="small" />
             <span>GitHub</span>
         </Link>
     );
     if (repo.homepage) {
         repoLinks.push(
-            <Link href={repo.homepage} underline="hover">
+            <Link key="2" href={repo.homepage} underline="hover">
                 <IconHome fontSize="small" />
                 <span>Website</span>
             </Link>
         );
     }
     repoLinks.push(
-        <div>
+        <div key="3">
             <IconStar sx={{ color: orange[500] }} fontSize="small" />
             <span>{repo.stars}</span>
         </div>
@@ -60,12 +66,8 @@ function RepoItem(props: Repo) {
     return (
         <Card variant="outlined">
             <CardHeader title={repo.name} subheader={repo.full_name} />
-            <Stack className="repo-details">
-                {repoLinks}
-            </Stack>
-            <CardContent>
-                {repo.description}
-            </CardContent>
+            <Stack className="repo-details">{repoLinks}</Stack>
+            <CardContent>{repo.description}</CardContent>
             <CardActions>
                 <Stack className="repo-topics" useFlexGap>
                     {repoTopics}

@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Container, Stack } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import RepoItem from "./components/RepoItem";
@@ -92,7 +92,22 @@ function getTopics() {
 function App() {
     const repos = data as Repo[];
     const topics = getTopics();
-    const [selectedTopics, setSelectedTopics] = useState([] as string[]);
+    const [selectedTopics, setSelectedTopics] = useState([] as any);
+    const selectedRef = useRef();
+    selectedRef.current = selectedTopics as any;
+
+    function handleTopicClicked(topic: string) {
+        let plainTopics = selectedRef.current.map((item: any) => item.value);
+        if (!plainTopics.includes(topic)) {
+            setSelectedTopics([
+                ...selectedRef.current,
+                {
+                    label: topic,
+                    value: topic,
+                },
+            ]);
+        }
+    }
 
     let [searchQuery, setSearchQuery] = useState("");
     let [filteredRepos, setFilteredRepos] = useState(
@@ -103,7 +118,11 @@ function App() {
     let [page, setPage] = useState(0);
     let visibleRepos = filteredRepos.slice(page, 10);
     let initialCards = visibleRepos.map((r: Repo) => (
-        <RepoItem key={r.full_name} {...r} />
+        <RepoItem
+            key={r.full_name}
+            repo={r}
+            onTopicClick={handleTopicClicked}
+        />
     ));
     let [cards, setCards] = useState(initialCards);
 
@@ -113,7 +132,13 @@ function App() {
         const end = start + reposPerPage;
         visibleRepos = filteredRepos.slice(start, end);
         setCards(
-            visibleRepos.map((r: Repo) => <RepoItem key={r.full_name} {...r} />)
+            visibleRepos.map((r: Repo) => (
+                <RepoItem
+                    key={r.full_name}
+                    repo={r}
+                    onTopicClick={handleTopicClicked}
+                />
+            ))
         );
     }
 
@@ -125,7 +150,13 @@ function App() {
         const end = start + reposPerPage;
         visibleRepos = filteredRepos.slice(start, end);
         setCards(
-            visibleRepos.map((r: Repo) => <RepoItem key={r.full_name} {...r} />)
+            visibleRepos.map((r: Repo) => (
+                <RepoItem
+                    key={r.full_name}
+                    repo={r}
+                    onTopicClick={handleTopicClicked}
+                />
+            ))
         );
     }
 
@@ -139,13 +170,16 @@ function App() {
         const end = start + reposPerPage;
         visibleRepos = filteredRepos.slice(start, end);
         cards = visibleRepos.map((r: Repo) => (
-            <RepoItem key={r.full_name} {...r} />
+            <RepoItem
+                key={r.full_name}
+                repo={r}
+                onTopicClick={handleTopicClicked}
+            />
         ));
         setCards(cards);
     }
 
     function handleSelect(topics: string[]) {
-        setSelectedTopics(topics);
         filteredRepos = applyFilters(repos, searchQuery, topics);
         page = 0;
         setFilteredRepos(filteredRepos);
@@ -154,7 +188,11 @@ function App() {
         const end = start + reposPerPage;
         visibleRepos = filteredRepos.slice(start, end);
         cards = visibleRepos.map((r: Repo) => (
-            <RepoItem key={r.full_name} {...r} />
+            <RepoItem
+                key={r.full_name}
+                repo={r}
+                onTopicClick={handleTopicClicked}
+            />
         ));
         setCards(cards);
     }
@@ -169,7 +207,8 @@ function App() {
                 <TopicsFilter
                     topics={topics}
                     selected={selectedTopics}
-                    onSelect={handleSelect}
+                    onSelect={setSelectedTopics}
+                    onSubmit={handleSelect}
                 />
                 <br />
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}

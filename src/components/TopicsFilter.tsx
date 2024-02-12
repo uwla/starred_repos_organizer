@@ -8,25 +8,16 @@ const animatedComponents = makeAnimated();
 interface Props {
     topics: string[];
     selected: string[];
-    onSelect: (topics: string[]) => void;
+    onSubmit: (topics: string[]) => void;
+    onSelect: (val: any) => void;
 }
 
 function TopicsFilter(props: Props) {
-    const { topics, selected, onSelect } = props;
+    const { topics, selected, onSelect, onSubmit } = props;
     const options = topics.map((t: string) => ({ value: t, label: t }));
-    const [value, setVal] = useState(
-        selected.map((t: any) => ({
-            value: t,
-            label: t,
-        }))
-    );
-
-    function handleChange(newValue: any) {
-        setVal(newValue);
-    }
 
     function handleClick() {
-        onSelect(value.map((options: any) => options.value));
+        onSubmit(selected.map((options: any) => options.value));
     }
 
     return (
@@ -34,8 +25,8 @@ function TopicsFilter(props: Props) {
             <div style={{ flexGrow: "1" }}>
                 <Select
                     options={options}
-                    value={value}
-                    onChange={handleChange}
+                    value={selected}
+                    onChange={onSelect}
                     isMulti
                     isSearchable
                     placeholder="search by topic..."
