@@ -1,3 +1,5 @@
+requests.http
+
 # Logs
 logs
 *.log

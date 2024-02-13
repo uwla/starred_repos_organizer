@@ -1,19 +1,20 @@
 /* eslint-disable prefer-const */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Stack } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import RepoItem from "./components/RepoItem";
 import SearchFilter from "./components/SearchFilter";
 import TopicsFilter from "./components/TopicsFilter";
 import Pagination from "./components/Pagination";
-import data from "./assets/data/sample_stars_github.json";
 import "./App.css";
 import { MultiValue } from "react-select";
+import axios, { AxiosResponse } from "axios";
 
 /* -------------------------------------------------------------------------- */
 // types
 
 type Repo = {
+    id?: string;
     full_name: string;
     name: string;
     description: string;
@@ -90,33 +91,41 @@ function applyFilters(repos: Repo[], search: string, topics: string[]) {
     return filterByTopics(filterBySearch(repos, search), topics);
 }
 
-function getTopics() {
-    // get the topics
-    let topics = (data as Repo[]).map((item: Repo) => item.topics).flat();
-
-    // sort
-    topics.sort();
-
-    // remove duplicates
-    topics = [...new Set(topics)];
-
-    return topics;
-}
-
 /* -------------------------------------------------------------------------- */
 // Main
 
-// data constants
-const repos = data as Repo[];
-const topics = getTopics();
-
 function App() {
     // state
+    const [repos, setRepos] = useState([] as Repo[]);
+    const [topics, setTopics] = useState([] as string[]);
     const [selectedTopics, setSelectedTopics] = useState([] as SelectOption[]);
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredRepos, setFilteredRepos] = useState(repos);
     const [perPage, setPerPage] = useState(10);
     const [page, setPage] = useState(0);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    async function fetchData() {
+        await axios
+            .get("http://localhost:3000/repos")
+            .then((response: AxiosResponse) => {
+                const repos = response.data as Repo[];
+                setRepos(repos);
+                setFilteredRepos(repos);
+
+                // for the topics, extra logic is necessary
+                // 1. extract topics from repositories
+                // 2. remove duplicates
+                // 3. sort
+                let topics = repos.map((item: Repo) => item.topics).flat();
+                topics = [...new Set(topics)];
+                topics.sort();
+                setTopics(topics);
+            });
+    }
 
     /* ---------------------------------------------------------------------- */
     // internal handlers

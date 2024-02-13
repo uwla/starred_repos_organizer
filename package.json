@@ -4,8 +4,10 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "dev": "vite",
+        "dev": "concurrently --kill-others \"npm run serve-app\" \"npm run serve-api\"",
         "build": "tsc && vite build",
+        "serve-app": "vite",
+        "serve-api": "json-server user-data.json",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview"
     },
@@ -15,16 +17,20 @@
         "@fontsource/roboto": "^5.0.8",
         "@mui/icons-material": "^5.15.9",
         "@mui/material": "^5.15.9",
+        "axios": "^1.6.7",
+        "json-server": "^1.0.0-alpha.23",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-select": "^5.7.7"
     },
     "devDependencies": {
+        "@types/json-server": "^0.14.7",
         "@types/react": "^18.2.55",
         "@types/react-dom": "^18.2.19",
         "@typescript-eslint/eslint-plugin": "^6.21.0",
         "@typescript-eslint/parser": "^6.21.0",
         "@vitejs/plugin-react-swc": "^3.5.0",
+        "concurrently": "^8.2.2",
         "eslint": "^8.56.0",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-react-refresh": "^0.4.5",
