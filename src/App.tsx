@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Container, Stack } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import RepoItem from "./components/RepoItem";
@@ -8,8 +8,12 @@ import TopicsFilter from "./components/TopicsFilter";
 import Pagination from "./components/Pagination";
 import data from "./assets/data/sample_stars_github.json";
 import "./App.css";
+import { MultiValue } from "react-select";
 
-export interface Repo {
+/* -------------------------------------------------------------------------- */
+// types
+
+type Repo = {
     full_name: string;
     name: string;
     description: string;
@@ -28,7 +32,17 @@ export interface Repo {
     owner_img: string;
     owner_type: string;
     stars: number;
-}
+};
+
+type RepoKey = keyof Repo;
+
+type SelectOption = {
+    label: string;
+    value: string;
+};
+
+/* -------------------------------------------------------------------------- */
+// Utilities
 
 function filterRepo(repo: Repo, normalizedQuery: string) {
     const searchableKeys = [
@@ -36,10 +50,10 @@ function filterRepo(repo: Repo, normalizedQuery: string) {
         "description",
         "topics",
         "lang",
-    ] as string[];
+    ] as RepoKey[];
 
     for (const key of searchableKeys) {
-        const field = (repo as any)[key];
+        const field = repo[key];
         let hasMatch = false;
 
         // Search string field by checking if the value includes the query.
@@ -89,114 +103,56 @@ function getTopics() {
     return topics;
 }
 
+/* -------------------------------------------------------------------------- */
+// Main
+
+// data constants
+const repos = data as Repo[];
+const topics = getTopics();
+
 function App() {
-    const repos = data as Repo[];
-    const topics = getTopics();
-    const [selectedTopics, setSelectedTopics] = useState([] as any);
-    const selectedRef = useRef();
-    selectedRef.current = selectedTopics as any;
+    // state
+    const [selectedTopics, setSelectedTopics] = useState([] as SelectOption[]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filteredRepos, setFilteredRepos] = useState(repos);
+    const [perPage, setPerPage] = useState(10);
+    const [page, setPage] = useState(0);
+
+    /* ---------------------------------------------------------------------- */
+    // internal handlers
+
+    const getPlainTopics = (topics: SelectOption[]): string[] =>
+        topics.map((topic: SelectOption) => topic.value);
 
     function handleTopicClicked(topic: string) {
-        let plainTopics = selectedRef.current.map((item: any) => item.value);
-        if (!plainTopics.includes(topic)) {
-            setSelectedTopics([
-                ...selectedRef.current,
-                {
-                    label: topic,
-                    value: topic,
-                },
-            ]);
-        }
+        const plainTopics = getPlainTopics(selectedTopics);
+        if (plainTopics.includes(topic)) return;
+        setSelectedTopics([...selectedTopics, { label: topic, value: topic }]);
     }
-
-    let [searchQuery, setSearchQuery] = useState("");
-    let [filteredRepos, setFilteredRepos] = useState(
-        applyFilters(repos, searchQuery, selectedTopics)
-    );
-
-    let [reposPerPage, setReposPerPage] = useState(10);
-    let [page, setPage] = useState(0);
-    let visibleRepos = filteredRepos.slice(page, 10);
-    let initialCards = visibleRepos.map((r: Repo) => (
-        <RepoItem
-            key={r.full_name}
-            repo={r}
-            onTopicClick={handleTopicClicked}
-        />
-    ));
-    let [cards, setCards] = useState(initialCards);
 
     function handlePageChange(page: number) {
         setPage(page);
-        const start = page * reposPerPage;
-        const end = start + reposPerPage;
-        visibleRepos = filteredRepos.slice(start, end);
-        setCards(
-            visibleRepos.map((r: Repo) => (
-                <RepoItem
-                    key={r.full_name}
-                    repo={r}
-                    onTopicClick={handleTopicClicked}
-                />
-            ))
-        );
     }
 
     function handlePerPageChange(perPage: number) {
-        let page = 0;
-        setPage(page);
-        setReposPerPage(perPage);
-        const start = page * reposPerPage;
-        const end = start + reposPerPage;
-        visibleRepos = filteredRepos.slice(start, end);
-        setCards(
-            visibleRepos.map((r: Repo) => (
-                <RepoItem
-                    key={r.full_name}
-                    repo={r}
-                    onTopicClick={handleTopicClicked}
-                />
-            ))
-        );
+        setPage(0);
+        setPerPage(perPage);
     }
 
     function handleSearch(text: string) {
         setSearchQuery(text);
-        filteredRepos = applyFilters(repos, searchQuery, selectedTopics);
-        setFilteredRepos(filteredRepos);
-        page = 0;
-        setPage(0);
-        const start = page * reposPerPage;
-        const end = start + reposPerPage;
-        visibleRepos = filteredRepos.slice(start, end);
-        cards = visibleRepos.map((r: Repo) => (
-            <RepoItem
-                key={r.full_name}
-                repo={r}
-                onTopicClick={handleTopicClicked}
-            />
-        ));
-        setCards(cards);
+        setFilteredRepos(
+            applyFilters(repos, text, getPlainTopics(selectedTopics))
+        );
     }
 
     function handleSelect(topics: string[]) {
-        filteredRepos = applyFilters(repos, searchQuery, topics);
-        page = 0;
-        setFilteredRepos(filteredRepos);
         setPage(0);
-        const start = page * reposPerPage;
-        const end = start + reposPerPage;
-        visibleRepos = filteredRepos.slice(start, end);
-        cards = visibleRepos.map((r: Repo) => (
-            <RepoItem
-                key={r.full_name}
-                repo={r}
-                onTopicClick={handleTopicClicked}
-            />
-        ));
-        setCards(cards);
+        setFilteredRepos(applyFilters(repos, searchQuery, topics));
     }
 
+    /* ---------------------------------------------------------------------- */
+    // render logic
     return (
         <>
             <CssBaseline />
@@ -207,8 +163,10 @@ function App() {
                 <TopicsFilter
                     topics={topics}
                     selected={selectedTopics}
-                    onSelect={setSelectedTopics}
                     onSubmit={handleSelect}
+                    onSelect={(value: MultiValue<SelectOption>) =>
+                        setSelectedTopics(value as SelectOption[])
+                    }
                 />
                 <br />
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}
@@ -219,10 +177,23 @@ function App() {
                     onPerPageChange={handlePerPageChange}
                 />
                 <br />
-                <Stack spacing={3}>{cards}</Stack>
+                <Stack spacing={3}>
+                    {filteredRepos
+                        .slice(page * perPage, (page + 1) * perPage)
+                        .map((repo: Repo) => {
+                            return (
+                                <RepoItem
+                                    repo={repo}
+                                    onTopicClick={handleTopicClicked}
+                                    key={repo.full_name}
+                                />
+                            );
+                        })}
+                </Stack>
             </Container>
         </>
     );
 }
 
 export default App;
+export type { Repo, SelectOption };

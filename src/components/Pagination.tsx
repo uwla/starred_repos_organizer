@@ -3,7 +3,7 @@ import TablePagination from "@mui/material/TablePagination";
 
 interface Props {
     count: number;
-    page: number,
+    page: number;
     onPageChange: (page: number) => void;
     onPerPageChange: (perPage: number) => void;
 }

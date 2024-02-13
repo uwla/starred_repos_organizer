@@ -1,15 +1,15 @@
-import { useState } from "react";
 import { Button, Stack } from "@mui/material";
-import Select from "react-select";
 import makeAnimated from "react-select/animated";
+import Select, { MultiValue } from "react-select";
+import { SelectOption } from "../App";
 
 const animatedComponents = makeAnimated();
 
 interface Props {
     topics: string[];
-    selected: string[];
+    selected: SelectOption[];
     onSubmit: (topics: string[]) => void;
-    onSelect: (val: any) => void;
+    onSelect: (val: MultiValue<SelectOption>) => void;
 }
 
 function TopicsFilter(props: Props) {
@@ -17,7 +17,7 @@ function TopicsFilter(props: Props) {
     const options = topics.map((t: string) => ({ value: t, label: t }));
 
     function handleClick() {
-        onSubmit(selected.map((options: any) => options.value));
+        onSubmit(selected.map((options: SelectOption) => options.value));
     }
 
     return (
@@ -35,7 +35,7 @@ function TopicsFilter(props: Props) {
                 />
             </div>
             <Button color="primary" variant="contained" onClick={handleClick}>
-                OK
+            FILTER
             </Button>
         </Stack>
     );

@@ -8,7 +8,7 @@ interface Props {
 
 function SearchFilter(props: Props) {
     const { onSubmit } = props;
-    let [searchInput, setSearchInput] = useState("");
+    const [searchInput, setSearchInput] = useState("");
 
     function handleInput(event: React.ChangeEvent<HTMLInputElement>) {
         setSearchInput(event.target.value);

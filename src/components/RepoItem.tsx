@@ -48,7 +48,7 @@ function RepoItem(props: Props) {
             <span>GitHub</span>
         </Link>
     );
-    if (repo.homepage) {
+    if (repo.homepage != "") {
         repoLinks.push(
             <Link key="2" href={repo.homepage} underline="hover">
                 <IconHome fontSize="small" />
