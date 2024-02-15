@@ -7,7 +7,7 @@ const apiClient = axios.create({
 
 const GitHubRepo: RepoProvider = {
     async getRepo(url: string): Promise<Repo> {
-        const match = url.match(/github.com\/([^/]+)\/([^/]+)/);
+        const match = url.match(/github.com\/([^/]+)\/([^/?#]+)/);
         if (match == null) {
             throw new Error("GitHub repository URL is ill-formed.");
         }
@@ -41,7 +41,7 @@ const GitHubRepo: RepoProvider = {
         await apiClient
             .get(`/repos/${userName}/${repoName}`)
             .then((response: AxiosResponse) => {
-                const data = response.data as { [key: string]: never; };
+                const data = response.data as { [key: string]: never };
                 for (const key in mapKeys) {
                     repo[mapKeys[key]] = data[key];
                 }
@@ -54,17 +54,17 @@ const GitHubRepo: RepoProvider = {
         let data = [] as Repo[];
         let page = 1;
         const perPage = 100;
-        const baseEndpoint = `/users/${userName}/starred?perPage=${perPage}`;
+        const baseEndpoint = `/users/${userName}/starred?per_page=${perPage}`;
+        let endpoint = "";
 
         // Due to GitHub API's limit of 100 items per page, we need to fetch
         // data per page until there are no more pages.
         do {
-            await apiClient
-                .get(`${baseEndpoint}&page=${page}`)
-                .then((response: AxiosResponse) => {
-                    data = response.data as Repo[];
-                    repos.push(...data);
-                });
+            endpoint = `${baseEndpoint}&page=${page}`;
+            await apiClient.get(endpoint).then((response: AxiosResponse) => {
+                data = response.data as Repo[];
+                repos.push(...data);
+            });
             page += 1;
         } while (data.length == perPage);
 

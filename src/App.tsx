@@ -151,6 +151,23 @@ function App() {
             });
     }
 
+    async function handleAddMany(manyRepos: Repo[]) {
+        return await apiClient
+            .createMany(manyRepos)
+            .then((created) => {
+                const newRepos = [...created, ...repos];
+                setRepos(newRepos);
+                setFilteredRepos(newRepos);
+                setPage(0);
+                setSearchQuery("");
+                return true;
+            })
+            .catch(() => {
+                // TODO: handle error properly
+                return false;
+            });
+    }
+
     /* ---------------------------------------------------------------------- */
     // render logic
     return (
@@ -176,7 +193,7 @@ function App() {
                     onPageChange={handlePageChange}
                     onPerPageChange={handlePerPageChange}
                 />
-                <AddItem onAdd={handleAddItem} />
+                <AddItem onAdd={handleAddItem} onAddMany={handleAddMany} />
                 <br />
                 <br />
                 <Stack spacing={3}>
@@ -187,7 +204,7 @@ function App() {
                                 <RepoItem
                                     repo={repo}
                                     onTopicClick={handleTopicClicked}
-                                    key={repo.full_name}
+                                    key={repo.id}
                                 />
                             );
                         })}

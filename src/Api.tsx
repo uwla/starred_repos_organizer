@@ -4,6 +4,7 @@ import { Repo } from "./repo/Repo";
 interface ApiClient {
     fetchRepos: () => Promise<Repo[]>;
     createRepo: (repo: Repo) => Promise<Repo>;
+    createMany: (repos: Repo[]) => Promise<Repo[]>;
     updateRepo: (repo: Repo) => Promise<Repo>;
     deleteRepo: (repo: Repo) => Promise<boolean>;
 }
@@ -25,6 +26,11 @@ const jsonServerClient: ApiClient = {
             created = response.data as Repo;
         });
         return created;
+    },
+    // TODO: implement this function instead of mocking it
+    async createMany(repos: Repo[]) {
+        // For now, this mocks the creation of several repos in the database.
+        return repos;
     },
     async updateRepo(repo: Repo) {
         let updated = {} as Repo;

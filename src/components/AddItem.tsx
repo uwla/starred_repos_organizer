@@ -15,14 +15,22 @@ import GitHubRepo from "../repo/GitHubRepo";
 
 interface Props {
     onAdd: (repo: Repo) => Promise<boolean>;
+    onAddMany: (repos: Repo[]) => Promise<boolean>;
 }
 
+// TODO: add support for other sources: GitLab, Gitea, SourceHut, ...
 const getRepo = async (url: string) => {
     return GitHubRepo.getRepo(url);
 };
 
+// TODO: add support for other sources: GitLab, Gitea, SourceHut, ...
+const getUserStarredRepos = async (url: string) => {
+    const userName = url.replace(/.*\//, "");
+    return GitHubRepo.getReposFromUser(userName);
+};
+
 function AddItem(props: Props) {
-    const { onAdd } = props;
+    const { onAdd, onAddMany } = props;
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState(false);
     const [showStatus, setShowStatus] = useState(false);
@@ -38,8 +46,26 @@ function AddItem(props: Props) {
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        getRepo(url)
-            .then((repo: Repo) => onAdd(repo))
+
+        // We need to determine if the URL is a repository URL, or if it is a
+        // user profile URL. In the later case, we will fetch all of the user's
+        // starred repositories.
+        const urlPath = url.replace(/(https?:\/\/)?[^/]+/, "");
+        const pathArray = urlPath.split("/").filter((str: string) => str != "");
+
+        // callback to add single repository
+        const callbackSingle = () =>
+            getRepo(url).then((repo: Repo) => onAdd(repo));
+
+        // callback to add many repositories at once
+        const callbackMany = () =>
+            getUserStarredRepos(url).then((repos: Repo[]) => onAddMany(repos));
+
+        // actual callback.
+        const callback = pathArray.length == 1 ? callbackMany : callbackSingle;
+
+        // perform the callback and show a status popup message.
+        callback()
             .then((status: boolean) => {
                 setStatus(status);
                 if (status) setUrl("");
@@ -64,9 +90,10 @@ function AddItem(props: Props) {
                 <DialogTitle>ADD REPOSITORY</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Enter the URL for the repository.<br></br>
-                        Supported sources: GitHub, GitLab, Gitea, SourceHut,
-                        CodeBerg.
+                        Enter the URL for the repository.
+                        <br />
+                        If the URL is a user profile, it will add all starred
+                        repositories from that user.
                     </DialogContentText>
                     <TextField
                         autoFocus
