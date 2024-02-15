@@ -14,7 +14,7 @@ import {
 } from "@mui/icons-material";
 import { orange } from "@mui/material/colors";
 
-import { Repo } from "../App";
+import { Repo } from "../repo/Repo";
 
 interface Props {
     repo: Repo;

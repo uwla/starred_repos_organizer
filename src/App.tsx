@@ -1,41 +1,18 @@
 /* eslint-disable prefer-const */
 import { useEffect, useState } from "react";
-import { Container, Stack } from "@mui/material";
-import CssBaseline from "@mui/material/CssBaseline";
+import { Container, CssBaseline, Stack } from "@mui/material";
+import { MultiValue } from "react-select";
+import axios, { AxiosResponse } from "axios";
 import RepoItem from "./components/RepoItem";
+import AddItem from "./components/AddItem";
 import SearchFilter from "./components/SearchFilter";
 import TopicsFilter from "./components/TopicsFilter";
 import Pagination from "./components/Pagination";
+import { Repo, RepoKey } from "./repo/Repo";
 import "./App.css";
-import { MultiValue } from "react-select";
-import axios, { AxiosResponse } from "axios";
 
 /* -------------------------------------------------------------------------- */
 // types
-
-type Repo = {
-    id?: string;
-    full_name: string;
-    name: string;
-    description: string;
-    topics: Array<string>;
-    html_url: string;
-    homepage: string;
-    lang: string;
-    created: string;
-    last_push: string;
-    last_update: string;
-    forked: boolean;
-    archived: boolean;
-    template: boolean;
-    owner: string;
-    owner_url: string;
-    owner_img: string;
-    owner_type: string;
-    stars: number;
-};
-
-type RepoKey = keyof Repo;
 
 type SelectOption = {
     label: string;
@@ -160,6 +137,15 @@ function App() {
         setFilteredRepos(applyFilters(repos, searchQuery, topics));
     }
 
+    async function handleAddItem(repo: Repo) {
+        const newRepos =[repo, ...repos];
+        setRepos(newRepos);
+        setFilteredRepos(newRepos);
+        setPage(0);
+        setSearchQuery("");
+        return true;
+    }
+
     /* ---------------------------------------------------------------------- */
     // render logic
     return (
@@ -185,6 +171,8 @@ function App() {
                     onPageChange={handlePageChange}
                     onPerPageChange={handlePerPageChange}
                 />
+                <AddItem onAdd={handleAddItem} />
+                <br />
                 <br />
                 <Stack spacing={3}>
                     {filteredRepos
@@ -205,4 +193,4 @@ function App() {
 }
 
 export default App;
-export type { Repo, SelectOption };
+export type { SelectOption };
