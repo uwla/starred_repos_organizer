@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Container, CssBaseline, Stack } from "@mui/material";
 import { MultiValue } from "react-select";
-import axios, { AxiosResponse } from "axios";
+import apiClient from "./Api";
 import RepoItem from "./components/RepoItem";
 import AddItem from "./components/AddItem";
 import SearchFilter from "./components/SearchFilter";
@@ -86,22 +86,19 @@ function App() {
     }, []);
 
     async function fetchData() {
-        await axios
-            .get("http://localhost:3000/repos")
-            .then((response: AxiosResponse) => {
-                const repos = response.data as Repo[];
-                setRepos(repos);
-                setFilteredRepos(repos);
+        await apiClient.fetchRepos().then((repos: Repo[]) => {
+            setRepos(repos);
+            setFilteredRepos(repos);
 
-                // for the topics, extra logic is necessary
-                // 1. extract topics from repositories
-                // 2. remove duplicates
-                // 3. sort
-                let topics = repos.map((item: Repo) => item.topics).flat();
-                topics = [...new Set(topics)];
-                topics.sort();
-                setTopics(topics);
-            });
+            // for the topics, extra logic is necessary
+            // 1. extract topics from repositories
+            // 2. remove duplicates
+            // 3. sort
+            let topics = repos.map((item: Repo) => item.topics).flat();
+            topics = [...new Set(topics)];
+            topics.sort();
+            setTopics(topics);
+        });
     }
 
     /* ---------------------------------------------------------------------- */
@@ -138,12 +135,20 @@ function App() {
     }
 
     async function handleAddItem(repo: Repo) {
-        const newRepos =[repo, ...repos];
-        setRepos(newRepos);
-        setFilteredRepos(newRepos);
-        setPage(0);
-        setSearchQuery("");
-        return true;
+        return await apiClient
+            .createRepo(repo)
+            .then((repo) => {
+                const newRepos = [repo, ...repos];
+                setRepos(newRepos);
+                setFilteredRepos(newRepos);
+                setPage(0);
+                setSearchQuery("");
+                return true;
+            })
+            .catch(() => {
+                // TODO: handle error properly
+                return false;
+            });
     }
 
     /* ---------------------------------------------------------------------- */
