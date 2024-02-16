@@ -9,7 +9,7 @@ interface ApiClient {
     deleteRepo: (repo: Repo) => Promise<boolean>;
 }
 
-const client = axios.create({ baseURL: "http://localhost:3000/repos" });
+const client = axios.create({ baseURL: "http://localhost:3000/repo" });
 
 const jsonServerClient: ApiClient = {
     async fetchRepos() {
