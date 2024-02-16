@@ -5,6 +5,48 @@ const apiClient = axios.create({
     baseURL: "https://api.github.com",
 }) as AxiosInstance;
 
+type ResponseData = { [key: string]: never };
+
+// Array used to map response object to our data structure.
+const mapKeys = {
+    "archived": "archived",
+    "created_at": "created_at",
+    "description": "description",
+    "fork": "forked",
+    "forks_count": "forks",
+    "full_name": "full_name",
+    "homepage": "homepage",
+    "html_url": "html_url",
+    "is_template": "template",
+    "language": "lang",
+    "license.spdx_id": "license",
+    "name": "name",
+    "owner.login": "owner",
+    "owner.type": "owner_type",
+    "pushed_at": "last_push",
+    "stargazers_count": "stars",
+    "topics": "topics",
+    "updated_at": "last_update",
+} as { [key: string]: RepoKey };
+
+const parseResponse = (data: ResponseData): Repo => {
+    const repo = {} as Repo;
+    for (const key in mapKeys) {
+        let val : never = data[key];
+
+        if (key.includes(".")) {
+            val = data as never;
+            for (const k of key.split(".")) {
+                val = val[k]
+                if (val == null) break;
+            }
+        }
+
+        repo[mapKeys[key]] = val as never;
+    }
+    return repo;
+};
+
 const GitHubRepo: RepoProvider = {
     async getRepo(url: string): Promise<Repo> {
         const match = url.match(/github.com\/([^/]+)\/([^/?#]+)/);
@@ -14,44 +56,18 @@ const GitHubRepo: RepoProvider = {
 
         const userName = match[1];
         const repoName = match[2];
-        const repo = {} as Repo;
-
-        // Array used to map response object to our data structure.
-        const mapKeys = {
-            full_name: "full_name",
-            name: "name",
-            description: "description",
-            topics: "topics",
-            html_url: "html_url",
-            homepage: "homepage",
-            language: "lang",
-            license: "license",
-            created_at: "created_at",
-            pushed_at: "last_push",
-            updated_at: "last_update",
-            fork: "forked",
-            forks_count: "forks",
-            archived: "archived",
-            template: "template",
-            owner: "owner",
-            owner_type: "owner_type",
-            stargazers_count: "stars",
-        } as { [key: string]: RepoKey };
-
+        let repo = {} as Repo;
         await apiClient
             .get(`/repos/${userName}/${repoName}`)
             .then((response: AxiosResponse) => {
-                const data = response.data as { [key: string]: never };
-                for (const key in mapKeys) {
-                    repo[mapKeys[key]] = data[key];
-                }
+                repo = parseResponse(response.data as ResponseData);
             });
         return repo;
     },
 
     async getReposFromUser(userName: string): Promise<Repo[]> {
         const repos = [] as Repo[];
-        let data = [] as Repo[];
+        let data = [] as ResponseData[];
         let page = 1;
         const perPage = 100;
         const baseEndpoint = `/users/${userName}/starred?per_page=${perPage}`;
@@ -62,8 +78,8 @@ const GitHubRepo: RepoProvider = {
         do {
             endpoint = `${baseEndpoint}&page=${page}`;
             await apiClient.get(endpoint).then((response: AxiosResponse) => {
-                data = response.data as Repo[];
-                repos.push(...data);
+                data = response.data as ResponseData[];
+                repos.push(...data.map(parseResponse));
             });
             page += 1;
         } while (data.length == perPage);
