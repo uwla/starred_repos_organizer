@@ -1,4 +1,4 @@
-import { Button, Stack } from "@mui/material";
+import { Button, Stack } from "react-bootstrap";
 import makeAnimated from "react-select/animated";
 import Select, { MultiValue } from "react-select";
 import { SelectOption } from "../App";
@@ -21,7 +21,7 @@ function TopicsFilter(props: Props) {
     }
 
     return (
-        <Stack direction="row" spacing={1}>
+        <Stack direction="horizontal" gap={2}>
             <div style={{ flexGrow: "1" }}>
                 <Select
                     options={options}
@@ -34,8 +34,8 @@ function TopicsFilter(props: Props) {
                     components={animatedComponents}
                 />
             </div>
-            <Button color="primary" variant="contained" onClick={handleClick}>
-            FILTER
+            <Button variant="primary" onClick={handleClick}>
+                FILTER
             </Button>
         </Stack>
     );

@@ -1,12 +1,5 @@
-import {
-    Chip,
-    Card,
-    CardActions,
-    CardHeader,
-    CardContent,
-    Stack,
-    Link,
-} from "@mui/material";
+import { Chip } from "@mui/material";
+import { Card, Stack } from "react-bootstrap";
 import {
     Star as IconStar,
     GitHub as IconGitHub,
@@ -35,7 +28,7 @@ function RepoItem(props: Props) {
                 color="primary"
                 variant="outlined"
                 sx={{ borderRadius: ".25em" }}
-                onClick={ () => onTopicClicked(topic) }
+                onClick={() => onTopicClicked(topic)}
             />
         );
     });
@@ -43,17 +36,17 @@ function RepoItem(props: Props) {
     // Tactic to avoid nested JSX.
     const repoLinks = [];
     repoLinks.push(
-        <Link key="1" href={repo.html_url} underline="hover">
+        <Card.Link key="1" href={repo.html_url}>
             <IconGitHub fontSize="small" />
             <span>GitHub</span>
-        </Link>
+        </Card.Link>
     );
-    if (repo.homepage != "") {
+    if (repo.homepage != "" && repo.homepage != null) {
         repoLinks.push(
-            <Link key="2" href={repo.homepage} underline="hover">
+            <Card.Link key="2" href={repo.homepage}>
                 <IconHome fontSize="small" />
                 <span>Website</span>
-            </Link>
+            </Card.Link>
         );
     }
     repoLinks.push(
@@ -63,16 +56,26 @@ function RepoItem(props: Props) {
         </div>
     );
 
+    // const [openMenu, setOpenMenu] = useState(false);
+
     return (
-        <Card variant="outlined">
-            <CardHeader title={repo.name} subheader={repo.full_name} />
-            <Stack className="repo-details">{repoLinks}</Stack>
-            <CardContent>{repo.description}</CardContent>
-            <CardActions>
-                <Stack className="repo-topics" useFlexGap>
-                    {repoTopics}
+        <Card>
+            <Card.Header>
+                <Card.Title>{repo.name}</Card.Title>
+                <Card.Subtitle>{repo.full_name}</Card.Subtitle>
+            </Card.Header>
+            <Card.Body>
+                <Card.Text>{repo.description}</Card.Text>
+
+                <Stack direction="horizontal" gap={2} className="repo-details">
+                    {repoLinks}
                 </Stack>
-            </CardActions>
+            </Card.Body>
+            {topics.length > 0 && (
+                <Card.Footer>
+                    <Stack className="repo-topics">{repoTopics}</Stack>
+                </Card.Footer>
+            )}
         </Card>
     );
 }

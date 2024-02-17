@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { useEffect, useState } from "react";
-import { Container, CssBaseline, Stack } from "@mui/material";
+import { Container, Stack } from "react-bootstrap"
 import { MultiValue } from "react-select";
 import apiClient from "./Api";
 import RepoItem from "./components/RepoItem";
@@ -172,8 +172,7 @@ function App() {
     // render logic
     return (
         <>
-            <CssBaseline />
-            <Container maxWidth="md" id="app">
+            <Container id="app">
                 <h1>STARRED REPOS</h1>
                 <SearchFilter onSubmit={handleSearch} />
                 <br />
@@ -196,7 +195,7 @@ function App() {
                 <AddItem onAdd={handleAddItem} onAddMany={handleAddMany} />
                 <br />
                 <br />
-                <Stack spacing={3}>
+                <Stack gap={3}>
                     {filteredRepos
                         .slice(page * perPage, (page + 1) * perPage)
                         .map((repo: Repo) => {

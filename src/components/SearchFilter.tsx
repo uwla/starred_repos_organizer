@@ -1,4 +1,4 @@
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Stack, Form } from "react-bootstrap";
 import { Search as IconSearch } from "@mui/icons-material";
 import { useState } from "react";
 
@@ -20,15 +20,15 @@ function SearchFilter(props: Props) {
 
     return (
         <>
-            <Stack direction="row" spacing={0.5}>
-                <TextField
+            <Stack direction="horizontal" gap={2}>
+                <Form.Control
+                    type="text"
                     id="search-input"
-                    label="Search"
-                    variant="outlined"
-                    sx={{ flexGrow: "1" }}
                     onChange={handleInput}
-                />
-                <Button color="info" variant="outlined" onClick={handleClick}>
+                    placeholder="Search..."
+                >
+                </Form.Control>
+                <Button variant="primary" onClick={handleClick}>
                     <IconSearch />
                 </Button>
             </Stack>

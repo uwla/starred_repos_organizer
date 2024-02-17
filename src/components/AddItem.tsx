@@ -1,15 +1,6 @@
-import { FormEvent, useState } from "react";
-import {
-    Alert,
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Snackbar,
-    TextField,
-} from "@mui/material";
+import { useState } from "react";
+import { Snackbar } from "@mui/material";
+import { Alert, Form, Modal, Button } from "react-bootstrap";
 import { Repo } from "../repo/Repo";
 import GitHubRepo from "../repo/GitHubRepo";
 
@@ -38,15 +29,13 @@ function AddItem(props: Props) {
 
     const handleClick = () => setOpen(true);
 
-    const handleClose = () => setOpen(false);
+    const handleHide = () => setOpen(false);
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUrl(event.target.value);
     };
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-
+    const handleSubmit = () => {
         // We need to determine if the URL is a repository URL, or if it is a
         // user profile URL. In the later case, we will fetch all of the user's
         // starred repositories.
@@ -76,54 +65,42 @@ function AddItem(props: Props) {
 
     return (
         <>
-            <Button variant="contained" color="success" onClick={handleClick}>
+            <Button variant="success" onClick={handleClick}>
                 ADD REPO
             </Button>
-            <Dialog
-                open={open}
-                onClose={handleClose}
-                PaperProps={{
-                    component: "form",
-                    onSubmit: handleSubmit,
-                }}
-            >
-                <DialogTitle>ADD REPOSITORY</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Enter the URL for the repository.
-                        <br />
-                        If the URL is a user profile, it will add all starred
-                        repositories from that user.
-                    </DialogContentText>
-                    <TextField
+            <Modal show={open} onHide={handleHide}>
+                <Modal.Header>
+                    <Modal.Title>ADD REPOSITORY</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Control
                         autoFocus
-                        fullWidth
                         id="repo_url"
-                        label="URL"
-                        margin="dense"
-                        name="repo_url"
                         required
                         type="url"
-                        variant="standard"
                         value={url}
+                        placeholder="Enter URL"
                         onChange={handleInput}
                     />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button type="submit">Add</Button>
-                </DialogActions>
-            </Dialog>
+                    <br />
+                    <small>
+                        If the URL is from user profile, it will add all starred
+                        repositories from that user.
+                    </small>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleHide}>
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSubmit}>Add</Button>
+                </Modal.Footer>
+            </Modal>
             <Snackbar
                 open={showStatus}
                 autoHideDuration={1000}
                 onClose={() => setShowStatus(false)}
             >
-                <Alert
-                    severity={status ? "success" : "error"}
-                    variant="filled"
-                    sx={{ width: "100%" }}
-                >
+                <Alert variant={status ? "success" : "danger"}>
                     {status ? "Repo added!" : "Something failed..."}
                 </Alert>
             </Snackbar>
