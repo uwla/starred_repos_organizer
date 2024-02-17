@@ -110,7 +110,7 @@ function App() {
     function handleTopicClicked(topic: string) {
         const plainTopics = getPlainTopics(selectedTopics);
         if (plainTopics.includes(topic)) return;
-        setSelectedTopics([...selectedTopics, { label: topic, value: topic }]);
+        handleSelect([...selectedTopics, { label: topic, value: topic }]);
     }
 
     function handlePageChange(page: number) {
@@ -129,9 +129,11 @@ function App() {
         );
     }
 
-    function handleSelect(topics: string[]) {
+    function handleSelect(topics: SelectOption[]) {
+        setSelectedTopics(topics);
         setPage(0);
-        setFilteredRepos(applyFilters(repos, searchQuery, topics));
+        const plainTopics = getPlainTopics(topics);
+        setFilteredRepos(applyFilters(repos, searchQuery, plainTopics));
     }
 
     async function handleAddItem(repo: Repo) {
@@ -191,9 +193,8 @@ function App() {
                 <TopicsFilter
                     topics={topics}
                     selected={selectedTopics}
-                    onSubmit={handleSelect}
                     onSelect={(value: MultiValue<SelectOption>) =>
-                        setSelectedTopics(value as SelectOption[])
+                        handleSelect(value as SelectOption[])
                     }
                 />
                 <br />
