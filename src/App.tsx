@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
 import { useEffect, useState } from "react";
-import { Container, Stack } from "react-bootstrap"
+import { Container, Stack } from "react-bootstrap";
 import { MultiValue } from "react-select";
 import apiClient from "./Api";
 import RepoItem from "./components/RepoItem";
@@ -168,6 +168,18 @@ function App() {
             });
     }
 
+    async function handleDelete(repo: Repo) {
+        await apiClient.deleteRepo(repo).then((status: boolean) => {
+            if (status) {
+                const filterDeleted = (r: Repo) => r.id != repo.id;
+                setRepos(repos.filter(filterDeleted));
+                setFilteredRepos(filteredRepos.filter(filterDeleted));
+            } else {
+                // TODO: handle failure
+            }
+        });
+    }
+
     /* ---------------------------------------------------------------------- */
     // render logic
     return (
@@ -201,9 +213,10 @@ function App() {
                         .map((repo: Repo) => {
                             return (
                                 <RepoItem
+                                    key={repo.id}
                                     repo={repo}
                                     onTopicClick={handleTopicClicked}
-                                    key={repo.id}
+                                    onDelete={() => handleDelete(repo)}
                                 />
                             );
                         })}

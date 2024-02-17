@@ -1,21 +1,25 @@
 import { Chip } from "@mui/material";
-import { Card, Stack } from "react-bootstrap";
+import { Card, Stack, Dropdown } from "react-bootstrap";
 import {
     Star as IconStar,
     GitHub as IconGitHub,
     HomeOutlined as IconHome,
+    Settings as IconGear,
+    Delete as IconDelete,
+    Edit as IconEdit,
 } from "@mui/icons-material";
 import { orange } from "@mui/material/colors";
-
 import { Repo } from "../repo/Repo";
+import "./RepoItem.css";
 
 interface Props {
     repo: Repo;
     onTopicClick: (topic: string) => void;
+    onDelete: () => void;
 }
 
 function RepoItem(props: Props) {
-    const { repo, onTopicClick: onTopicClicked } = props;
+    const { repo, onTopicClick, onDelete } = props;
     const topics = [...repo.topics].sort();
 
     // Tactic to avoid nested JSX.
@@ -28,7 +32,7 @@ function RepoItem(props: Props) {
                 color="primary"
                 variant="outlined"
                 sx={{ borderRadius: ".25em" }}
-                onClick={() => onTopicClicked(topic)}
+                onClick={() => onTopicClick(topic)}
             />
         );
     });
@@ -63,6 +67,20 @@ function RepoItem(props: Props) {
             <Card.Header>
                 <Card.Title>{repo.name}</Card.Title>
                 <Card.Subtitle>{repo.full_name}</Card.Subtitle>
+                <Dropdown className="repo-options" align="end">
+                    <Dropdown.Toggle variant="light" id="dropdown-basic">
+                        <IconGear fontSize="small" />
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={onDelete}>
+                            <IconDelete fontSize="small" />
+                            &nbsp; remove
+                        </Dropdown.Item>
+                        <Dropdown.Item>
+                            <IconEdit fontSize="small" />&nbsp; edit
+                        </Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
             </Card.Header>
             <Card.Body>
                 <Card.Text>{repo.description}</Card.Text>

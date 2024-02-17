@@ -1,0 +1,40 @@
+.repo-options {
+    position: absolute !important;
+    top: .5em;
+    right: .5em;
+}
+
+.repo-options .dropdown-toggle {
+    padding: 0.1em;
+    display: flex;
+    align-items: center;
+}
+
+/* .repo-options .dropdown-toggle:after {
+} */
+
+.repo-details > a,
+.repo-details > div {
+    display: flex;
+    align-items: end;
+    line-height: 1;
+    margin-left: 0 !important;
+}
+
+.repo-details > a {
+    text-decoration: none;
+}
+
+.repo-details > a:hover {
+    text-decoration: underline;
+}
+
+.repo-details svg {
+    font-size: 1em;
+}
+
+.repo-topics {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 0.25em;
+}

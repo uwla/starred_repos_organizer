@@ -9,29 +9,3 @@ h1 {
     margin-top: 1em;
     margin-bottom: 1em;
 }
-
-
-
-.repo-details > a,
-.repo-details > div {
-    display: flex;
-    align-items: end;
-    line-height: 1;
-    margin-left: 0 !important
-}
-.repo-details > a {
-    text-decoration: none;
-}
-.repo-details > a:hover {
-    text-decoration: underline;
-}
-
-.repo-details svg {
-    font-size: 1em;
-}
-
-.repo-topics {
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    gap: .25em;
-}
