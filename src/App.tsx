@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
-import { useEffect, useState } from "react";
-import { Container, Stack } from "react-bootstrap";
+import { FormEvent, useEffect, useState } from "react";
+import { Button, Container, Form, Modal, Stack } from "react-bootstrap";
 import { MultiValue } from "react-select";
 import apiClient from "./Api";
 import RepoItem from "./components/RepoItem";
@@ -80,6 +80,9 @@ function App() {
     const [filteredRepos, setFilteredRepos] = useState(repos);
     const [perPage, setPerPage] = useState(10);
     const [page, setPage] = useState(0);
+    const [repoEditing, setRepoEditing] = useState({} as Repo);
+    const [topicsEditing, setTopicsEditing] = useState([] as SelectOption[]);
+    const [editing, setEditing] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -182,6 +185,31 @@ function App() {
         });
     }
 
+    async function handleEdit(r: Repo) {
+        setRepoEditing({ ...r });
+        setTopicsEditing(r.topics.map((t: string) => ({ value: t, label: t })));
+        setEditing(true);
+    }
+
+    async function handleUpdate() {
+        const repo = { ...repoEditing };
+        repo.topics = getPlainTopics(topicsEditing);
+        await apiClient.updateRepo(repo).then((updated: Repo) => {
+            // Update local repos.
+            let index = repos.findIndex((r: Repo) => (r.id == updated.id));
+            repos.splice(index, 1, updated);
+            setRepos(repos);
+
+            // Updated local filtered repos.
+            index = filteredRepos.findIndex((r: Repo) => r.id == updated.id);
+            filteredRepos.splice(index, 1, updated);
+            setFilteredRepos(filteredRepos);
+
+            // TODO: show success toaster
+            setEditing(false);
+        });
+    }
+
     /* ---------------------------------------------------------------------- */
     // render logic
     return (
@@ -218,10 +246,69 @@ function App() {
                                     repo={repo}
                                     onTopicClick={handleTopicClicked}
                                     onDelete={() => handleDelete(repo)}
+                                    onEdit={() => handleEdit(repo)}
                                 />
                             );
                         })}
                 </Stack>
+                <Modal
+                    size="lg"
+                    show={editing}
+                    onHide={() => setEditing(false)}
+                >
+                    <Modal.Header>
+                        <Modal.Title>EDIT REPO</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form
+                            id="edit-repo"
+                            onSubmit={(e: FormEvent<HTMLFormElement>) => {
+                                e.preventDefault();
+                                handleUpdate();
+                            }}
+                        >
+                            <Form.Group controlId="edit-repo-name">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    defaultValue={repoEditing.name}
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="edit-repo-url">
+                                <Form.Label>URL</Form.Label>
+                                <Form.Control
+                                    type="url"
+                                    defaultValue={repoEditing.html_url}
+                                />
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Label>Topics</Form.Label>
+                                <TopicsFilter
+                                    topics={topics}
+                                    selected={topicsEditing}
+                                    onSelect={(val: MultiValue<SelectOption>) =>
+                                        setTopicsEditing(val as SelectOption[])
+                                    }
+                                />
+                            </Form.Group>
+                        </Form>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button
+                            variant="danger"
+                            onClick={() => setEditing(false)}
+                        >
+                            CANCEL
+                        </Button>
+                        <Button
+                            variant="primary"
+                            form="edit-repo"
+                            type="submit"
+                        >
+                            UPDATE
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </Container>
         </>
     );

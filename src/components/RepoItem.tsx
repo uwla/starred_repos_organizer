@@ -16,10 +16,11 @@ interface Props {
     repo: Repo;
     onTopicClick: (topic: string) => void;
     onDelete: () => void;
+    onEdit: () => void;
 }
 
 function RepoItem(props: Props) {
-    const { repo, onTopicClick, onDelete } = props;
+    const { repo, onTopicClick, onEdit, onDelete } = props;
     const topics = [...repo.topics].sort();
 
     // Tactic to avoid nested JSX.
@@ -76,8 +77,9 @@ function RepoItem(props: Props) {
                             <IconDelete fontSize="small" />
                             &nbsp; remove
                         </Dropdown.Item>
-                        <Dropdown.Item>
-                            <IconEdit fontSize="small" />&nbsp; edit
+                        <Dropdown.Item onClick={onEdit}>
+                            <IconEdit fontSize="small" />
+                            &nbsp; edit
                         </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>

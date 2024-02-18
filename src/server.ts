@@ -86,7 +86,7 @@ app.post(`/${name}`, async (req, res) => {
 });
 
 // Update repo
-app.put(`/${name}/:id`, async (req, res) => {
+app.post(`/${name}/:id`, async (req, res) => {
     const { id = "" } = req.params;
     if (!isItem(req.body)) {
         res.send("Expected resource");
