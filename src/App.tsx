@@ -286,6 +286,7 @@ function App() {
                                 <TopicsFilter
                                     topics={topics}
                                     selected={topicsEditing}
+                                    creatable={true}
                                     onSelect={(val: MultiValue<SelectOption>) =>
                                         setTopicsEditing(val as SelectOption[])
                                     }
