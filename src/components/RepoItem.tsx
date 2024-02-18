@@ -9,7 +9,7 @@ import {
     Edit as IconEdit,
 } from "@mui/icons-material";
 import { orange } from "@mui/material/colors";
-import { Repo } from "../repo/Repo";
+import { Repo } from "../types";
 import "./RepoItem.css";
 
 interface Props {

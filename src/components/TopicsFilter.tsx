@@ -1,8 +1,8 @@
-import { Button, Stack } from "react-bootstrap";
 import makeAnimated from "react-select/animated";
 import Select, { MultiValue } from "react-select";
 import CreatableSelect from "react-select/creatable"
-import { SelectOption } from "../App";
+import { SelectOption } from "../types";
+import { topicsToOptions } from "../utils";
 
 const animatedComponents = makeAnimated();
 
@@ -15,7 +15,7 @@ interface Props {
 
 function TopicsFilter(props: Props) {
     const { creatable, topics, selected, onSelect } = props;
-    const options = topics.map((t: string) => ({ value: t, label: t }));
+    const options = topicsToOptions(topics);
 
     const SelectComponent = creatable ? CreatableSelect : Select;
 

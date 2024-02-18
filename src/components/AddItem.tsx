@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Snackbar } from "@mui/material";
 import { Alert, Form, Modal, Button } from "react-bootstrap";
-import { Repo } from "../repo/Repo";
+import { Repo } from "../types";
 import GitHubRepo from "../repo/GitHubRepo";
 
 interface Props {

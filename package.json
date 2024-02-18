@@ -27,6 +27,7 @@
         "@types/bootstrap": "^5.2.10",
         "@types/json-server": "^0.14.7",
         "@types/react": "^18.2.55",
+        "@types/react-bootstrap": "^0.32.35",
         "@types/react-dom": "^18.2.19",
         "@typescript-eslint/eslint-plugin": "^6.21.0",
         "@typescript-eslint/parser": "^6.21.0",

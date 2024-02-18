@@ -1,4 +1,4 @@
-import { Repo, RepoProvider, RepoKey } from "./Repo";
+import { Repo, RepoProvider, RepoKey } from "../types";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
 const apiClient = axios.create({

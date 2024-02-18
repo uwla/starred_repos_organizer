@@ -1,3 +1,8 @@
+type SelectOption = {
+    label: string;
+    value: string;
+};
+
 type Repo = {
     id?: string;
     full_name: string;
@@ -27,4 +32,4 @@ interface RepoProvider {
     getReposFromUser: (userName: string) => Promise<Repo[]>;
 }
 
-export type { Repo, RepoKey, RepoProvider };
+export type { SelectOption, Repo, RepoKey, RepoProvider };

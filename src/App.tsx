@@ -1,6 +1,6 @@
 /* eslint-disable prefer-const */
-import { FormEvent, useEffect, useState } from "react";
-import { Button, Container, Form, Modal, Stack } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Container, Stack } from "react-bootstrap";
 import { MultiValue } from "react-select";
 import apiClient from "./Api";
 import RepoItem from "./components/RepoItem";
@@ -8,16 +8,10 @@ import AddItem from "./components/AddItem";
 import SearchFilter from "./components/SearchFilter";
 import TopicsFilter from "./components/TopicsFilter";
 import Pagination from "./components/Pagination";
-import { Repo, RepoKey } from "./repo/Repo";
+import { SelectOption, Repo, RepoKey } from "./types";
 import "./App.css";
-
-/* -------------------------------------------------------------------------- */
-// types
-
-type SelectOption = {
-    label: string;
-    value: string;
-};
+import { optionsToTopics } from "./utils";
+import EditItem from "./components/EditItem";
 
 /* -------------------------------------------------------------------------- */
 // Utilities
@@ -81,7 +75,6 @@ function App() {
     const [perPage, setPerPage] = useState(10);
     const [page, setPage] = useState(0);
     const [repoEditing, setRepoEditing] = useState({} as Repo);
-    const [topicsEditing, setTopicsEditing] = useState([] as SelectOption[]);
     const [editing, setEditing] = useState(false);
 
     useEffect(() => {
@@ -107,15 +100,6 @@ function App() {
     /* ---------------------------------------------------------------------- */
     // internal handlers
 
-    const getPlainTopics = (topics: SelectOption[]): string[] =>
-        topics.map((topic: SelectOption) => topic.value);
-
-    function handleTopicClicked(topic: string) {
-        const plainTopics = getPlainTopics(selectedTopics);
-        if (plainTopics.includes(topic)) return;
-        handleSelect([...selectedTopics, { label: topic, value: topic }]);
-    }
-
     function handlePageChange(page: number) {
         setPage(page);
     }
@@ -128,15 +112,21 @@ function App() {
     function handleSearch(text: string) {
         setSearchQuery(text);
         setFilteredRepos(
-            applyFilters(repos, text, getPlainTopics(selectedTopics))
+            applyFilters(repos, text, optionsToTopics(selectedTopics))
         );
     }
 
     function handleSelect(topics: SelectOption[]) {
         setSelectedTopics(topics);
         setPage(0);
-        const plainTopics = getPlainTopics(topics);
+        const plainTopics = optionsToTopics(topics);
         setFilteredRepos(applyFilters(repos, searchQuery, plainTopics));
+    }
+
+    function handleTopicClicked(topic: string) {
+        const plainTopics = optionsToTopics(selectedTopics);
+        if (plainTopics.includes(topic)) return;
+        handleSelect([...selectedTopics, { label: topic, value: topic }]);
     }
 
     async function handleAddItem(repo: Repo) {
@@ -185,29 +175,33 @@ function App() {
         });
     }
 
-    async function handleEdit(r: Repo) {
-        setRepoEditing({ ...r });
-        setTopicsEditing(r.topics.map((t: string) => ({ value: t, label: t })));
+    function handleEdit(r: Repo) {
+        setRepoEditing(r);
         setEditing(true);
     }
 
-    async function handleUpdate() {
-        const repo = { ...repoEditing };
-        repo.topics = getPlainTopics(topicsEditing);
-        await apiClient.updateRepo(repo).then((updated: Repo) => {
-            // Update local repos.
-            let index = repos.findIndex((r: Repo) => (r.id == updated.id));
-            repos.splice(index, 1, updated);
-            setRepos(repos);
+    async function handleUpdate(repo: Repo) {
+        return apiClient
+            .updateRepo(repo)
+            .then((updated: Repo) => {
+                // Update local repos.
+                let index = repos.findIndex((r: Repo) => r.id == updated.id);
+                repos.splice(index, 1, updated);
+                setRepos(repos);
 
-            // Updated local filtered repos.
-            index = filteredRepos.findIndex((r: Repo) => r.id == updated.id);
-            filteredRepos.splice(index, 1, updated);
-            setFilteredRepos(filteredRepos);
+                // Updated local filtered repos.
+                index = filteredRepos.findIndex(
+                    (r: Repo) => r.id == updated.id
+                );
+                filteredRepos.splice(index, 1, updated);
+                setFilteredRepos(filteredRepos);
 
-            // TODO: show success toaster
-            setEditing(false);
-        });
+                setEditing(false);
+
+                // indicates updated was successful
+                return true;
+            })
+            .catch(() => false);
     }
 
     /* ---------------------------------------------------------------------- */
@@ -251,69 +245,16 @@ function App() {
                             );
                         })}
                 </Stack>
-                <Modal
-                    size="lg"
-                    show={editing}
+                <EditItem
+                    topics={topics}
+                    repo={repoEditing}
+                    editing={editing}
                     onHide={() => setEditing(false)}
-                >
-                    <Modal.Header>
-                        <Modal.Title>EDIT REPO</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form
-                            id="edit-repo"
-                            onSubmit={(e: FormEvent<HTMLFormElement>) => {
-                                e.preventDefault();
-                                handleUpdate();
-                            }}
-                        >
-                            <Form.Group controlId="edit-repo-name">
-                                <Form.Label>Name</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    defaultValue={repoEditing.name}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="edit-repo-url">
-                                <Form.Label>URL</Form.Label>
-                                <Form.Control
-                                    type="url"
-                                    defaultValue={repoEditing.html_url}
-                                />
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Label>Topics</Form.Label>
-                                <TopicsFilter
-                                    topics={topics}
-                                    selected={topicsEditing}
-                                    creatable={true}
-                                    onSelect={(val: MultiValue<SelectOption>) =>
-                                        setTopicsEditing(val as SelectOption[])
-                                    }
-                                />
-                            </Form.Group>
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            variant="danger"
-                            onClick={() => setEditing(false)}
-                        >
-                            CANCEL
-                        </Button>
-                        <Button
-                            variant="primary"
-                            form="edit-repo"
-                            type="submit"
-                        >
-                            UPDATE
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
+                    onUpdate={handleUpdate}
+                />
             </Container>
         </>
     );
 }
 
 export default App;
-export type { SelectOption };
