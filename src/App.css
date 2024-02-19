@@ -4,6 +4,10 @@
     max-width: 900px;
 }
 
+#app > * {
+    margin-top: 1em;
+}
+
 #demo-msg {
     text-align: center;
 }
@@ -16,7 +20,7 @@
     margin-bottom: 1em;
 }
 
-h1 {
+#app h1 {
     text-align: center;
     margin-top: 1em;
     margin-bottom: 1em;
