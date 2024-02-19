@@ -12,7 +12,7 @@ import { MultiValue } from "react-select";
 
 import { Close as CloseIcon, Undo as UndoIcon } from "@mui/icons-material";
 
-import apiClient from "./Api";
+import apiClient from "./api";
 import AddItem from "./components/AddItem";
 import EditItem from "./components/EditItem";
 import Pagination from "./components/Pagination";

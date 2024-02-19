@@ -32,11 +32,20 @@ interface RepoProvider {
     getReposFromUser: (userName: string) => Promise<Repo[]>;
 }
 
+interface ApiClient {
+    fetchRepos: () => Promise<Repo[]>;
+    createRepo: (repo: Repo) => Promise<Repo>;
+    createMany: (repos: Repo[]) => Promise<Repo[]>;
+    updateRepo: (repo: Repo) => Promise<Repo>;
+    deleteRepo: (repo: Repo) => Promise<boolean>;
+}
+
 type ResponseData = { [key: string]: never };
 
 type ResponseKeyMapper = { [key: string]: RepoKey };
 
 export type {
+    ApiClient,
     SelectOption,
     Repo,
     RepoKey,

@@ -1,17 +1,9 @@
 import axios, { AxiosResponse } from "axios";
-import { Repo } from "./types";
-
-interface ApiClient {
-    fetchRepos: () => Promise<Repo[]>;
-    createRepo: (repo: Repo) => Promise<Repo>;
-    createMany: (repos: Repo[]) => Promise<Repo[]>;
-    updateRepo: (repo: Repo) => Promise<Repo>;
-    deleteRepo: (repo: Repo) => Promise<boolean>;
-}
+import { ApiClient, Repo } from "../types";
 
 const client = axios.create({ baseURL: "http://localhost:3000/repo" });
 
-const jsonServerClient: ApiClient = {
+const restClient: ApiClient = {
     async fetchRepos() {
         let repos = [] as Repo[];
         await client.get("/").then((response: AxiosResponse) => {
@@ -53,4 +45,4 @@ const jsonServerClient: ApiClient = {
     },
 };
 
-export { jsonServerClient, jsonServerClient as default };
+export default restClient;

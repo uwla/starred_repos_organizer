@@ -73,8 +73,6 @@ function RepoItem(props: Props) {
         </div>
     );
 
-    // const [openMenu, setOpenMenu] = useState(false);
-
     return (
         <Card>
             <Card.Header>

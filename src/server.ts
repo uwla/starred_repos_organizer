@@ -11,7 +11,7 @@ import chalk from "chalk";
 /* -------------------------------------------------------------------------- */
 
 // Set up database
-const file = "user-data.json";
+const file = "user-data.json"; // path relative to CWD of the process
 const adapter = new JSONFile(file);
 const observer = new Observer(adapter);
 const db = new Low(observer, {}) as Low<Data>;
