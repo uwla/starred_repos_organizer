@@ -1,21 +1,29 @@
-import { Container, Stack } from "react-bootstrap";
-import { MultiValue } from "react-select";
-import { useEffect, useState } from "react";
+import "./App.css";
 
-import { optionsToTopics } from "./utils";
-import { SelectOption, Repo, RepoKey } from "./types";
-import AddItem from "./components/AddItem";
+import { useEffect, useState } from "react";
+import {
+    Button,
+    Container,
+    Stack,
+    Toast,
+    ToastContainer,
+} from "react-bootstrap";
+import { MultiValue } from "react-select";
+
+import { Close as CloseIcon, Undo as UndoIcon } from "@mui/icons-material";
+
 import apiClient from "./Api";
+import AddItem from "./components/AddItem";
 import EditItem from "./components/EditItem";
 import Pagination from "./components/Pagination";
 import RepoItem from "./components/RepoItem";
 import SearchFilter from "./components/SearchFilter";
 import TopicsFilter from "./components/TopicsFilter";
-import "./App.css";
+import { Repo, RepoKey, SelectOption } from "./types";
+import { optionsToTopics } from "./utils";
 
 /* -------------------------------------------------------------------------- */
 // Utilities
-
 function filterRepo(repo: Repo, normalizedQuery: string) {
     const searchableKeys = [
         "full_name",
@@ -68,6 +76,7 @@ function applyFilters(repos: Repo[], search: string, topics: string[]) {
 function App() {
     // state
     const [repos, setRepos] = useState([] as Repo[]);
+    const [deletedRepos, setDeletedRepos] = useState([] as Repo[]);
     const [topics, setTopics] = useState([] as string[]);
     const [selectedTopics, setSelectedTopics] = useState([] as SelectOption[]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -169,11 +178,23 @@ function App() {
                 const filterDeleted = (r: Repo) => r.id != repo.id;
                 setRepos(repos.filter(filterDeleted));
                 setFilteredRepos(filteredRepos.filter(filterDeleted));
-                // TODO: add undo toast
+
+                // cache deleted for undo actions
+                deletedRepos.push(repo);
+                setDeletedRepos(deletedRepos);
             } else {
                 // TODO: handle failure
             }
         });
+    }
+
+    function closeUndoDeleteToast(repo: Repo) {
+        setDeletedRepos(deletedRepos.filter((r: Repo) => r.id !== repo.id));
+    }
+
+    async function handleUndoDeleted(repo: Repo) {
+        closeUndoDeleteToast(repo);
+        handleAddItem(repo);
     }
 
     function handleEdit(r: Repo) {
@@ -249,6 +270,35 @@ function App() {
                             );
                         })}
                 </Stack>
+                <ToastContainer
+                    className="toasts"
+                    containerPosition="fixed"
+                    position="bottom-start"
+                >
+                    {deletedRepos.map((r: Repo) => (
+                        <Toast
+                            key={r.id}
+                            autohide
+                            delay={3000}
+                            onClose={() => closeUndoDeleteToast(r)}
+                        >
+                            Deleted {r.name}
+                            <Button
+                                variant="outline-primary"
+                                onClick={() => handleUndoDeleted(r)}
+                            >
+                                <UndoIcon />
+                            </Button>
+                            <Button
+                                variant="outline-dark"
+                                className="close"
+                                onClick={() => closeUndoDeleteToast(r)}
+                            >
+                                <CloseIcon />
+                            </Button>
+                        </Toast>
+                    ))}
+                </ToastContainer>
                 <EditItem
                     topics={topics}
                     repo={repoEditing}

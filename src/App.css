@@ -4,12 +4,41 @@
     max-width: 900px;
 }
 
+#edit-repo > div:not(:last-child) {
+    margin-bottom: 1em;
+}
+
 h1 {
     text-align: center;
     margin-top: 1em;
     margin-bottom: 1em;
 }
 
-#edit-repo > div:not(:last-child) {
-    margin-bottom: 1em;
+.toasts {
+    padding: 1em;
+}
+
+.toasts .toast {
+    /* width: fit-content; */
+    padding: 0.5em;
+    --bs-toast-max-width: fit-content;
+    --bs-toast-spacing: .75em;
+    display: flex;
+    gap: 0.3em;
+    font-size: 80%;
+    align-items: center;
+}
+
+.toasts .toast button {
+    display: flex;
+    padding: 0 0.25em;
+    border-radius: 0;
+}
+
+.toasts .toast button.close {
+    padding: 0;
+}
+
+.toasts .toast svg {
+    font-size: 1em;
 }
