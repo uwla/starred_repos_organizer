@@ -18,6 +18,12 @@ function SearchFilter(props: Props) {
         onSubmit(searchInput);
     }
 
+    function handleKey(event: React.KeyboardEvent<HTMLInputElement>) {
+        if (event.key === "Enter") {
+            onSubmit(searchInput);
+        }
+    }
+
     return (
         <>
             <Stack direction="horizontal" gap={2}>
@@ -25,9 +31,9 @@ function SearchFilter(props: Props) {
                     type="text"
                     id="search-input"
                     onChange={handleInput}
+                    onKeyDown={handleKey}
                     placeholder="Search..."
-                >
-                </Form.Control>
+                ></Form.Control>
                 <Button variant="primary" onClick={handleClick}>
                     <IconSearch />
                 </Button>
