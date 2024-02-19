@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { Repo } from "./repo/Repo";
+import { Repo } from "./types";
 
 interface ApiClient {
     fetchRepos: () => Promise<Repo[]>;

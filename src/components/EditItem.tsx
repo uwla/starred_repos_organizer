@@ -1,9 +1,10 @@
 import { Button, Form, Modal } from "react-bootstrap";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { SelectOption, Repo } from "../types";
 import { MultiValue } from "react-select";
-import TopicsFilter from "./TopicsFilter";
+
 import { optionsToTopics, topicsToOptions } from "../utils";
+import { SelectOption, Repo } from "../types";
+import TopicsFilter from "./TopicsFilter";
 
 interface Props {
     repo: Repo;

@@ -1,14 +1,15 @@
-import { Chip } from "@mui/material";
 import { Card, Stack, Dropdown } from "react-bootstrap";
+import { Chip } from "@mui/material";
+import { orange } from "@mui/material/colors";
 import {
-    Star as IconStar,
+    Delete as IconDelete,
+    Edit as IconEdit,
     GitHub as IconGitHub,
     HomeOutlined as IconHome,
     Settings as IconGear,
-    Delete as IconDelete,
-    Edit as IconEdit,
+    Star as IconStar,
 } from "@mui/icons-material";
-import { orange } from "@mui/material/colors";
+
 import { Repo } from "../types";
 import "./RepoItem.css";
 

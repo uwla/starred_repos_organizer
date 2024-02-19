@@ -1,17 +1,17 @@
-/* eslint-disable prefer-const */
-import { useEffect, useState } from "react";
 import { Container, Stack } from "react-bootstrap";
 import { MultiValue } from "react-select";
-import apiClient from "./Api";
-import RepoItem from "./components/RepoItem";
+import { useEffect, useState } from "react";
+
+import { optionsToTopics } from "./utils";
+import { SelectOption, Repo, RepoKey } from "./types";
 import AddItem from "./components/AddItem";
+import apiClient from "./Api";
+import EditItem from "./components/EditItem";
+import Pagination from "./components/Pagination";
+import RepoItem from "./components/RepoItem";
 import SearchFilter from "./components/SearchFilter";
 import TopicsFilter from "./components/TopicsFilter";
-import Pagination from "./components/Pagination";
-import { SelectOption, Repo, RepoKey } from "./types";
 import "./App.css";
-import { optionsToTopics } from "./utils";
-import EditItem from "./components/EditItem";
 
 /* -------------------------------------------------------------------------- */
 // Utilities

@@ -1,5 +1,5 @@
-import { Repo, RepoProvider, RepoKey } from "../types";
 import axios, { AxiosInstance, AxiosResponse } from "axios";
+import { Repo, RepoProvider, RepoKey } from "../types";
 
 const apiClient = axios.create({
     baseURL: "https://api.github.com",
