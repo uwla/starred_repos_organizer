@@ -1,14 +1,12 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { Repo, RepoProvider, RepoKey } from "../types";
+import axios, { AxiosResponse } from "axios";
+import { Repo, RepoProvider, ResponseData, ResponseKeyMapper } from "../types";
+import { parseResponse } from "../utils";
 
-const apiClient = axios.create({
-    baseURL: "https://api.github.com",
-}) as AxiosInstance;
-
-type ResponseData = { [key: string]: never };
+const baseURL = "https://api.github.com";
+const apiClient = axios.create({ baseURL });
 
 // Array used to map response object to our data structure.
-const mapKeys = {
+const map= {
     "archived": "archived",
     "created_at": "created_at",
     "description": "description",
@@ -27,25 +25,9 @@ const mapKeys = {
     "stargazers_count": "stars",
     "topics": "topics",
     "updated_at": "last_update",
-} as { [key: string]: RepoKey };
+} as ResponseKeyMapper;
 
-const parseResponse = (data: ResponseData): Repo => {
-    const repo = {} as Repo;
-    for (const key in mapKeys) {
-        let val : never = data[key];
-
-        if (key.includes(".")) {
-            val = data as never;
-            for (const k of key.split(".")) {
-                val = val[k]
-                if (val == null) break;
-            }
-        }
-
-        repo[mapKeys[key]] = val as never;
-    }
-    return repo;
-};
+const parseGitHubResponse = (data: ResponseData) => parseResponse(data, map);
 
 const GitHubRepo: RepoProvider = {
     async getRepo(url: string): Promise<Repo> {
@@ -60,7 +42,7 @@ const GitHubRepo: RepoProvider = {
         await apiClient
             .get(`/repos/${userName}/${repoName}`)
             .then((response: AxiosResponse) => {
-                repo = parseResponse(response.data as ResponseData);
+                repo = parseGitHubResponse(response.data as ResponseData);
             });
         return repo;
     },
@@ -79,7 +61,7 @@ const GitHubRepo: RepoProvider = {
             endpoint = `${baseEndpoint}&page=${page}`;
             await apiClient.get(endpoint).then((response: AxiosResponse) => {
                 data = response.data as ResponseData[];
-                repos.push(...data.map(parseResponse));
+                repos.push(...data.map(parseGitHubResponse));
             });
             page += 1;
         } while (data.length == perPage);

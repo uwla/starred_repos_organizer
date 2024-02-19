@@ -6,6 +6,7 @@ import {
     Edit as IconEdit,
     GitHub as IconGitHub,
     HomeOutlined as IconHome,
+    Launch as IconLink,
     Settings as IconGear,
     Star as IconStar,
 } from "@mui/icons-material";
@@ -41,12 +42,22 @@ function RepoItem(props: Props) {
 
     // Tactic to avoid nested JSX.
     const repoLinks = [];
-    repoLinks.push(
-        <Card.Link key="1" href={repo.html_url}>
-            <IconGitHub fontSize="small" />
-            <span>GitHub</span>
-        </Card.Link>
-    );
+    if (repo.html_url.includes("github.com")) {
+        repoLinks.push(
+            <Card.Link key="1" href={repo.html_url}>
+                <IconGitHub fontSize="small" />
+                <span>GitHub</span>
+            </Card.Link>
+        );
+    } else if (repo.html_url.includes("gitlab.com")) {
+       repoLinks.push(
+            <Card.Link key="1" href={repo.html_url}>
+                <IconLink fontSize="small" />
+                <span>GitLab</span>
+            </Card.Link>
+        );
+    }
+
     if (repo.homepage != "" && repo.homepage != null) {
         repoLinks.push(
             <Card.Link key="2" href={repo.homepage}>
@@ -74,13 +85,13 @@ function RepoItem(props: Props) {
                         <IconGear fontSize="small" />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={onDelete}>
-                            <IconDelete fontSize="small" />
-                            &nbsp; remove
-                        </Dropdown.Item>
                         <Dropdown.Item onClick={onEdit}>
                             <IconEdit fontSize="small" />
                             &nbsp; edit
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={onDelete}>
+                            <IconDelete fontSize="small" />
+                            &nbsp; remove
                         </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>

@@ -1,7 +1,27 @@
-import { SelectOption } from "./types";
+import { Repo, ResponseData, ResponseKeyMapper, SelectOption } from "./types";
 
-export const optionsToTopics = (topics: SelectOption[]): string[] =>
+const optionsToTopics = (topics: SelectOption[]): string[] =>
     topics.map((topic: SelectOption) => topic.value);
 
-export const topicsToOptions = (topics: string[]): SelectOption[] =>
+const topicsToOptions = (topics: string[]): SelectOption[] =>
     topics.map((topic: string) => ({ value: topic, label: topic }));
+
+const parseResponse = (data: ResponseData, map: ResponseKeyMapper): Repo => {
+    const repo = {} as Repo;
+    for (const key in map) {
+        let val: never = data[key];
+
+        if (key.includes(".")) {
+            val = data as never;
+            for (const k of key.split(".")) {
+                val = val[k];
+                if (val == null) break;
+            }
+        }
+
+        repo[map[key]] = val as never;
+    }
+    return repo;
+};
+
+export { parseResponse, optionsToTopics, topicsToOptions };

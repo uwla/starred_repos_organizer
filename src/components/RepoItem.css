@@ -10,9 +10,6 @@
     align-items: center;
 }
 
-/* .repo-options .dropdown-toggle:after {
-} */
-
 .repo-details > a,
 .repo-details > div {
     display: flex;

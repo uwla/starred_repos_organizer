@@ -4,21 +4,30 @@ import { Alert, Form, Modal, Button } from "react-bootstrap";
 
 import { Repo } from "../types";
 import GitHubRepo from "../repo/GitHubRepo";
+import GitLabRepo from "../repo/GitLabRepo";
 
 interface Props {
     onAdd: (repo: Repo) => Promise<boolean>;
     onAddMany: (repos: Repo[]) => Promise<boolean>;
 }
 
-// TODO: add support for GitLab, Gitea, SourceHut, ...
+// TODO: add support for Gitea, SourceHut, ...
 const getRepo = async (url: string) => {
-    return GitHubRepo.getRepo(url);
+    if (url.includes("github.com"))
+        return GitHubRepo.getRepo(url);
+    if (url.includes("gitlab.com"))
+        return GitLabRepo.getRepo(url);
+    throw new Error(`No provider for the given url ${url}`);
 };
 
-// TODO: add support for GitLab, Gitea, SourceHut, ...
+// TODO: add support for Gitea, SourceHut, ...
 const getUserStarredRepos = async (url: string) => {
     const userName = url.replace(/.*\//, "");
-    return GitHubRepo.getReposFromUser(userName);
+    if (url.includes("github.com"))
+        return GitHubRepo.getReposFromUser(userName);
+    if (url.includes("gitlab.com"))
+        return GitLabRepo.getReposFromUser(userName);
+    throw new Error(`No provider for the given url ${url}`);
 };
 
 function AddItem(props: Props) {

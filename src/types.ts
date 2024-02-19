@@ -32,4 +32,15 @@ interface RepoProvider {
     getReposFromUser: (userName: string) => Promise<Repo[]>;
 }
 
-export type { SelectOption, Repo, RepoKey, RepoProvider };
+type ResponseData = { [key: string]: never };
+
+type ResponseKeyMapper = { [key: string]: RepoKey };
+
+export type {
+    SelectOption,
+    Repo,
+    RepoKey,
+    RepoProvider,
+    ResponseData,
+    ResponseKeyMapper,
+};
