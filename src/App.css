@@ -26,6 +26,28 @@
     margin-bottom: 1em;
 }
 
+footer {
+    display: flex;
+    align-items: center;
+    gap: 0.25em;
+    padding: .5em;
+    border-top: 1px solid #ddd;
+    line-height: 1;
+    justify-content: center;
+}
+
+footer a {
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer svg {
+    font-size: 1em !important;
+}
+
 .toasts {
     padding: 1em;
 }

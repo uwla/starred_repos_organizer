@@ -11,7 +11,11 @@ import {
 } from "react-bootstrap";
 import { MultiValue } from "react-select";
 
-import { Close as CloseIcon, Undo as UndoIcon } from "@mui/icons-material";
+import {
+    Close as CloseIcon,
+    Undo as UndoIcon,
+    GitHub as GitHubIcon,
+} from "@mui/icons-material";
 
 import apiClient from "./api";
 import AddItem from "./components/AddItem";
@@ -321,6 +325,12 @@ function App() {
                     onUpdate={handleUpdate}
                 />
             </Container>
+            <footer>
+                <a href="https://github.com/uwla/repo_stars_organizer">
+                Source Code
+                </a>
+                    <GitHubIcon />
+            </footer>
         </>
     );
 }
