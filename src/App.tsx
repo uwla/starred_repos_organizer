@@ -229,8 +229,6 @@ function App() {
     /* ---------------------------------------------------------------------- */
     // render logic
 
-    // TODO: add pagination at the page bottom
-    // TODO: hide pagination if no entries found
     return (
         <>
             <Container id="app">
@@ -246,15 +244,14 @@ function App() {
                 />
                 <br />
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}
+                <AddItem onAdd={handleAddItem} onAddMany={handleAddMany} />
+                <br />
                 <Pagination
                     page={page}
                     count={filteredRepos.length}
                     onPageChange={handlePageChange}
                     onPerPageChange={handlePerPageChange}
                 />
-                <AddItem onAdd={handleAddItem} onAddMany={handleAddMany} />
-                <br />
-                <br />
                 <Stack gap={3}>
                     {filteredRepos
                         .slice(page * perPage, (page + 1) * perPage)
@@ -270,6 +267,12 @@ function App() {
                             );
                         })}
                 </Stack>
+                <Pagination
+                    page={page}
+                    count={filteredRepos.length}
+                    onPageChange={handlePageChange}
+                    onPerPageChange={handlePerPageChange}
+                />
                 <ToastContainer
                     className="toasts"
                     containerPosition="fixed"

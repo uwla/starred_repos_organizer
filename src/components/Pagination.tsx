@@ -1,4 +1,6 @@
-import { useState, MouseEvent, ChangeEvent } from "react";
+import "./Pagination.css";
+
+import { ChangeEvent, MouseEvent, useState } from "react";
 import TablePagination from "@mui/material/TablePagination";
 
 interface Props {
@@ -26,16 +28,20 @@ export default function Pagination(props: Props) {
         onPerPageChange(value);
     }
 
-    // TODO: replace this pagination component with a better one
     return (
-        <TablePagination
-            component="div"
-            count={count}
-            page={page}
-            onPageChange={handleChangePage}
-            labelRowsPerPage={`Showing ${rowsPerPage} items:`}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        <>
+            {count > 0 && (
+                <TablePagination
+                    className="repo-pagination"
+                    component="div"
+                    count={count}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    labelRowsPerPage={`Showing ${rowsPerPage} items:`}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            )}
+        </>
     );
 }
