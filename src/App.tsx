@@ -141,7 +141,7 @@ function App() {
                 return true;
             })
             .catch(() => {
-                // TODO: handle error properly
+                // TODO: handle failure
                 return false;
             });
     }
@@ -158,7 +158,7 @@ function App() {
                 return true;
             })
             .catch(() => {
-                // TODO: handle error properly
+                // TODO: handle failure
                 return false;
             });
     }
@@ -169,6 +169,7 @@ function App() {
                 const filterDeleted = (r: Repo) => r.id != repo.id;
                 setRepos(repos.filter(filterDeleted));
                 setFilteredRepos(filteredRepos.filter(filterDeleted));
+                // TODO: add undo toast
             } else {
                 // TODO: handle failure
             }
@@ -206,6 +207,9 @@ function App() {
 
     /* ---------------------------------------------------------------------- */
     // render logic
+
+    // TODO: add pagination at the page bottom
+    // TODO: hide pagination if no entries found
     return (
         <>
             <Container id="app">

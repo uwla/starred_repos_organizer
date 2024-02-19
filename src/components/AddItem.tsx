@@ -10,12 +10,12 @@ interface Props {
     onAddMany: (repos: Repo[]) => Promise<boolean>;
 }
 
-// TODO: add support for other sources: GitLab, Gitea, SourceHut, ...
+// TODO: add support for GitLab, Gitea, SourceHut, ...
 const getRepo = async (url: string) => {
     return GitHubRepo.getRepo(url);
 };
 
-// TODO: add support for other sources: GitLab, Gitea, SourceHut, ...
+// TODO: add support for GitLab, Gitea, SourceHut, ...
 const getUserStarredRepos = async (url: string) => {
     const userName = url.replace(/.*\//, "");
     return GitHubRepo.getReposFromUser(userName);

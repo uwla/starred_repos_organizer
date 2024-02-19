@@ -26,6 +26,7 @@ export default function Pagination(props: Props) {
         onPerPageChange(value);
     }
 
+    // TODO: replace this pagination component with a better one
     return (
         <TablePagination
             component="div"

@@ -27,7 +27,6 @@ const jsonServerClient: ApiClient = {
         });
         return created;
     },
-    // TODO: implement this function instead of mocking it
     async createMany(repos: Repo[]) {
         let created = [] as Repo[];
         await client.post("/", repos).then((response: AxiosResponse) => {
