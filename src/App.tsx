@@ -2,6 +2,7 @@ import "./App.css";
 
 import { useEffect, useState } from "react";
 import {
+    Alert,
     Button,
     Container,
     Stack,
@@ -73,6 +74,8 @@ function applyFilters(repos: Repo[], search: string, topics: string[]) {
 /* -------------------------------------------------------------------------- */
 // Main
 
+const isDemo = process.env.NODE_ENV == "demo";
+
 function App() {
     // state
     const [repos, setRepos] = useState([] as Repo[]);
@@ -85,6 +88,7 @@ function App() {
     const [page, setPage] = useState(0);
     const [repoEditing, setRepoEditing] = useState({} as Repo);
     const [editing, setEditing] = useState(false);
+    const [showDemoMsg, setShowDemoMsg] = useState(isDemo);
 
     useEffect(() => {
         fetchData();
@@ -231,10 +235,19 @@ function App() {
 
     return (
         <>
+            <Alert
+                id="demo-msg"
+                variant="warning"
+                show={showDemoMsg}
+                onClose={() => setShowDemoMsg(false)}
+                dismissible
+            >
+                This app is running on demo mode. Data will not be persisted and
+                will be erased after page refresh.
+            </Alert>
             <Container id="app">
                 <h1>STARRED REPOS</h1>
                 <SearchFilter onSubmit={handleSearch} />
-                <br />
                 <TopicsFilter
                     topics={topics}
                     selected={selectedTopics}
@@ -242,10 +255,8 @@ function App() {
                         handleSelect(value as SelectOption[])
                     }
                 />
-                <br />
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}
                 <AddItem onAdd={handleAddItem} onAddMany={handleAddMany} />
-                <br />
                 <Pagination
                     page={page}
                     count={filteredRepos.length}

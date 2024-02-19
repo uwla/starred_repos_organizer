@@ -4,6 +4,14 @@
     max-width: 900px;
 }
 
+#demo-msg {
+    text-align: center;
+}
+
+#demo-msg .btn-close {
+    right: 1em;
+}
+
 #edit-repo > div:not(:last-child) {
     margin-bottom: 1em;
 }
