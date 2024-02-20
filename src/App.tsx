@@ -263,6 +263,7 @@ function App() {
                 <AddItem onAdd={handleAddItem} onAddMany={handleAddMany} />
                 <Pagination
                     page={page}
+                    perPage={perPage}
                     count={filteredRepos.length}
                     onPageChange={handlePageChange}
                     onPerPageChange={handlePerPageChange}
@@ -284,6 +285,7 @@ function App() {
                 </Stack>
                 <Pagination
                     page={page}
+                    perPage={perPage}
                     count={filteredRepos.length}
                     onPageChange={handlePageChange}
                     onPerPageChange={handlePerPageChange}
@@ -329,7 +331,7 @@ function App() {
                 <a href="https://github.com/uwla/repo_stars_organizer">
                 Source Code
                 </a>
-                    <GitHubIcon />
+                <GitHubIcon />
             </footer>
         </>
     );
