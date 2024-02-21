@@ -8,6 +8,12 @@
     margin-top: 1em;
 }
 
+#app h1 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    text-align: center;
+}
+
 #demo-msg {
     text-align: center;
 }
@@ -20,20 +26,14 @@
     margin-bottom: 1em;
 }
 
-#app h1 {
-    text-align: center;
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
-
 footer {
     display: flex;
     align-items: center;
-    gap: 0.25em;
-    padding: .5em;
-    border-top: 1px solid #ddd;
-    line-height: 1;
     justify-content: center;
+    border-top: 1px solid #ddd;
+    padding: 0.5em;
+    line-height: 1;
+    gap: 0.25em;
 }
 
 footer a {
@@ -53,20 +53,19 @@ footer svg {
 }
 
 .toasts .toast {
-    /* width: fit-content; */
-    padding: 0.5em;
-    --bs-toast-max-width: fit-content;
-    --bs-toast-spacing: .75em;
     display: flex;
-    gap: 0.3em;
-    font-size: 80%;
     align-items: center;
+    padding: 0.5em;
+    font-size: 80%;
+    --bs-toast-max-width: fit-content;
+    --bs-toast-spacing: 0.75em;
+    gap: 0.3em;
 }
 
 .toasts .toast button {
     display: flex;
-    padding: 0 0.25em;
     border-radius: 0;
+    padding: 0 0.25em;
 }
 
 .toasts .toast button.close {
