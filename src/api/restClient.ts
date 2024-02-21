@@ -8,7 +8,6 @@ const restClient: ApiClient = {
         let repos = [] as Repo[];
         await client.get("/").then((response: AxiosResponse) => {
             repos = response.data as Repo[];
-            repos.reverse(); // reverse to get the most recent first
         });
         return repos;
     },

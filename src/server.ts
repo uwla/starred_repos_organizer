@@ -74,10 +74,10 @@ app.post(`/${name}`, async (req, res) => {
             item.push(data[item.length] as Item);
         }
         item = item.map(assignId);
-        repos.push(...item);
+        repos.unshift(...item);
     } else {
         item = assignId(data);
-        repos.push(item);
+        repos.unshift(item);
     }
 
     // Extract URLs to detect duplicate repositories.
