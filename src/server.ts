@@ -60,7 +60,7 @@ app.post(`/${name}`, async (req, res) => {
         return;
     }
     const data = req.body;
-    const repos = db.data.repo as Item[];
+    const repos = [...db.data.repo as Item[]];
     let item;
 
     // helper to assign random ID to created items.
@@ -80,7 +80,25 @@ app.post(`/${name}`, async (req, res) => {
         repos.push(item);
     }
 
-    // write to DB
+    // Extract URLs to detect duplicate repositories.
+    const urls = {} as { [key: string]: boolean };
+    repos.forEach((r: Item) => (urls[r.html_url as string] = false));
+
+    // Reverse order so the most recently added repos will prevail.
+    repos.reverse();
+
+    // Prevent duplicated repos by applying a URL filter.
+    db.data.repo = repos.filter((r: Item) => {
+        const url = r.html_url as string;
+        if (urls[url] == true) return false;
+        urls[url] = true;
+        return true;
+    });
+
+    // Re-reverse to cancel the first reverse.
+    db.data.repo.reverse();
+
+    // Write to DB
     await db.write();
     res.send(item);
 });
@@ -97,8 +115,8 @@ app.post(`/${name}/:id`, async (req, res) => {
 
 // Delete repo
 app.delete(`/${name}/:id`, async (req, res) => {
-    const { id = '' } = req.params;
-    res.send(await service.destroyById(name, id, req.query['dependent']));
+    const { id = "" } = req.params;
+    res.send(await service.destroyById(name, id, req.query["dependent"]));
 });
 
 // Start server

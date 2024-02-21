@@ -26,6 +26,14 @@
     margin-bottom: 1em;
 }
 
+#error-msg {
+    padding: 0;
+}
+
+#error-msg .alert {
+    margin: 0;
+}
+
 footer {
     display: flex;
     align-items: center;
@@ -62,13 +70,13 @@ footer svg {
     gap: 0.3em;
 }
 
-.toasts .toast button {
+.toasts .toast > button {
     display: flex;
     border-radius: 0;
     padding: 0 0.25em;
 }
 
-.toasts .toast button.close {
+.toasts .toast > button.close {
     padding: 0;
 }
 

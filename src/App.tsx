@@ -93,6 +93,7 @@ function App() {
     const [repoEditing, setRepoEditing] = useState({} as Repo);
     const [editing, setEditing] = useState(false);
     const [showDemoMsg, setShowDemoMsg] = useState(isDemo);
+    const [errorMsg, setErrorMsg] = useState("");
 
     useEffect(() => {
         fetchData();
@@ -147,6 +148,11 @@ function App() {
     }
 
     async function handleAddItem(repo: Repo) {
+        if (repos.find((r: Repo) => r.html_url === repo.html_url)) {
+            setErrorMsg("Repo already added!");
+            return false;
+        }
+
         return await apiClient
             .createRepo(repo)
             .then((repo) => {
@@ -295,6 +301,21 @@ function App() {
                     containerPosition="fixed"
                     position="bottom-start"
                 >
+                    <Toast
+                        id="error-msg"
+                        show={errorMsg != ""}
+                        autohide={true}
+                        delay={5000}
+                        onClose={() => setErrorMsg("")}
+                    >
+                        <Alert
+                            variant="danger"
+                            dismissible={true}
+                            onClose={() => setErrorMsg("")}
+                        >
+                            {errorMsg}
+                        </Alert>
+                    </Toast>
                     {deletedRepos.map((r: Repo) => (
                         <Toast
                             key={r.id}

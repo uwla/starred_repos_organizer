@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Snackbar } from "@mui/material";
-import { Alert, Form, Modal, Button } from "react-bootstrap";
+import { Form, Modal, Button } from "react-bootstrap";
 
 import { Repo } from "../types";
 import GitHubRepo from "../repo/GitHubRepo";
@@ -33,8 +32,6 @@ const getUserStarredRepos = async (url: string) => {
 function AddItem(props: Props) {
     const { onAdd, onAddMany } = props;
     const [open, setOpen] = useState(false);
-    const [status, setStatus] = useState(false);
-    const [showStatus, setShowStatus] = useState(false);
     const [url, setUrl] = useState("");
 
     const handleClick = () => setOpen(true);
@@ -64,13 +61,7 @@ function AddItem(props: Props) {
         const callback = pathArray.length == 1 ? callbackMany : callbackSingle;
 
         // perform the callback and show a status popup message.
-        callback()
-            .then((status: boolean) => {
-                setStatus(status);
-                if (status) setUrl("");
-            })
-            .catch(() => setStatus(false))
-            .finally(() => setShowStatus(true));
+        callback();
     };
 
     return (
@@ -105,15 +96,6 @@ function AddItem(props: Props) {
                     <Button onClick={handleSubmit}>Add</Button>
                 </Modal.Footer>
             </Modal>
-            <Snackbar
-                open={showStatus}
-                autoHideDuration={1000}
-                onClose={() => setShowStatus(false)}
-            >
-                <Alert variant={status ? "success" : "danger"}>
-                    {status ? "Repo added!" : "Something failed..."}
-                </Alert>
-            </Snackbar>
         </>
     );
 }
