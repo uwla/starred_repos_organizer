@@ -164,7 +164,7 @@ function App() {
                 return true;
             })
             .catch(() => {
-                // TODO: handle failure
+                setErrorMsg("Failed to add repository [Server error]");
                 return false;
             });
     }
@@ -181,7 +181,7 @@ function App() {
                 return true;
             })
             .catch(() => {
-                // TODO: handle failure
+                setErrorMsg("Failed to add repositories [Server error]");
                 return false;
             });
     }
@@ -197,7 +197,7 @@ function App() {
                 deletedRepos.push(repo);
                 setDeletedRepos(deletedRepos);
             } else {
-                // TODO: handle failure
+                setErrorMsg("Failed to delete repository [Server error]");
             }
         });
     }
@@ -237,7 +237,10 @@ function App() {
                 // indicates updated was successful
                 return true;
             })
-            .catch(() => false);
+            .catch(() => {
+                setErrorMsg("Failed to updated repository [Server error]");
+                return false;
+            });
     }
 
     /* ---------------------------------------------------------------------- */
@@ -350,7 +353,7 @@ function App() {
             </Container>
             <footer>
                 <a href="https://github.com/uwla/repo_stars_organizer">
-                Source Code
+                    Source Code
                 </a>
                 <GitHubIcon />
             </footer>
