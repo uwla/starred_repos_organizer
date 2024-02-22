@@ -51,6 +51,16 @@ A live working demo is available at <https://uwla.github.io/repo_stars_organizer
     npm run server-api # start api server
     ```
 
+## Roadmap
+
+- [ ] Menu to sort repos by name or stars
+- [ ] Manual selection when importing repos in batch
+- [ ] Display forks, code language, and other details
+- [ ] Support for CodeBerg
+- [ ] Support for Gitea
+- [ ] Support for SourceHut
+- [ ] Support for SourceForge
+
 ## Contributing
 
 Contributions are welcome.
