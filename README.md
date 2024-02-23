@@ -53,9 +53,14 @@ A live working demo is available at <https://uwla.github.io/repo_stars_organizer
 
 ## Roadmap
 
-- [ ] Menu to sort repos by name or stars
+- [x] Search filter
+- [x] Topics filter
+- [x] Sort repos by name or stars
+- [x] Import all starred repos from public profiles
 - [ ] Manual selection when importing repos in batch
 - [ ] Display forks, code language, and other details
+- [x] Support for GitHub
+- [x] Support for GitLab
 - [ ] Support for CodeBerg
 - [ ] Support for Gitea
 - [ ] Support for SourceHut
