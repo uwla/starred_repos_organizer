@@ -2,6 +2,7 @@
     margin-top: 2rem;
     margin-bottom: 3rem;
     max-width: 900px;
+    min-height: calc(100vh - 8rem); /* margin-bottom + margin-top + footer */
 }
 
 #app > * {
