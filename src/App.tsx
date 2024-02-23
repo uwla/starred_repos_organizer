@@ -27,6 +27,7 @@ import TopicsFilter from "./components/TopicsFilter";
 import { Repo, RepoKey, SelectOption } from "./types";
 import { optionsToTopics } from "./utils";
 import SortOptions from "./components/SortOptions";
+import Menu from "./components/Menu";
 
 /* -------------------------------------------------------------------------- */
 // Utilities
@@ -288,6 +289,7 @@ function App() {
                 This app is running on demo mode. Data will not be persisted and
                 will be erased after page refresh.
             </Alert>
+            <Menu repos={repos} />
             <Container id="app">
                 <h1>STARRED REPOS</h1>
                 <SearchFilter onSubmit={handleSearch} />
