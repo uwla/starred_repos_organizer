@@ -13,6 +13,7 @@ type Repo = {
     homepage: string;
     lang: string;
     license: string;
+    index: number;
     created_at: string;
     last_push: string;
     last_update: string;

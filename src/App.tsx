@@ -102,13 +102,18 @@ function App() {
 
     async function fetchData() {
         await apiClient.fetchRepos().then((repos: Repo[]) => {
+            // Assign index to each repo so they can be sorted to the default
+            // order later on.
+            repos.forEach((repo: Repo, index: number) => repo.index = index);
+
+            // After assigning the indexes, we can safely update the state.
             setRepos(repos);
             setFilteredRepos(repos);
 
-            // for the topics, extra logic is necessary
-            // 1. extract topics from repositories
-            // 2. remove duplicates
-            // 3. sort
+            // For the topics, extra logic is necessary:
+            // 1. Extract topics from repositories.
+            // 2. Remove duplicates.
+            // 3. Sort.
             let topics = repos.map((item: Repo) => item.topics).flat();
             topics = [...new Set(topics)];
             topics.sort();
@@ -152,7 +157,7 @@ function App() {
         let cmp: (a: Repo, b: Repo) => number;
         switch (value) {
             case "":
-                cmp = (_a: Repo, _b: Repo) => 0;
+                cmp = (a: Repo, b: Repo) => a.index - b.index;
                 break;
             case "stars":
                 cmp = (a: Repo, b: Repo) => b.stars - a.stars;
