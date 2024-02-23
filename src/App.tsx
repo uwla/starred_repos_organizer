@@ -26,6 +26,7 @@ import SearchFilter from "./components/SearchFilter";
 import TopicsFilter from "./components/TopicsFilter";
 import { Repo, RepoKey, SelectOption } from "./types";
 import { optionsToTopics } from "./utils";
+import SortOptions from "./components/SortOptions";
 
 /* -------------------------------------------------------------------------- */
 // Utilities
@@ -145,6 +146,24 @@ function App() {
         const plainTopics = optionsToTopics(selectedTopics);
         if (plainTopics.includes(topic)) return;
         handleSelect([...selectedTopics, { label: topic, value: topic }]);
+    }
+
+    function handleSort(value: string) {
+        let cmp: (a: Repo, b: Repo) => number;
+        switch (value) {
+            case "":
+                cmp = (_a: Repo, _b: Repo) => 0;
+                break;
+            case "stars":
+                cmp = (a: Repo, b: Repo) => b.stars - a.stars;
+                break;
+            case "name":
+                cmp = (a: Repo, b: Repo) => a.name.localeCompare(b.name);
+                break;
+            default:
+                throw Error("unknown sort option");
+        }
+        setFilteredRepos([...filteredRepos].sort(cmp));
     }
 
     async function handleAddItem(repo: Repo) {
@@ -269,6 +288,10 @@ function App() {
                     }
                 />
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}
+                <SortOptions
+                    values={["", "stars", "name"]}
+                    onSelect={handleSort}
+                />
                 <AddItem onAdd={handleAddItem} onAddMany={handleAddMany} />
                 <Pagination
                     page={page}

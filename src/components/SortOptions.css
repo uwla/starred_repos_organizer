@@ -1,0 +1,12 @@
+.sort-options {
+    align-content: center;
+    gap: 0.5em;
+}
+
+.sort-options p {
+    margin: 0;
+}
+
+.sort-options select {
+    width: fit-content;
+}
