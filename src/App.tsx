@@ -168,6 +168,12 @@ function App() {
             default:
                 throw Error("unknown sort option");
         }
+
+        // Both repository arrays need to be sorted.
+        // The filtered repos needs to be sorted because data its content is
+        // rendered after basic pagination. It is also necessary the repos to be
+        // sorted because the filteredRepos is updated based on it.
+        setRepos([...repos].sort(cmp));
         setFilteredRepos([...filteredRepos].sort(cmp));
     }
 
