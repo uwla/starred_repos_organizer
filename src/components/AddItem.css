@@ -1,0 +1,23 @@
+.repos-to-add {
+    max-height: 50vh;
+    overflow: auto;
+}
+
+.repos-to-add > div {
+    display: flex;
+    align-items: center;
+}
+
+.repos-to-add > div a {
+    white-space: pre;
+}
+
+.repos-to-add label {
+    display: block;
+    width: 100%;
+    padding: .5em 0;
+}
+
+.repos-to-add > div:hover {
+    background-color: #eee;
+}

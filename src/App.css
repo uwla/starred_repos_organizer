@@ -35,6 +35,10 @@
     margin: 0;
 }
 
+label {
+    cursor: pointer;
+}
+
 footer {
     display: flex;
     align-items: center;
