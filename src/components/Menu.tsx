@@ -38,7 +38,7 @@ function Menu(props: Props) {
     };
 
     return (
-        <Dropdown id="menu">
+        <Dropdown id="menu" align="end">
             <Dropdown.Toggle variant="light">
                 <IconGear />
             </Dropdown.Toggle>

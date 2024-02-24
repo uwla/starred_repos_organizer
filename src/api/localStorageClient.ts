@@ -1,5 +1,6 @@
 import { ApiClient, Repo } from "../types";
 import { assignId, uniqueRepos } from "../utils";
+import sampleData from "../../user-data-sample.json";
 
 const getRepos = () =>
     JSON.parse(localStorage.getItem("repos") || "[]") as Repo[];
@@ -7,8 +8,16 @@ const getRepos = () =>
 const setRepos = (repos: Repo[]) =>
     localStorage.setItem("repos", JSON.stringify(repos));
 
+const isDemo = process.env.NODE_ENV === "demo";
+const firstTimeAccess = localStorage.getItem("repos") === null;
+
 const localStorageClient: ApiClient = {
     async fetchRepos() {
+        // DEMO MODE: load sample data for demo app.
+        if (isDemo && firstTimeAccess) {
+            setRepos(sampleData.repo as Repo[]);
+        }
+
         return getRepos();
     },
     async createRepo(repo: Repo) {

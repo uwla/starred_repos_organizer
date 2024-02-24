@@ -80,7 +80,8 @@ function applyFilters(repos: Repo[], search: string, topics: string[]) {
 /* -------------------------------------------------------------------------- */
 // Main
 
-const isDemo = process.env.NODE_ENV == "demo";
+const shouldShowDemoMsg =
+    process.env.NODE_ENV == "demo" && localStorage.getItem("repos") == null;
 
 function App() {
     // state
@@ -94,7 +95,7 @@ function App() {
     const [page, setPage] = useState(0);
     const [repoEditing, setRepoEditing] = useState({} as Repo);
     const [editing, setEditing] = useState(false);
-    const [showDemoMsg, setShowDemoMsg] = useState(isDemo);
+    const [showDemoMsg, setShowDemoMsg] = useState(shouldShowDemoMsg);
     const [errorMsg, setErrorMsg] = useState("");
 
     useEffect(() => {
@@ -105,7 +106,7 @@ function App() {
         await apiClient.fetchRepos().then((repos: Repo[]) => {
             // Assign index to each repo so they can be sorted to the default
             // order later on.
-            repos.forEach((repo: Repo, index: number) => repo.index = index);
+            repos.forEach((repo: Repo, index: number) => (repo.index = index));
 
             // After assigning the indexes, we can safely update the state.
             setRepos(repos);
@@ -286,11 +287,11 @@ function App() {
                 onClose={() => setShowDemoMsg(false)}
                 dismissible
             >
-                This app is running on demo mode. Data will not be persisted and
-                will be erased after page refresh.
+                This app is running on demo mode. Sample data has been loaded.
+                Data is saved to local storage and can be exported/imported.
             </Alert>
-            <Menu repos={repos} onImport={handleAddMany} />
             <Container id="app">
+                <Menu repos={repos} onImport={handleAddMany} />
                 <h1>STARRED REPOS</h1>
                 <SearchFilter onSubmit={handleSearch} />
                 <TopicsFilter
