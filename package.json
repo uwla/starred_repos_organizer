@@ -22,7 +22,8 @@
         "react-bootstrap": "^2.10.1",
         "react-dom": "^18.2.0",
         "react-select": "^5.7.7",
-        "tsx": "^4.7.1"
+        "tsx": "^4.7.1",
+        "use-file-picker": "^2.1.1"
     },
     "devDependencies": {
         "@types/bootstrap": "^5.2.10",

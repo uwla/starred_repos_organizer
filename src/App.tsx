@@ -289,7 +289,7 @@ function App() {
                 This app is running on demo mode. Data will not be persisted and
                 will be erased after page refresh.
             </Alert>
-            <Menu repos={repos} />
+            <Menu repos={repos} onImport={handleAddMany} />
             <Container id="app">
                 <h1>STARRED REPOS</h1>
                 <SearchFilter onSubmit={handleSearch} />

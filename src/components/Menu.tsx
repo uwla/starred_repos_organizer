@@ -7,14 +7,29 @@ import { Dropdown } from "react-bootstrap";
 import "./Menu.css";
 import { Repo } from "../types";
 import exportFromJSON from "export-from-json";
+import { useFilePicker } from "use-file-picker";
+import { SelectedFiles } from "use-file-picker/types";
 
 interface Props {
     repos: Repo[];
+    onImport: (repos: Repo[]) => void;
 }
 
 function Menu(props: Props) {
-    const { repos } = props;
+    const { repos, onImport } = props;
 
+    // Handles importing files.
+    const { openFilePicker } = useFilePicker({
+        accept: ".json",
+        multiple: false,
+        onFilesSuccessfullySelected: (files: SelectedFiles<string>) => {
+            const data = JSON.parse(files.filesContent[0].content);
+            const importedRepos = data.repo as Repo[];
+            onImport(importedRepos);
+        },
+    });
+
+    // Handles exporting files.
     const handleDownload = () => {
         const data = { repos };
         const fileName = "starred-repos";
@@ -28,10 +43,10 @@ function Menu(props: Props) {
                 <IconGear />
             </Dropdown.Toggle>
             <Dropdown.Menu>
-                <Dropdown.Item>
+                <Dropdown.Item as="button" onClick={openFilePicker}>
                     <IconUpload /> IMPORT
                 </Dropdown.Item>
-                <Dropdown.Item onClick={handleDownload}>
+                <Dropdown.Item as="button" onClick={handleDownload}>
                     <IconDownload /> EXPORT
                 </Dropdown.Item>
             </Dropdown.Menu>
