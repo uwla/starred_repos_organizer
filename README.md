@@ -16,6 +16,12 @@ A live working demo is available at <https://uwla.github.io/repo_stars_organizer
 
 ## Usage
 
+Go to the demo page and use the app.
+
+You can also save the demo files locally and it will work offline.
+
+### Development
+
 1. Clone the repo and `cd` into:
 
     ```shell
@@ -59,9 +65,12 @@ A live working demo is available at <https://uwla.github.io/repo_stars_organizer
 - [x] Import all starred repos from public profiles
 - [x] Manual selection when importing repos in batch
 - [ ] Display forks, code language, and other details
-- [x] Export data to file
 - [x] Import data from file
-- [ ] Custom export options
+- [x] Export data to file
+- [x] Export only filtered entries
+- [x] Option to delete all repos
+- [x] Option to delete filtered repos
+- [ ] Show notifications on success
 - [x] Support for GitHub
 - [x] Support for GitLab
 - [ ] Support for CodeBerg
