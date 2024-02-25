@@ -42,6 +42,15 @@ const restClient: ApiClient = {
             .catch(() => (responseStatus = false));
         return responseStatus;
     },
+    async deleteMany(repos: Repo[]) {
+        const ids = repos.map((r: Repo) => r.id);
+        let responseStatus = false;
+        await client
+            .post("/", { _method: "delete", ids })
+            .then(() => (responseStatus = true))
+            .catch(() => (responseStatus = false));
+        return responseStatus;
+    },
 };
 
 export default restClient;

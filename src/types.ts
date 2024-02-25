@@ -4,7 +4,7 @@ type SelectOption = {
 };
 
 type Repo = {
-    id?: string;
+    id: string;
     full_name: string;
     name: string;
     description: string;
@@ -39,6 +39,7 @@ interface ApiClient {
     createMany: (repos: Repo[]) => Promise<Repo[]>;
     updateRepo: (repo: Repo) => Promise<Repo>;
     deleteRepo: (repo: Repo) => Promise<boolean>;
+    deleteMany: (repos: Repo[]) => Promise<boolean>;
 }
 
 type ResponseData = { [key: string]: never };

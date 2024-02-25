@@ -19,6 +19,9 @@ const mockClient: ApiClient = {
     async deleteRepo(_: Repo) {
         return true;
     },
+    async deleteMany(_: Repo[]) {
+        return true;
+    },
 };
 
 export default mockClient;

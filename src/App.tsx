@@ -234,6 +234,18 @@ function App() {
         });
     }
 
+    async function handleDeleteAll() {
+        await apiClient.deleteMany(repos).then((status: boolean) => {
+            if (status) {
+                setRepos([]);
+                setFilteredRepos([]);
+                setPage(0);
+            } else {
+                setErrorMsg("Failed to delete repositories [error]");
+            }
+        });
+    }
+
     function closeUndoDeleteToast(repo: Repo) {
         setDeletedRepos(deletedRepos.filter((r: Repo) => r.id !== repo.id));
     }
@@ -291,7 +303,11 @@ function App() {
                 Data is saved to local storage and can be exported/imported.
             </Alert>
             <Container id="app">
-                <Menu repos={repos} onImport={handleAddMany} />
+                <Menu
+                    repos={repos}
+                    onImport={handleAddMany}
+                    onDeleteAll={handleDeleteAll}
+                />
                 <h1>STARRED REPOS</h1>
                 <SearchFilter onSubmit={handleSearch} />
                 <TopicsFilter

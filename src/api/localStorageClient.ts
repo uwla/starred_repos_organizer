@@ -23,7 +23,7 @@ const localStorageClient: ApiClient = {
     async createRepo(repo: Repo) {
         const repos = getRepos();
         repos.unshift(assignId(repo));
-        setRepos(repos)
+        setRepos(repos);
         return repo;
     },
     async createMany(repos: Repo[]) {
@@ -33,20 +33,30 @@ const localStorageClient: ApiClient = {
     },
     async updateRepo(repo: Repo) {
         const repos = getRepos();
-        const index = repos.findIndex((r: Repo) => r.html_url = repo.html_url);
-        if (index === -1)
-            throw Error("Repo does not exist yet.");
+        const index = repos.findIndex(
+            (r: Repo) => (r.html_url = repo.html_url)
+        );
+        if (index === -1) throw Error("Repo does not exist yet.");
         repos.splice(index, 1, repo);
         setRepos(repos);
         return repo;
     },
     async deleteRepo(repo: Repo) {
         const repos = getRepos();
-        const index = repos.findIndex((r: Repo) => r.html_url = repo.html_url);
-        if (index === -1)
-            return false
+        const index = repos.findIndex(
+            (r: Repo) => (r.html_url = repo.html_url)
+        );
+        if (index === -1) return false;
         repos.splice(index, 1);
         setRepos(repos);
+        return true;
+    },
+    async deleteMany(repos: Repo[]) {
+        const currentRepos = getRepos();
+        const ids = {} as { [key: string]: boolean };
+        repos.forEach((r: Repo) => (ids[r.id] = true));
+        const newRepos = currentRepos.filter((r: Repo) => !ids[r.id]);
+        setRepos(newRepos);
         return true;
     },
 };
