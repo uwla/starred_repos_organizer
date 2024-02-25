@@ -110,7 +110,6 @@ function App() {
 
             // After assigning the indexes, we can safely update the state.
             setRepos(repos);
-            setFilteredRepos(repos);
 
             // For the topics, extra logic is necessary:
             // 1. Extract topics from repositories.
@@ -120,6 +119,12 @@ function App() {
             topics = [...new Set(topics)];
             topics.sort();
             setTopics(topics);
+
+            // reset search filters
+            setFilteredRepos(repos);
+            setSelectedTopics([]);
+            setSearchQuery("")
+            setPage(0);
         });
     }
 
@@ -234,16 +239,8 @@ function App() {
         });
     }
 
-    async function handleDeleteAll() {
-        await apiClient.deleteMany(repos).then((status: boolean) => {
-            if (status) {
-                setRepos([]);
-                setFilteredRepos([]);
-                setPage(0);
-            } else {
-                setErrorMsg("Failed to delete repositories [error]");
-            }
-        });
+    async function handleDeleteMany(repos: Repo[]) {
+        await apiClient.deleteMany(repos).then(fetchData)
     }
 
     function closeUndoDeleteToast(repo: Repo) {
@@ -305,8 +302,9 @@ function App() {
             <Container id="app">
                 <Menu
                     repos={repos}
+                    filtered={filteredRepos}
                     onImport={handleAddMany}
-                    onDeleteAll={handleDeleteAll}
+                    onDelete={handleDeleteMany}
                 />
                 <h1>STARRED REPOS</h1>
                 <SearchFilter onSubmit={handleSearch} />
