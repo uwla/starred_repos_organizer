@@ -12,9 +12,7 @@
 
 .repo-details > div {
     display: flex;
-    align-items: end;
-    margin-left: 0 !important;
-    line-height: 1;
+    align-items: start;
 }
 
 .repo-details a.card-link {

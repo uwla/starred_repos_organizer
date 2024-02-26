@@ -8,6 +8,7 @@ import {
     Settings as IconGear,
     HomeOutlined as IconHome,
     Star as IconStar,
+    AltRoute as IconForks,
 } from "@mui/icons-material";
 import { Chip } from "@mui/material";
 import { orange } from "@mui/material/colors";
@@ -74,6 +75,15 @@ function RepoItem(props: Props) {
             <span>{repo.stars}</span>
         </div>
     );
+
+    if (typeof repo.forks == "number") {
+        repoLinks.push(
+            <div key="4">
+                <IconForks fontSize="small" />
+                <span>{repo.forks}</span>
+            </div>
+        );
+    }
 
     return (
         <Card>
