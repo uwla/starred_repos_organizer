@@ -142,9 +142,9 @@ function App() {
 
     function handleSearch(text: string) {
         setSearchQuery(text);
-        setFilteredRepos(
-            applyFilters(repos, text, optionsToTopics(selectedTopics))
-        );
+        setPage(0);
+        const plainTopics = optionsToTopics(selectedTopics);
+        setFilteredRepos(applyFilters(repos, text, plainTopics));
     }
 
     function handleSelect(topics: SelectOption[]) {
