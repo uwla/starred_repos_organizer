@@ -1,14 +1,36 @@
 import {
+    SiC,
+    SiCplusplus,
+    SiCsharp,
     SiGithub as IconGitHub,
     SiGitlab as IconGitLab,
+    SiJavascript,
+    SiPython,
+    SiRust,
+    SiCss3,
+    SiTypescript,
+    IconType,
+    SiVim,
+    SiPhp,
+    SiRacket,
+    SiRuby,
+    SiLua,
+    SiVuedotjs,
+    SiHtml5,
+    SiKotlin,
+    SiPowershell,
+    SiGnubash,
+    SiReact,
+    SiSvelte,
+    SiAwesomelists,
 } from "@icons-pack/react-simple-icons";
 import {
     Delete as IconDelete,
     Edit as IconEdit,
+    AltRoute as IconForks,
     Settings as IconGear,
     HomeOutlined as IconHome,
     Star as IconStar,
-    AltRoute as IconForks,
 } from "@mui/icons-material";
 import { Chip } from "@mui/material";
 import { orange } from "@mui/material/colors";
@@ -23,6 +45,30 @@ interface Props {
     onDelete: () => void;
     onEdit: () => void;
 }
+
+const languageIcons = {
+    bash: SiGnubash,
+    c: SiC,
+    "c#": SiCsharp,
+    "c++": SiCplusplus,
+    css: SiCss3,
+    html: SiHtml5,
+    javascript: SiJavascript,
+    kotlin: SiKotlin,
+    lua: SiLua,
+    php: SiPhp,
+    powershell: SiPowershell,
+    python: SiPython,
+    racket: SiRacket,
+    react: SiReact,
+    ruby: SiRuby,
+    rust: SiRust,
+    shell: SiGnubash,
+    svelte: SiSvelte,
+    typescript: SiTypescript,
+    vim: SiVim,
+    vue: SiVuedotjs
+} as { [key: string]: IconType };
 
 function RepoItem(props: Props) {
     const { repo, onTopicClick, onEdit, onDelete } = props;
@@ -53,7 +99,7 @@ function RepoItem(props: Props) {
             </Card.Link>
         );
     } else if (repo.html_url.includes("gitlab.com")) {
-       repoLinks.push(
+        repoLinks.push(
             <Card.Link key="1" href={repo.html_url}>
                 <IconGitLab fontSize="small" />
                 <span>GitLab</span>
@@ -69,6 +115,7 @@ function RepoItem(props: Props) {
             </Card.Link>
         );
     }
+
     repoLinks.push(
         <div key="3">
             <IconStar sx={{ color: orange[500] }} fontSize="small" />
@@ -81,6 +128,24 @@ function RepoItem(props: Props) {
             <div key="4">
                 <IconForks fontSize="small" />
                 <span>{repo.forks}</span>
+            </div>
+        );
+    }
+
+    const lang = (repo.lang || "").toLowerCase();
+    if (languageIcons[lang]) {
+        const LanguageIcon = languageIcons[lang];
+        repoLinks.push(
+            <div key="5">
+                <LanguageIcon />
+            </div>
+        );
+    }
+
+    if (repo.topics.includes("awesome") || repo.topics.includes("awesome-list")) {
+        repoLinks.push(
+            <div key="6">
+                <SiAwesomelists />
             </div>
         );
     }
@@ -109,7 +174,7 @@ function RepoItem(props: Props) {
             <Card.Body>
                 <Card.Text>{repo.description}</Card.Text>
 
-                <Stack direction="horizontal" gap={2} className="repo-details">
+                <Stack direction="horizontal" gap={3} className="repo-details">
                     {repoLinks}
                 </Stack>
             </Card.Body>
