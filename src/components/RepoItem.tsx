@@ -1,15 +1,17 @@
-import { Card, Stack, Dropdown } from "react-bootstrap";
-import { Chip } from "@mui/material";
-import { orange } from "@mui/material/colors";
+import {
+    SiGithub as IconGitHub,
+    SiGitlab as IconGitLab,
+} from "@icons-pack/react-simple-icons";
 import {
     Delete as IconDelete,
     Edit as IconEdit,
-    GitHub as IconGitHub,
-    HomeOutlined as IconHome,
-    Launch as IconLink,
     Settings as IconGear,
+    HomeOutlined as IconHome,
     Star as IconStar,
 } from "@mui/icons-material";
+import { Chip } from "@mui/material";
+import { orange } from "@mui/material/colors";
+import { Card, Dropdown, Stack } from "react-bootstrap";
 
 import { Repo } from "../types";
 import "./RepoItem.css";
@@ -52,7 +54,7 @@ function RepoItem(props: Props) {
     } else if (repo.html_url.includes("gitlab.com")) {
        repoLinks.push(
             <Card.Link key="1" href={repo.html_url}>
-                <IconLink fontSize="small" />
+                <IconGitLab fontSize="small" />
                 <span>GitLab</span>
             </Card.Link>
         );

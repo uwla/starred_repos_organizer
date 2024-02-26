@@ -12,6 +12,7 @@
         "preview": "vite preview"
     },
     "dependencies": {
+        "@icons-pack/react-simple-icons": "^9.3.0",
         "@mui/icons-material": "^5.15.9",
         "@mui/material": "^5.15.9",
         "axios": "^1.6.7",
