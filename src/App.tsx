@@ -13,21 +13,21 @@ import { MultiValue } from "react-select";
 
 import {
     Close as CloseIcon,
-    Undo as UndoIcon,
     GitHub as GitHubIcon,
+    Undo as UndoIcon,
 } from "@mui/icons-material";
 
-import storageDriver from "./storage";
 import AddItem from "./components/AddItem";
 import EditItem from "./components/EditItem";
+import Menu from "./components/Menu";
 import Pagination from "./components/Pagination";
 import RepoItem from "./components/RepoItem";
 import SearchFilter from "./components/SearchFilter";
+import SortOptions from "./components/SortOptions";
 import TopicsFilter from "./components/TopicsFilter";
+import storageDriver from "./storage";
 import { Repo, RepoKey, SelectOption } from "./types";
 import { optionsToTopics } from "./utils";
-import SortOptions from "./components/SortOptions";
-import Menu from "./components/Menu";
 
 /* -------------------------------------------------------------------------- */
 // Utilities
@@ -77,6 +77,13 @@ function applyFilters(repos: Repo[], search: string, topics: string[]) {
     return filterByTopics(filterBySearch(repos, search), topics);
 }
 
+function extractTopics(repos: Repo[]): string[] {
+    let topics = repos.map((item: Repo) => item.topics).flat();
+    topics = [...new Set(topics)];
+    topics.sort();
+    return topics;
+}
+
 /* -------------------------------------------------------------------------- */
 // Main
 
@@ -111,19 +118,13 @@ function App() {
             // After assigning the indexes, we can safely update the state.
             setRepos(repos);
 
-            // For the topics, extra logic is necessary:
-            // 1. Extract topics from repositories.
-            // 2. Remove duplicates.
-            // 3. Sort.
-            let topics = repos.map((item: Repo) => item.topics).flat();
-            topics = [...new Set(topics)];
-            topics.sort();
-            setTopics(topics);
+            // Update topics.
+            setTopics(extractTopics(repos));
 
             // reset search filters
             setFilteredRepos(repos);
             setSelectedTopics([]);
-            setSearchQuery("")
+            setSearchQuery("");
             setPage(0);
         });
     }
@@ -184,6 +185,14 @@ function App() {
         setFilteredRepos([...filteredRepos].sort(cmp));
     }
 
+    function updateRepos(newRepos: Repo[]) {
+        setRepos(newRepos);
+        setFilteredRepos(newRepos);
+        setTopics(extractTopics(newRepos));
+        setPage(0);
+        setSearchQuery("");
+    }
+
     async function handleAddItem(repo: Repo) {
         if (repos.find((r: Repo) => r.html_url === repo.html_url)) {
             setErrorMsg("Repo already added!");
@@ -193,11 +202,7 @@ function App() {
         return await storageDriver
             .createRepo(repo)
             .then((repo) => {
-                const newRepos = [repo, ...repos];
-                setRepos(newRepos);
-                setFilteredRepos(newRepos);
-                setPage(0);
-                setSearchQuery("");
+                updateRepos([repo, ...repos]);
                 return true;
             })
             .catch(() => {
@@ -210,11 +215,7 @@ function App() {
         return await storageDriver
             .createMany(manyRepos)
             .then((created) => {
-                const newRepos = [...created, ...repos];
-                setRepos(newRepos);
-                setFilteredRepos(newRepos);
-                setPage(0);
-                setSearchQuery("");
+                updateRepos([...created, ...repos]);
                 return true;
             })
             .catch(() => {
@@ -226,11 +227,14 @@ function App() {
     async function handleDelete(repo: Repo) {
         await storageDriver.deleteRepo(repo).then((status: boolean) => {
             if (status) {
+                // Update local state.
                 const filterDeleted = (r: Repo) => r.id != repo.id;
-                setRepos(repos.filter(filterDeleted));
+                const newRepos = repos.filter(filterDeleted)
+                setRepos(newRepos);
                 setFilteredRepos(filteredRepos.filter(filterDeleted));
+                setTopics(extractTopics(newRepos));
 
-                // cache deleted for undo actions
+                // Cache deleted repos for undo actions.
                 deletedRepos.push(repo);
                 setDeletedRepos(deletedRepos);
             } else {
@@ -240,7 +244,7 @@ function App() {
     }
 
     async function handleDeleteMany(repos: Repo[]) {
-        await storageDriver.deleteMany(repos).then(fetchData)
+        await storageDriver.deleteMany(repos).then(fetchData);
     }
 
     function closeUndoDeleteToast(repo: Repo) {
@@ -273,6 +277,10 @@ function App() {
                 filteredRepos.splice(index, 1, updated);
                 setFilteredRepos(filteredRepos);
 
+                // Update topics.
+                setTopics(extractTopics(repos));
+
+                // Finish editing
                 setEditing(false);
 
                 // indicates updated was successful
