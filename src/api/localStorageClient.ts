@@ -44,7 +44,7 @@ const localStorageClient: ApiClient = {
     async deleteRepo(repo: Repo) {
         const repos = getRepos();
         const index = repos.findIndex(
-            (r: Repo) => (r.html_url = repo.html_url)
+            (r: Repo) => (r.html_url === repo.html_url)
         );
         if (index === -1) return false;
         repos.splice(index, 1);
