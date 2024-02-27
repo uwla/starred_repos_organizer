@@ -62,7 +62,7 @@ const GitLabRepo: RepoProvider = {
         return repo;
     },
 
-    async getReposFromUser(userName: string): Promise<Repo[]> {
+    async getUserStarredRepos(userName: string): Promise<Repo[]> {
         const repos = [] as Repo[];
         const endpoint = `/users/${userName}/starred_projects`;
 

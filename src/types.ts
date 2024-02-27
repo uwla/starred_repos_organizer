@@ -30,7 +30,7 @@ type RepoKey = keyof Repo;
 
 interface RepoProvider {
     getRepo: (url: string) => Promise<Repo>;
-    getReposFromUser: (userName: string) => Promise<Repo[]>;
+    getUserStarredRepos: (userName: string) => Promise<Repo[]>;
 }
 
 interface StorageDriver {

@@ -2,10 +2,9 @@ import { useState } from "react";
 import { Form, Modal, Button } from "react-bootstrap";
 
 import { Repo } from "../types";
-import GitHubRepo from "../repo/GitHubRepo";
-import GitLabRepo from "../repo/GitLabRepo";
 import { Checkbox } from "@mui/material";
 import "./AddItem.css";
+import RepoProvider from "../repo";
 
 interface Props {
     onAdd: (repo: Repo) => Promise<boolean>;
@@ -17,21 +16,14 @@ interface RepoCheck {
     checked: boolean;
 }
 
-// TODO: add support for Gitea, SourceHut, ...
 const getRepo = async (url: string) => {
-    if (url.includes("github.com")) return GitHubRepo.getRepo(url);
-    if (url.includes("gitlab.com")) return GitLabRepo.getRepo(url);
-    throw new Error(`No provider for the given url ${url}`);
+    const provider = RepoProvider.determineProvider(url);
+    return RepoProvider.getRepo(url, provider);
 };
 
-// TODO: add support for Gitea, SourceHut, ...
 const getUserStarredRepos = async (url: string) => {
-    const userName = url.replace(/.*\//, "");
-    if (url.includes("github.com"))
-        return GitHubRepo.getReposFromUser(userName);
-    if (url.includes("gitlab.com"))
-        return GitLabRepo.getReposFromUser(userName);
-    throw new Error(`No provider for the given url ${url}`);
+    const provider = RepoProvider.determineProvider(url);
+    return RepoProvider.getUserStarredRepos(url, provider);
 };
 
 function AddItem(props: Props) {

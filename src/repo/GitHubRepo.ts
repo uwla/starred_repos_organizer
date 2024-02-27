@@ -47,7 +47,7 @@ const GitHubRepo: RepoProvider = {
         return repo;
     },
 
-    async getReposFromUser(userName: string): Promise<Repo[]> {
+    async getUserStarredRepos(userName: string): Promise<Repo[]> {
         const repos = [] as Repo[];
         let data = [] as ResponseData[];
         let page = 1;
