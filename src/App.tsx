@@ -17,7 +17,7 @@ import {
     GitHub as GitHubIcon,
 } from "@mui/icons-material";
 
-import apiClient from "./api";
+import storageDriver from "./storage";
 import AddItem from "./components/AddItem";
 import EditItem from "./components/EditItem";
 import Pagination from "./components/Pagination";
@@ -103,7 +103,7 @@ function App() {
     }, []);
 
     async function fetchData() {
-        await apiClient.fetchRepos().then((repos: Repo[]) => {
+        await storageDriver.fetchRepos().then((repos: Repo[]) => {
             // Assign index to each repo so they can be sorted to the default
             // order later on.
             repos.forEach((repo: Repo, index: number) => (repo.index = index));
@@ -190,7 +190,7 @@ function App() {
             return false;
         }
 
-        return await apiClient
+        return await storageDriver
             .createRepo(repo)
             .then((repo) => {
                 const newRepos = [repo, ...repos];
@@ -207,7 +207,7 @@ function App() {
     }
 
     async function handleAddMany(manyRepos: Repo[]) {
-        return await apiClient
+        return await storageDriver
             .createMany(manyRepos)
             .then((created) => {
                 const newRepos = [...created, ...repos];
@@ -224,7 +224,7 @@ function App() {
     }
 
     async function handleDelete(repo: Repo) {
-        await apiClient.deleteRepo(repo).then((status: boolean) => {
+        await storageDriver.deleteRepo(repo).then((status: boolean) => {
             if (status) {
                 const filterDeleted = (r: Repo) => r.id != repo.id;
                 setRepos(repos.filter(filterDeleted));
@@ -240,7 +240,7 @@ function App() {
     }
 
     async function handleDeleteMany(repos: Repo[]) {
-        await apiClient.deleteMany(repos).then(fetchData)
+        await storageDriver.deleteMany(repos).then(fetchData)
     }
 
     function closeUndoDeleteToast(repo: Repo) {
@@ -258,7 +258,7 @@ function App() {
     }
 
     async function handleUpdate(repo: Repo) {
-        return apiClient
+        return storageDriver
             .updateRepo(repo)
             .then((updated: Repo) => {
                 // Update local repos.

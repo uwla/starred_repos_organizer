@@ -1,9 +1,9 @@
-import { ApiClient, Repo } from "../types";
+import { StorageDriver, Repo } from "../types";
 import data from "../../user-data-sample.json";
 
 const repos = (data.repo as Repo[]).reverse();
 
-const mockClient: ApiClient = {
+const mockDriver: StorageDriver = {
     async fetchRepos() {
         return repos;
     },
@@ -24,4 +24,4 @@ const mockClient: ApiClient = {
     },
 };
 
-export default mockClient;
+export default mockDriver;

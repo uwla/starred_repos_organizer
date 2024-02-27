@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from "axios";
-import { ApiClient, Repo } from "../types";
+import { StorageDriver, Repo } from "../types";
 
 const client = axios.create({ baseURL: "http://localhost:3000/repo" });
 
-const restClient: ApiClient = {
+const restApiDriver: StorageDriver = {
     async fetchRepos() {
         let repos = [] as Repo[];
         await client.get("/").then((response: AxiosResponse) => {
@@ -53,4 +53,4 @@ const restClient: ApiClient = {
     },
 };
 
-export default restClient;
+export default restApiDriver;

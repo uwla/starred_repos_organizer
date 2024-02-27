@@ -1,4 +1,4 @@
-import { ApiClient, Repo } from "../types";
+import { StorageDriver, Repo } from "../types";
 import { assignId, uniqueRepos } from "../utils";
 import sampleData from "../../user-data-sample.json";
 
@@ -11,7 +11,7 @@ const setRepos = (repos: Repo[]) =>
 const isDemo = process.env.NODE_ENV === "demo";
 const firstTimeAccess = localStorage.getItem("repos") === null;
 
-const localStorageClient: ApiClient = {
+const localStorageDriver: StorageDriver = {
     async fetchRepos() {
         // DEMO MODE: load sample data for demo app.
         if (isDemo && firstTimeAccess) {
@@ -61,4 +61,4 @@ const localStorageClient: ApiClient = {
     },
 };
 
-export default localStorageClient;
+export default localStorageDriver;

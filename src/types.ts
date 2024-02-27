@@ -33,7 +33,7 @@ interface RepoProvider {
     getReposFromUser: (userName: string) => Promise<Repo[]>;
 }
 
-interface ApiClient {
+interface StorageDriver {
     fetchRepos: () => Promise<Repo[]>;
     createRepo: (repo: Repo) => Promise<Repo>;
     createMany: (repos: Repo[]) => Promise<Repo[]>;
@@ -47,7 +47,7 @@ type ResponseData = { [key: string]: never };
 type ResponseKeyMapper = { [key: string]: RepoKey };
 
 export type {
-    ApiClient,
+    StorageDriver,
     SelectOption,
     Repo,
     RepoKey,
