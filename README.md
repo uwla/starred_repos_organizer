@@ -70,7 +70,7 @@ You can also save the demo files locally and it will work offline.
 - [x] Export only filtered entries
 - [x] Option to delete all repos
 - [x] Option to delete filtered repos
-- [ ] Show notifications on success
+- [x] Show notifications on success
 - [x] Support for GitHub
 - [x] Support for GitLab
 - [ ] Support for CodeBerg

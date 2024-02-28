@@ -31,11 +31,11 @@ html {
     right: 1em;
 }
 
-#error-msg {
+#error-msg, #success-msg {
     padding: 0;
 }
 
-#error-msg .alert {
+#error-msg .alert, #success-msg .alert {
     margin: 0;
 }
 

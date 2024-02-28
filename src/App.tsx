@@ -105,6 +105,7 @@ function App() {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedTopics, setSelectedTopics] = useState([] as SelectOption[]);
     const [showDemoMsg, setShowDemoMsg] = useState(shouldShowDemoMsg);
+    const [successMsg, setSuccessMsg] = useState("");
     const [topics, setTopics] = useState([] as string[]);
 
     useEffect(() => {
@@ -190,7 +191,7 @@ function App() {
         setFilteredRepos([...filteredRepos].sort(cmp));
     }
 
-    function updateRepos(newRepos: Repo[]) {
+    function updateStateRepos(newRepos: Repo[]) {
         setRepos(newRepos);
         setFilteredRepos(newRepos);
         setTopics(extractTopics(newRepos));
@@ -207,11 +208,12 @@ function App() {
         return await storageDriver
             .createRepo(repo)
             .then((repo) => {
-                updateRepos([repo, ...repos]);
+                updateStateRepos([repo, ...repos]);
+                setSuccessMsg("Repository added");
                 return true;
             })
             .catch(() => {
-                setErrorMsg("Failed to add repository [Server error]");
+                setErrorMsg("Failed to add repository");
                 return false;
             });
     }
@@ -230,11 +232,12 @@ function App() {
         return await storageDriver
             .createMany(manyRepos)
             .then((created) => {
-                updateRepos([...created, ...repos]);
+                updateStateRepos([...created, ...repos]);
+                setSuccessMsg("Repositories added");
                 return true;
             })
             .catch(() => {
-                setErrorMsg("Failed to add repositories [Server error]");
+                setErrorMsg("Failed to add repositories");
                 return false;
             })
             .finally(() => setReposToAdd([]));
@@ -254,7 +257,7 @@ function App() {
                 deletedRepos.push(repo);
                 setDeletedRepos(deletedRepos);
             } else {
-                setErrorMsg("Failed to delete repository [Server error]");
+                setErrorMsg("Failed to delete repository");
             }
         });
     }
@@ -300,17 +303,18 @@ function App() {
                 setEditing(false);
 
                 // indicates updated was successful
+                setSuccessMsg("Repo updated");
                 return true;
             })
             .catch(() => {
-                setErrorMsg("Failed to updated repository [Server error]");
+                setErrorMsg("Failed to updated repository");
                 return false;
             });
     }
 
     async function handleRefresh(repo: Repo) {
         // Get the updated version of the repository.
-        const updated = await RepoProvider.getRepo(repo.url)
+        const updated = await RepoProvider.getRepo(repo.url);
 
         // Preserve the topics, which may have been overwritten locally.
         updated.topics = repo.topics;
@@ -376,7 +380,7 @@ function App() {
                         .map((repo: Repo) => {
                             return (
                                 <RepoCard
-                                    key={repo.id}
+                                    key={repo.url}
                                     repo={repo}
                                     onClickTopic={handleTopicClicked}
                                     onEdit={() => handleEdit(repo)}
@@ -411,6 +415,21 @@ function App() {
                             onClose={() => setErrorMsg("")}
                         >
                             {errorMsg}
+                        </Alert>
+                    </Toast>
+                    <Toast
+                        id="success-msg"
+                        show={successMsg != ""}
+                        autohide={true}
+                        delay={5000}
+                        onClose={() => setSuccessMsg("")}
+                    >
+                        <Alert
+                            variant="success"
+                            dismissible={true}
+                            onClose={() => setSuccessMsg("")}
+                        >
+                            {successMsg}
                         </Alert>
                     </Toast>
                     {deletedRepos.map((r: Repo) => (
