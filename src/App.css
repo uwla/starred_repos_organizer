@@ -1,3 +1,10 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
 #app {
     margin-top: 2rem;
     margin-bottom: 3rem;
@@ -22,10 +29,6 @@
 
 #demo-msg .btn-close {
     right: 1em;
-}
-
-#edit-repo > div:not(:last-child) {
-    margin-bottom: 1em;
 }
 
 #error-msg {
