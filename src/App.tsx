@@ -376,9 +376,11 @@ function App() {
                             handleSelect(value as SelectOption[])
                         }
                     />
-                    <Button onClick={() => setPickingTopics(true)}>
-                        <EditIcon />
-                    </Button>
+                    {topics.length > 0 && (
+                        <Button onClick={() => setPickingTopics(true)}>
+                            <EditIcon />
+                        </Button>
+                    )}
                 </Stack>
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}
                 <SortOptions
@@ -479,12 +481,12 @@ function App() {
                         </Toast>
                     ))}
                 </ToastContainer>
-               <TopicSelect
+                <TopicSelect
                     show={pickingTopics}
                     topics={topics}
                     onHide={() => setPickingTopics(false)}
                     onConfirmSelection={handleTopicsPicking}
-                 />
+                />
                 <RepoEdit
                     topics={topics}
                     repo={editingRepo}
