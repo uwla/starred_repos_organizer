@@ -64,7 +64,7 @@ You can also save the demo files locally and it will work offline.
 - [x] Sort repos by name or stars
 - [x] Import all starred repos from public profiles
 - [x] Manual selection when importing repos in batch
-- [ ] Display forks, code language, and other details
+- [x] Display forks, code language, and other details
 - [x] Import data from file
 - [x] Export data to file
 - [x] Export only filtered entries
