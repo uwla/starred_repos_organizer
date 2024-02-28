@@ -174,13 +174,13 @@ function App() {
                 cmp = (a: Repo, b: Repo) => a.index - b.index;
                 break;
             case "stars":
-                cmp = (a: Repo, b: Repo) => b.stars - a.stars;
+                cmp = (a: Repo, b: Repo) => (b.stars || 0) - (a.stars || 0);
                 break;
             case "name":
                 cmp = (a: Repo, b: Repo) => a.name.localeCompare(b.name);
                 break;
             case "forks":
-                cmp = (a: Repo, b: Repo) => b.forks - a.forks;
+                cmp = (a: Repo, b: Repo) => (b.forks || 0) - (a.forks || 0);
                 break;
             default:
                 throw Error("unknown sort option");
