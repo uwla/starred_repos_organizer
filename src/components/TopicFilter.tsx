@@ -1,7 +1,6 @@
 import CreatableSelect from "react-select/creatable"
 import makeAnimated from "react-select/animated";
 import Select, { MultiValue } from "react-select";
-
 import { SelectOption } from "../types";
 import { topicsToOptions } from "../utils";
 
@@ -14,7 +13,7 @@ interface Props {
     onSelect: (val: MultiValue<SelectOption>) => void;
 }
 
-function TopicsFilter(props: Props) {
+function TopicFilter(props: Props) {
     const { creatable, topics, selected, onSelect } = props;
     const options = topicsToOptions(topics);
 
@@ -34,4 +33,4 @@ function TopicsFilter(props: Props) {
     );
 }
 
-export default TopicsFilter;
+export default TopicFilter;

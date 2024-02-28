@@ -1,7 +1,6 @@
-import "./Pagination.css";
-
 import { ChangeEvent, MouseEvent } from "react";
 import TablePagination from "@mui/material/TablePagination";
+import "./Pagination.css";
 
 interface Props {
     count: number;

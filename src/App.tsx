@@ -13,19 +13,20 @@ import {
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { MultiValue } from "react-select";
-
+import {
+    Menu,
+    Pagination,
+    RepoAdd,
+    RepoCard,
+    RepoEdit,
+    RepoSelect,
+    SearchFilter,
+    SortOptions,
+    TopicFilter,
+} from "./components";
 import { optionsToTopics } from "./utils";
 import { Repo, RepoKey, SelectOption } from "./types";
-import AddItem from "./components/AddItem";
-import EditItem from "./components/EditItem";
-import Menu from "./components/Menu";
-import Pagination from "./components/Pagination";
-import RepoItem from "./components/RepoItem";
-import RepoSelect from "./components/RepoSelect";
-import SearchFilter from "./components/SearchFilter";
-import SortOptions from "./components/SortOptions";
 import storageDriver from "./storage";
-import TopicsFilter from "./components/TopicsFilter";
 import "./App.css";
 
 /* -------------------------------------------------------------------------- */
@@ -327,7 +328,7 @@ function App() {
                 />
                 <h1>STARRED REPOS</h1>
                 <SearchFilter onSubmit={handleSearch} />
-                <TopicsFilter
+                <TopicFilter
                     topics={topics}
                     selected={selectedTopics}
                     onSelect={(value: MultiValue<SelectOption>) =>
@@ -339,7 +340,7 @@ function App() {
                     values={["", "stars", "name"]}
                     onSelect={handleSort}
                 />
-                <AddItem onAdd={handleAddItem} onAddMany={confirmAddMany} />
+                <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
                 <RepoSelect
                     repos={reposToAdd}
                     onConfirmSelection={handleAddMany}
@@ -356,7 +357,7 @@ function App() {
                         .slice(page * perPage, (page + 1) * perPage)
                         .map((repo: Repo) => {
                             return (
-                                <RepoItem
+                                <RepoCard
                                     key={repo.id}
                                     repo={repo}
                                     onTopicClick={handleTopicClicked}
@@ -417,7 +418,7 @@ function App() {
                         </Toast>
                     ))}
                 </ToastContainer>
-                <EditItem
+                <RepoEdit
                     topics={topics}
                     repo={repoEditing}
                     editing={editing}

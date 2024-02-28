@@ -3,8 +3,8 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { MultiValue } from "react-select";
 import { Repo, SelectOption } from "../types";
 import { optionsToTopics, topicsToOptions } from "../utils";
-import TopicsFilter from "./TopicsFilter";
-import './AddItem.css'
+import TopicFilter from "./TopicFilter";
+import './RepoEdit.css'
 
 interface Props {
     repo: Repo;
@@ -14,7 +14,7 @@ interface Props {
     onHide: () => void;
 }
 
-function EditItem(props: Props) {
+function RepoEdit(props: Props) {
     const { topics, editing, onHide, onUpdate, repo } = props;
     const [repoName, setRepoName] = useState(repo.name);
     const [repoUrl, setRepoUrl] = useState(repo.url);
@@ -68,7 +68,7 @@ function EditItem(props: Props) {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Topics</Form.Label>
-                        <TopicsFilter
+                        <TopicFilter
                             topics={topics}
                             selected={repoTopics}
                             creatable={true}
@@ -91,4 +91,4 @@ function EditItem(props: Props) {
     );
 }
 
-export default EditItem;
+export default RepoEdit;

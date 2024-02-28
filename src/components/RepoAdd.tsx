@@ -2,7 +2,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useState } from "react";
 import { Repo } from "../types";
 import RepoProvider from "../repo";
-import "./AddItem.css";
+import "./RepoAdd.css";
 
 interface Props {
     onAdd: (repo: Repo) => Promise<boolean>;
@@ -19,7 +19,7 @@ const getUserStarredRepos = async (url: string) => {
     return RepoProvider.getUserStarredRepos(url, provider);
 };
 
-function AddItem(props: Props) {
+function RepoAdd(props: Props) {
     const { onAdd, onAddMany } = props;
     const [open, setOpen] = useState(false);
     const [url, setUrl] = useState("");
@@ -89,4 +89,4 @@ function AddItem(props: Props) {
     );
 }
 
-export default AddItem;
+export default RepoAdd;

@@ -5,12 +5,12 @@ import {
     Delete as IconDelete,
 } from "@mui/icons-material";
 import { Button, Dropdown, Modal } from "react-bootstrap";
-import "./Menu.css";
-import { Repo } from "../types";
+import { useState } from "react";
 import exportFromJSON from "export-from-json";
 import { useFilePicker } from "use-file-picker";
 import { SelectedFiles } from "use-file-picker/types";
-import { useState } from "react";
+import { Repo } from "../types";
+import "./Menu.css";
 
 interface Props {
     repos: Repo[];

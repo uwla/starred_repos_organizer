@@ -1,7 +1,7 @@
 import { Button, Modal } from "react-bootstrap";
-import { Repo } from "../types";
-import { useEffect, useState } from "react";
 import { Checkbox } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Repo } from "../types";
 
 interface Props {
     repos: Repo[];

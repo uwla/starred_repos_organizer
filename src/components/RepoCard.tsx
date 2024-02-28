@@ -1,28 +1,28 @@
 import {
+    IconType,
+    SiAwesomelists,
     SiC,
     SiCplusplus,
     SiCsharp,
+    SiCss3,
     SiGithub as IconGitHub,
     SiGitlab as IconGitLab,
-    SiJavascript,
-    SiPython,
-    SiRust,
-    SiCss3,
-    SiTypescript,
-    IconType,
-    SiVim,
-    SiPhp,
-    SiRacket,
-    SiRuby,
-    SiLua,
-    SiVuedotjs,
-    SiHtml5,
-    SiKotlin,
-    SiPowershell,
     SiGnubash,
+    SiHtml5,
+    SiJavascript,
+    SiKotlin,
+    SiLua,
+    SiPhp,
+    SiPowershell,
+    SiPython,
+    SiRacket,
     SiReact,
+    SiRuby,
+    SiRust,
     SiSvelte,
-    SiAwesomelists,
+    SiTypescript,
+    SiVim,
+    SiVuedotjs,
 } from "@icons-pack/react-simple-icons";
 import {
     Delete as IconDelete,
@@ -35,9 +35,8 @@ import {
 import { Chip } from "@mui/material";
 import { orange } from "@mui/material/colors";
 import { Card, Dropdown, Stack } from "react-bootstrap";
-
 import { Repo } from "../types";
-import "./RepoItem.css";
+import "./RepoCard.css";
 
 interface Props {
     repo: Repo;
@@ -70,7 +69,7 @@ const languageIcons = {
     vue: SiVuedotjs
 } as { [key: string]: IconType };
 
-function RepoItem(props: Props) {
+function RepoCard(props: Props) {
     const { repo, onTopicClick, onEdit, onDelete } = props;
     const topics = [...repo.topics].sort();
 
@@ -187,4 +186,4 @@ function RepoItem(props: Props) {
     );
 }
 
-export default RepoItem;
+export default RepoCard;
