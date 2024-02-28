@@ -60,8 +60,11 @@ app.post(`/repo`, async (req, res) => {
     const repos = dbRepos();
     let item;
 
+    // The actual method (POST, PUT, DELETE)
+    const method = ((data._method as string) || "").toLowerCase();
+
     // Delete many repositories.
-    if ((data._method as string || "").toLowerCase() === "delete") {
+    if (method === "delete") {
         const ids = data.ids as string[];
         const repos = dbRepos();
         const toDel = {} as { [key: string]: boolean };
@@ -71,6 +74,22 @@ app.post(`/repo`, async (req, res) => {
         db.data.repo = newRepos;
         db.write();
         res.send(deleted);
+        return;
+    }
+
+    if (method === "put") {
+        const toUpdate = data.repos as Repo[];
+        const id2repo = {} as { [key: string]: Repo };
+        toUpdate.forEach((r: Repo) => (id2repo[r.id] = r));
+        repos.forEach((repo: Repo, index: number) => {
+            const id = repo.id;
+            if (id2repo[id] !== undefined) {
+                repos[index] = id2repo[id];
+            }
+        });
+        db.data.repo = repos;
+        db.write();
+        res.send(toUpdate);
         return;
     }
 
@@ -110,6 +129,7 @@ app.post(`/repo/:id`, async (req, res) => {
     const repos = dbRepos();
     const index = findRepoIndex(id);
     repos.splice(index, 1, repo);
+    db.data.repo = repos;
     db.write();
     res.send(repo);
 });
@@ -121,6 +141,8 @@ app.delete(`/repo/:id`, async (req, res) => {
     const index = findRepoIndex(id);
     const repo = repos[index];
     repos.splice(index, 1);
+    db.data.repo = repos;
+    db.write();
     res.send(repo);
 });
 

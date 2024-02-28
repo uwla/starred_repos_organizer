@@ -5,34 +5,29 @@ const client = axios.create({ baseURL: "http://localhost:3000/repo" });
 
 const restApiDriver: StorageDriver = {
     async fetchRepos() {
-        let repos = [] as Repo[];
-        await client.get("/").then((response: AxiosResponse) => {
-            repos = response.data as Repo[];
-        });
-        return repos;
+        return client
+            .get("/")
+            .then((response: AxiosResponse) => response.data as Repo[]);
     },
     async createRepo(repo: Repo) {
-        let created = {} as Repo;
-        await client.post("/", repo).then((response: AxiosResponse) => {
-            created = response.data as Repo;
-        });
-        return created;
+        return client
+            .post("/", repo)
+            .then((response: AxiosResponse) => response.data as Repo);
     },
     async createMany(repos: Repo[]) {
-        let created = [] as Repo[];
-        await client.post("/", repos).then((response: AxiosResponse) => {
-            created = response.data as Repo[];
-        });
-        return created;
+        return client
+            .post("/", repos)
+            .then((response: AxiosResponse) => response.data as Repo[]);
     },
     async updateRepo(repo: Repo) {
-        let updated = {} as Repo;
-        await client
+        return client
             .post(`/${repo.id}`, repo)
-            .then((response: AxiosResponse) => {
-                updated = response.data as Repo;
-            });
-        return updated;
+            .then((response: AxiosResponse) => response.data as Repo);
+    },
+    async updateMany(repos: Repo[]) {
+        return client
+            .post(`/`, { repos, _method: "PUT" })
+            .then((response: AxiosResponse) => response.data as Repo[]);
     },
     async deleteRepo(repo: Repo) {
         let responseStatus = false;
