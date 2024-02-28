@@ -62,92 +62,18 @@ const languageIcons = {
     react: SiReact,
     ruby: SiRuby,
     rust: SiRust,
-    shell: SiGnubash,
     svelte: SiSvelte,
     typescript: SiTypescript,
     vim: SiVim,
-    vue: SiVuedotjs
+    vue: SiVuedotjs,
 } as { [key: string]: IconType };
 
 function RepoCard(props: Props) {
-    const { repo, onTopicClick, onEdit, onDelete } = props;
+    const { onEdit, onDelete, onTopicClick, repo } = props;
+    const { homepage, forks, stars, url } = repo;
     const topics = [...repo.topics].sort();
-
-    // Tactic to avoid nested JSX.
-    const repoTopics = topics.map((topic: string) => {
-        return (
-            <Chip
-                key={topic}
-                label={topic}
-                size="small"
-                color="primary"
-                variant="outlined"
-                sx={{ borderRadius: ".25em" }}
-                onClick={() => onTopicClick(topic)}
-            />
-        );
-    });
-
-    // Tactic to avoid nested JSX.
-    const repoLinks = [];
-    if (repo.url.includes("github.com")) {
-        repoLinks.push(
-            <Card.Link key="1" href={repo.url}>
-                <IconGitHub fontSize="small" />
-                <span>GitHub</span>
-            </Card.Link>
-        );
-    } else if (repo.url.includes("gitlab.com")) {
-        repoLinks.push(
-            <Card.Link key="1" href={repo.url}>
-                <IconGitLab fontSize="small" />
-                <span>GitLab</span>
-            </Card.Link>
-        );
-    }
-
-    if (repo.homepage != "" && repo.homepage != null) {
-        repoLinks.push(
-            <Card.Link key="2" href={repo.homepage}>
-                <IconHome fontSize="small" />
-                <span>Website</span>
-            </Card.Link>
-        );
-    }
-
-    repoLinks.push(
-        <div key="3">
-            <IconStar sx={{ color: orange[500] }} fontSize="small" />
-            <span>{repo.stars}</span>
-        </div>
-    );
-
-    if (typeof repo.forks == "number") {
-        repoLinks.push(
-            <div key="4">
-                <IconForks fontSize="small" />
-                <span>{repo.forks}</span>
-            </div>
-        );
-    }
-
     const lang = (repo.lang || "").toLowerCase();
-    if (languageIcons[lang]) {
-        const LanguageIcon = languageIcons[lang];
-        repoLinks.push(
-            <div key="5">
-                <LanguageIcon />
-            </div>
-        );
-    }
-
-    if (repo.topics.includes("awesome") || repo.topics.includes("awesome-list")) {
-        repoLinks.push(
-            <div key="6">
-                <SiAwesomelists />
-            </div>
-        );
-    }
+    const LanguageIcon = languageIcons[lang];
 
     return (
         <Card>
@@ -172,14 +98,67 @@ function RepoCard(props: Props) {
             </Card.Header>
             <Card.Body>
                 <Card.Text>{repo.description}</Card.Text>
-
                 <Stack direction="horizontal" gap={3} className="repo-details">
-                    {repoLinks}
+                    {url.includes("github.com/") && (
+                        <Card.Link href={url}>
+                            <IconGitHub fontSize="small" />
+                            <span>GitHub</span>
+                        </Card.Link>
+                    )}
+                    {url.includes("gitlab.com/") && (
+                        <Card.Link href={url}>
+                            <IconGitLab fontSize="small" />
+                            <span>GitLab</span>
+                        </Card.Link>
+                    )}
+                    {homepage && (
+                        <Card.Link href={homepage}>
+                            <IconHome fontSize="small" />
+                            <span>Website</span>
+                        </Card.Link>
+                    )}
+                    {typeof stars === "number" && (
+                        <div>
+                            <IconStar
+                                sx={{ color: orange[500] }}
+                                fontSize="small"
+                            />
+                            <span>{stars}</span>
+                        </div>
+                    )}
+                    {typeof forks === "number" && (
+                        <div>
+                            <IconForks fontSize="small" />
+                            <span>{forks}</span>
+                        </div>
+                    )}
+                    {LanguageIcon && (
+                        <div>
+                            <LanguageIcon />
+                        </div>
+                    )}
+                    {topics.some((t: string) => t.startsWith("awesome")) && (
+                        <div>
+                            <SiAwesomelists />
+                        </div>
+                    )}
                 </Stack>
             </Card.Body>
             {topics.length > 0 && (
                 <Card.Footer>
-                    <Stack className="repo-topics">{repoTopics}</Stack>
+                    <Stack className="repo-topics">
+                        {topics.map((topic: string) => (
+                            <Chip
+                                key={topic}
+                                label={topic}
+                                size="small"
+                                color="primary"
+                                variant="outlined"
+                                sx={{ borderRadius: ".25em" }}
+                                onClick={() => onTopicClick(topic)}
+                            />
+                        ))}
+                    </Stack>
                 </Card.Footer>
             )}
         </Card>
