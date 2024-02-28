@@ -28,6 +28,7 @@ import { optionsToTopics } from "./utils";
 import { Repo, RepoKey, SelectOption } from "./types";
 import storageDriver from "./storage";
 import "./App.css";
+import RepoProvider from "./repo";
 
 /* -------------------------------------------------------------------------- */
 // Utilities
@@ -278,16 +279,16 @@ function App() {
             .updateRepo(repo)
             .then((updated: Repo) => {
                 // Update local repos.
-                let index = repos.findIndex((r: Repo) => r.id == updated.id);
+                let index = repos.findIndex((r: Repo) => r.id === updated.id);
                 repos.splice(index, 1, updated);
-                setRepos(repos);
+                setRepos([...repos]);
 
                 // Updated local filtered repos.
                 index = filteredRepos.findIndex(
-                    (r: Repo) => r.id == updated.id
+                    (r: Repo) => r.id === updated.id
                 );
                 filteredRepos.splice(index, 1, updated);
-                setFilteredRepos(filteredRepos);
+                setFilteredRepos([...filteredRepos]);
 
                 // Update topics.
                 setTopics(extractTopics(repos));
@@ -302,6 +303,20 @@ function App() {
                 setErrorMsg("Failed to updated repository [Server error]");
                 return false;
             });
+    }
+
+    async function handleRefresh(repo: Repo) {
+        // Get the updated version of the repository.
+        const updated = await RepoProvider.getRepo(repo.url)
+
+        // Preserve the topics, which may have been overwritten locally.
+        updated.topics = repo.topics;
+
+        // Also, we want to make sure the id was not overwritten.
+        updated.id = repo.id;
+
+        // Then, update it.
+        handleUpdate(updated);
     }
 
     /* ---------------------------------------------------------------------- */
@@ -360,9 +375,10 @@ function App() {
                                 <RepoCard
                                     key={repo.id}
                                     repo={repo}
-                                    onTopicClick={handleTopicClicked}
-                                    onDelete={() => handleDelete(repo)}
+                                    onClickTopic={handleTopicClicked}
                                     onEdit={() => handleEdit(repo)}
+                                    onDelete={() => handleDelete(repo)}
+                                    onRefresh={() => handleRefresh(repo)}
                                 />
                             );
                         })}

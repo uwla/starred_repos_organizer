@@ -25,11 +25,12 @@ import {
     SiVuedotjs,
 } from "@icons-pack/react-simple-icons";
 import {
+    AltRoute as IconForks,
     Delete as IconDelete,
     Edit as IconEdit,
-    AltRoute as IconForks,
-    Settings as IconGear,
     HomeOutlined as IconHome,
+    Refresh as IconRefresh,
+    Settings as IconGear,
     Star as IconStar,
 } from "@mui/icons-material";
 import { Chip } from "@mui/material";
@@ -39,10 +40,11 @@ import { Repo } from "../types";
 import "./RepoCard.css";
 
 interface Props {
-    repo: Repo;
-    onTopicClick: (topic: string) => void;
-    onDelete: () => void;
+    onClickTopic: (topic: string) => void;
     onEdit: () => void;
+    onDelete: () => void;
+    onRefresh: () => void;
+    repo: Repo;
 }
 
 const languageIcons = {
@@ -69,7 +71,7 @@ const languageIcons = {
 } as { [key: string]: IconType };
 
 function RepoCard(props: Props) {
-    const { onEdit, onDelete, onTopicClick, repo } = props;
+    const { onClickTopic, onEdit, onDelete, onRefresh, repo } = props;
     const { homepage, forks, stars, url } = repo;
     const topics = [...repo.topics].sort();
     const lang = (repo.lang || "").toLowerCase();
@@ -85,6 +87,10 @@ function RepoCard(props: Props) {
                         <IconGear fontSize="small" />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
+                        <Dropdown.Item onClick={onRefresh}>
+                            <IconRefresh fontSize="small" />
+                            &nbsp; refresh
+                        </Dropdown.Item>
                         <Dropdown.Item onClick={onEdit}>
                             <IconEdit fontSize="small" />
                             &nbsp; edit
@@ -155,7 +161,7 @@ function RepoCard(props: Props) {
                                 color="primary"
                                 variant="outlined"
                                 sx={{ borderRadius: ".25em" }}
-                                onClick={() => onTopicClick(topic)}
+                                onClick={() => onClickTopic(topic)}
                             />
                         ))}
                     </Stack>
