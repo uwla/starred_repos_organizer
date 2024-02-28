@@ -62,18 +62,22 @@ function Menu(props: Props) {
                     <Dropdown.Item onClick={openFilePicker}>
                         <IconUpload /> IMPORT
                     </Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleDownload(repos)}>
-                        <IconDownload /> EXPORT
-                    </Dropdown.Item>
-                    {filtered.length < repos.length && (
+                    {repos.length > 0 && (
+                        <Dropdown.Item onClick={() => handleDownload(repos)}>
+                            <IconDownload /> EXPORT
+                        </Dropdown.Item>
+                    )}
+                    {filtered.length > 0 && filtered.length < repos.length && (
                         <Dropdown.Item onClick={() => handleDownload(filtered)}>
                             <IconDownload /> EXPORT FILTERED
                         </Dropdown.Item>
                     )}
-                    <Dropdown.Item onClick={() => confirmDelete(repos)}>
-                        <IconDelete /> DELETE ALL
-                    </Dropdown.Item>
-                    {filtered.length < repos.length && (
+                    {repos.length > 0 && (
+                        <Dropdown.Item onClick={() => confirmDelete(repos)}>
+                            <IconDelete /> DELETE ALL
+                        </Dropdown.Item>
+                    )}
+                    {filtered.length > 0 && filtered.length < repos.length && (
                         <Dropdown.Item onClick={() => confirmDelete(filtered)}>
                             <IconDelete /> DELETE FILTERED
                         </Dropdown.Item>
