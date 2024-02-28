@@ -357,7 +357,7 @@ function App() {
                         .map((repo: Repo) => {
                             return (
                                 <RepoItem
-                                    key={repo.url}
+                                    key={repo.id}
                                     repo={repo}
                                     onTopicClick={handleTopicClicked}
                                     onDelete={() => handleDelete(repo)}

@@ -1,12 +1,14 @@
 import { App } from "@tinyhttp/app";
 import { cors } from "@tinyhttp/cors";
-import { Data, Item, Service, isItem } from "json-server/lib/service";
+import { Data, Item, isItem } from "json-server/lib/service";
 import { json } from "milliparsec";
 import { JSONFile } from "lowdb/node";
 import { Low } from "lowdb";
 import { Observer } from "json-server/lib/observer";
 import { watch } from "chokidar";
 import chalk from "chalk";
+import { uniqueRepos } from "./utils";
+import { Repo } from "./types";
 
 /* -------------------------------------------------------------------------- */
 
@@ -16,7 +18,14 @@ const adapter = new JSONFile(file);
 const observer = new Observer(adapter);
 const db = new Low(observer, {}) as Low<Data>;
 await db.read();
-const service = new Service(db);
+
+/* -------------------------------------------------------------------------- */
+
+// Database helpers
+const dbRepos = () => db.data.repo as Repo[];
+const findRepo = (id: string) => dbRepos().find((r: Repo) => r.id === id);
+const findRepoIndex = (id: string) =>
+    dbRepos().findIndex((r: Repo) => r.id === id);
 
 /* -------------------------------------------------------------------------- */
 
@@ -28,40 +37,42 @@ app.use(cors());
 /* -------------------------------------------------------------------------- */
 
 // Set up routes
-const name = "repo";
 
 // Get repos
-app.get(`/${name}`, async (req, res) => {
-    const queryTypes = ["_start", "_end", "_limit", "_page", "_per_page"];
-    const query = Object.fromEntries(
-        Object.entries(req.query)
-            .map(([key, value]) => {
-                if (queryTypes.includes(key) && typeof value === "string") {
-                    return [key, parseInt(value)];
-                } else {
-                    return [key, value];
-                }
-            })
-            .filter(([_key, value]) => !Number.isNaN(value))
-    );
-    res.send(service.find(name, query));
+app.get(`/repo`, async (_, res) => {
+    res.send(dbRepos());
 });
 
 // Get repo
-app.get(`/${name}/:id`, (req, res) => {
+app.get(`/repo/:id`, (req, res) => {
     const { id = "" } = req.params;
-    res.send(service.findById(name, id, req.query) || "Not found");
+    res.send(findRepo(id));
 });
 
 // Create repo(s)
-app.post(`/${name}`, async (req, res) => {
+app.post(`/repo`, async (req, res) => {
     if (!isItem(req.body)) {
         res.send("Expect request body");
         return;
     }
+
     const data = req.body;
-    const repos = [...db.data.repo as Item[]];
+    const repos = dbRepos();
     let item;
+
+    // Delete many repositories.
+    if ((data._method as string || "").toLowerCase() === "delete") {
+        const ids = data.ids as string[];
+        const repos = dbRepos();
+        const toDel = {} as { [key: string]: boolean };
+        ids.forEach((id: string) => (toDel[id] = true));
+        const newRepos = repos.filter((r: Repo) => !toDel[r.id]);
+        const deleted = repos.filter((r: Repo) => toDel[r.id]);
+        db.data.repo = newRepos;
+        db.write();
+        res.send(deleted);
+        return;
+    }
 
     // helper to assign random ID to created items.
     const randomId = () => Math.random().toString().slice(2, 8);
@@ -74,29 +85,14 @@ app.post(`/${name}`, async (req, res) => {
             item.push(data[item.length] as Item);
         }
         item = item.map(assignId);
-        repos.unshift(...item);
+        repos.unshift(...(item as Repo[]));
     } else {
         item = assignId(data);
-        repos.unshift(item);
+        repos.unshift(item as Repo);
     }
 
-    // Extract URLs to detect duplicate repositories.
-    const urls = {} as { [key: string]: boolean };
-    repos.forEach((r: Item) => (urls[r.url as string] = false));
-
-    // Reverse order so the most recently added repos will prevail.
-    repos.reverse();
-
-    // Prevent duplicated repos by applying a URL filter.
-    db.data.repo = repos.filter((r: Item) => {
-        const url = r.url as string;
-        if (urls[url] == true) return false;
-        urls[url] = true;
-        return true;
-    });
-
-    // Re-reverse to cancel the first reverse.
-    db.data.repo.reverse();
+    // Make it unique.
+    db.data.repo = uniqueRepos(repos as Repo[]);
 
     // Write to DB
     await db.write();
@@ -104,19 +100,28 @@ app.post(`/${name}`, async (req, res) => {
 });
 
 // Update repo
-app.post(`/${name}/:id`, async (req, res) => {
+app.post(`/repo/:id`, async (req, res) => {
     const { id = "" } = req.params;
     if (!isItem(req.body)) {
         res.send("Expected resource");
         return;
     }
-    res.send(await service.updateById(name, id, req.body));
+    const repo = req.body as Repo;
+    const repos = dbRepos();
+    const index = findRepoIndex(id);
+    repos.splice(index, 1, repo);
+    db.write();
+    res.send(repo);
 });
 
-// Delete repo
-app.delete(`/${name}/:id`, async (req, res) => {
+// Delete single repo.
+app.delete(`/repo/:id`, async (req, res) => {
     const { id = "" } = req.params;
-    res.send(await service.destroyById(name, id, req.query["dependent"]));
+    const repos = dbRepos();
+    const index = findRepoIndex(id);
+    const repo = repos[index];
+    repos.splice(index, 1);
+    res.send(repo);
 });
 
 // Start server

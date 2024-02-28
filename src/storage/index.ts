@@ -4,8 +4,7 @@ import localStorageDriver from "./localStorageDriver";
 import mockDriver from "./mockDriver";
 import restApiDriver from "./restApiDriver";
 
-const STORAGE_DRIVER =
-    typeof process !== "undefined" ? process.env.REACT_APP_STORAGE_DRIVER : "";
+const STORAGE_DRIVER = import.meta.env.VITE_STORAGE_DRIVER;
 
 let apiClient = {} as StorageDriver;
 
