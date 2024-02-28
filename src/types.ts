@@ -38,6 +38,7 @@ interface StorageDriver {
     createRepo: (repo: Repo) => Promise<Repo>;
     createMany: (repos: Repo[]) => Promise<Repo[]>;
     updateRepo: (repo: Repo) => Promise<Repo>;
+    updateMany: (repos: Repo[]) => Promise<Repo[]>;
     deleteRepo: (repo: Repo) => Promise<boolean>;
     deleteMany: (repos: Repo[]) => Promise<boolean>;
 }

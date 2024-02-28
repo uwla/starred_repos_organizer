@@ -39,6 +39,17 @@ html {
     margin: 0;
 }
 
+#app .stack-filter {
+    gap: 0.5em;
+    flex-direction: row;
+}
+
+#app .stack-filter > :first-child
+
+{
+    flex-grow: 1;
+}
+
 label {
     cursor: pointer;
 }

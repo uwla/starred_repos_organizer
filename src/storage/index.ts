@@ -6,18 +6,18 @@ import restApiDriver from "./restApiDriver";
 
 const STORAGE_DRIVER = import.meta.env.VITE_STORAGE_DRIVER;
 
-let apiClient = {} as StorageDriver;
+let storageDriver = {} as StorageDriver;
 
 switch (STORAGE_DRIVER) {
     case "mock":
-        apiClient = mockDriver;
+        storageDriver = mockDriver;
         break;
     case "rest":
-        apiClient = restApiDriver;
+        storageDriver = restApiDriver;
         break;
     case "local":
     default:
-        apiClient = localStorageDriver;
+        storageDriver = localStorageDriver;
 }
 
-export default apiClient;
+export default storageDriver;

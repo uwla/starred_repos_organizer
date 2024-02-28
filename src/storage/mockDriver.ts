@@ -16,6 +16,9 @@ const mockDriver: StorageDriver = {
     async updateRepo(repo: Repo) {
         return repo;
     },
+    async updateMany(repos: Repo[]) {
+        return repos;
+    },
     async deleteRepo(_: Repo) {
         return true;
     },

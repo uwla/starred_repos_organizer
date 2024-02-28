@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 import {
     Close as CloseIcon,
+    Edit as EditIcon,
     GitHub as GitHubIcon,
     Undo as UndoIcon,
 } from "@mui/icons-material";
@@ -29,6 +30,7 @@ import { Repo, RepoKey, SelectOption } from "./types";
 import storageDriver from "./storage";
 import "./App.css";
 import RepoProvider from "./repo";
+import TopicSelect from "./components/TopicSelect";
 
 /* -------------------------------------------------------------------------- */
 // Utilities
@@ -99,7 +101,8 @@ function App() {
     const [filteredRepos, setFilteredRepos] = useState([] as Repo[]);
     const [page, setPage] = useState(0);
     const [perPage, setPerPage] = useState(10);
-    const [repoEditing, setRepoEditing] = useState({} as Repo);
+    const [editingRepo, setEditingRepo] = useState({} as Repo);
+    const [pickingTopics, setPickingTopics] = useState(false);
     const [repos, setRepos] = useState([] as Repo[]);
     const [reposToAdd, setReposToAdd] = useState([] as Repo[]);
     const [searchQuery, setSearchQuery] = useState("");
@@ -276,7 +279,7 @@ function App() {
     }
 
     function handleEdit(r: Repo) {
-        setRepoEditing(r);
+        setEditingRepo(r);
         setEditing(true);
     }
 
@@ -326,6 +329,21 @@ function App() {
         handleUpdate(updated);
     }
 
+    async function handleTopicsPicking(selectedTopics: string[]) {
+        if (selectedTopics.length === topics.length) {
+            setPickingTopics(false);
+            return;
+        }
+        const topicsDict = {} as { [key: string]: boolean };
+        selectedTopics.forEach((t: string) => (topicsDict[t] = true));
+        const filterTopics = (topic: string) => topicsDict[topic];
+        repos.forEach((r: Repo) => (r.topics = r.topics.filter(filterTopics)));
+        storageDriver
+            .updateMany(repos)
+            .then(updateStateRepos)
+            .then(() => setPickingTopics(false));
+    }
+
     /* ---------------------------------------------------------------------- */
     // render logic
 
@@ -350,13 +368,18 @@ function App() {
                 />
                 <h1>STARRED REPOS</h1>
                 <SearchFilter onSubmit={handleSearch} />
-                <TopicFilter
-                    topics={topics}
-                    selected={selectedTopics}
-                    onSelect={(value: MultiValue<SelectOption>) =>
-                        handleSelect(value as SelectOption[])
-                    }
-                />
+                <Stack className="stack-filter">
+                    <TopicFilter
+                        topics={topics}
+                        selected={selectedTopics}
+                        onSelect={(value: MultiValue<SelectOption>) =>
+                            handleSelect(value as SelectOption[])
+                        }
+                    />
+                    <Button onClick={() => setPickingTopics(true)}>
+                        <EditIcon />
+                    </Button>
+                </Stack>
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}
                 <SortOptions
                     values={["", "stars", "name", "forks"]}
@@ -456,9 +479,15 @@ function App() {
                         </Toast>
                     ))}
                 </ToastContainer>
+               <TopicSelect
+                    show={pickingTopics}
+                    topics={topics}
+                    onHide={() => setPickingTopics(false)}
+                    onConfirmSelection={handleTopicsPicking}
+                 />
                 <RepoEdit
                     topics={topics}
-                    repo={repoEditing}
+                    repo={editingRepo}
                     editing={editing}
                     onHide={() => setEditing(false)}
                     onUpdate={handleUpdate}

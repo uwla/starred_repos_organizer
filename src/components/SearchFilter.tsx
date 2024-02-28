@@ -25,20 +25,17 @@ function SearchFilter(props: Props) {
     }
 
     return (
-        <>
-            <Stack direction="horizontal" gap={2}>
-                <Form.Control
-                    type="text"
-                    id="search-input"
-                    onChange={handleInput}
-                    onKeyDown={handleKey}
-                    placeholder="Search..."
-                ></Form.Control>
-                <Button variant="primary" onClick={handleClick}>
-                    <IconSearch />
-                </Button>
-            </Stack>
-        </>
+        <Stack className="stack-filter">
+            <Form.Control
+                type="text"
+                onChange={handleInput}
+                onKeyDown={handleKey}
+                placeholder="Search..."
+            ></Form.Control>
+            <Button variant="primary" onClick={handleClick}>
+                <IconSearch />
+            </Button>
+        </Stack>
     );
 }
 

@@ -1,0 +1,10 @@
+#app .topic-filter {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: stretch;
+}
+
+#app .topic-filter > div {
+    flex-grow: 1;
+}

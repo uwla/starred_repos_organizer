@@ -87,13 +87,13 @@ function RepoCard(props: Props) {
                         <IconGear fontSize="small" />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={onRefresh}>
-                            <IconRefresh fontSize="small" />
-                            &nbsp; refresh
-                        </Dropdown.Item>
                         <Dropdown.Item onClick={onEdit}>
                             <IconEdit fontSize="small" />
                             &nbsp; edit
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={onRefresh}>
+                            <IconRefresh fontSize="small" />
+                            &nbsp; refresh
                         </Dropdown.Item>
                         <Dropdown.Item onClick={onDelete}>
                             <IconDelete fontSize="small" />

@@ -1,23 +1,23 @@
-.repos-to-add {
+.select-menu {
     max-height: 50vh;
     overflow: auto;
 }
 
-.repos-to-add > div {
+.select-menu > div {
     display: flex;
     align-items: center;
 }
 
-.repos-to-add > div a {
+.select-menu > div a {
     white-space: pre;
 }
 
-.repos-to-add label {
+.select-menu label {
     display: block;
     width: 100%;
     padding: .5em 0;
 }
 
-.repos-to-add > div:hover {
+.select-menu > div:hover {
     background-color: #eee;
 }

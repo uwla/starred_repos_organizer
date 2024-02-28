@@ -41,6 +41,19 @@ const localStorageDriver: StorageDriver = {
         setRepos(repos);
         return repo;
     },
+    async updateMany(repos: Repo[]) {
+        const current = getRepos();
+        const id2repo = {} as { [key:string] : Repo};
+        repos.forEach((r: Repo) => id2repo[r.id] = r);
+        current.forEach((repo: Repo, index: number) => {
+            const id = repo.id;
+            if (id2repo[id] !== undefined) {
+                current[index] = id2repo[id];
+            }
+        })
+        setRepos(current);
+        return repos;
+    },
     async deleteRepo(repo: Repo) {
         const repos = getRepos();
         const index = repos.findIndex(

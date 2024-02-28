@@ -2,6 +2,7 @@ import { Button, Modal } from "react-bootstrap";
 import { Checkbox } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Repo } from "../types";
+import './RepoSelect.css'
 
 interface Props {
     repos: Repo[];
@@ -40,14 +41,14 @@ function RepoSelect(props: Props) {
     return (
         <Modal show={repos.length > 0} onHide={handleHide}>
             <Modal.Header>
-                <Modal.Title>ADD REPOSITORY</Modal.Title>
+                <Modal.Title>ADD REPOSITORIES</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className="repos-to-add">
+                <div className="select-menu">
                     {checkboxes.map((checkbox: RepoCheckbox, index: number) => {
                         const { repo, checked } = checkbox;
                         const { url, full_name } = repo;
-                        const cssId = `add-${index}`;
+                        const cssId = `repo-add-${index}`;
                         return (
                             <div key={index}>
                                 <Checkbox

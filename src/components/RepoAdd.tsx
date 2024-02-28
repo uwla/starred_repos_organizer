@@ -2,7 +2,6 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useState } from "react";
 import { Repo } from "../types";
 import RepoProvider from "../repo";
-import "./RepoAdd.css";
 
 interface Props {
     onAdd: (repo: Repo) => Promise<boolean>;

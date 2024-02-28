@@ -3,6 +3,7 @@ import makeAnimated from "react-select/animated";
 import Select, { MultiValue } from "react-select";
 import { SelectOption } from "../types";
 import { topicsToOptions } from "../utils";
+import './TopicFilter.css'
 
 const animatedComponents = makeAnimated();
 
@@ -21,6 +22,7 @@ function TopicFilter(props: Props) {
 
     return (
         <SelectComponent
+            className="topic-filter"
             options={options}
             value={selected}
             onChange={onSelect}
