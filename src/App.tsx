@@ -1,6 +1,3 @@
-import "./App.css";
-
-import { useEffect, useState } from "react";
 import {
     Alert,
     Button,
@@ -9,25 +6,27 @@ import {
     Toast,
     ToastContainer,
 } from "react-bootstrap";
-import { MultiValue } from "react-select";
-
 import {
     Close as CloseIcon,
     GitHub as GitHubIcon,
     Undo as UndoIcon,
 } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { MultiValue } from "react-select";
 
+import { optionsToTopics } from "./utils";
+import { Repo, RepoKey, SelectOption } from "./types";
 import AddItem from "./components/AddItem";
 import EditItem from "./components/EditItem";
 import Menu from "./components/Menu";
 import Pagination from "./components/Pagination";
 import RepoItem from "./components/RepoItem";
+import RepoSelect from "./components/RepoSelect";
 import SearchFilter from "./components/SearchFilter";
 import SortOptions from "./components/SortOptions";
-import TopicsFilter from "./components/TopicsFilter";
 import storageDriver from "./storage";
-import { Repo, RepoKey, SelectOption } from "./types";
-import { optionsToTopics } from "./utils";
+import TopicsFilter from "./components/TopicsFilter";
+import "./App.css";
 
 /* -------------------------------------------------------------------------- */
 // Utilities
@@ -92,18 +91,19 @@ const shouldShowDemoMsg =
 
 function App() {
     // state
-    const [repos, setRepos] = useState([] as Repo[]);
     const [deletedRepos, setDeletedRepos] = useState([] as Repo[]);
-    const [topics, setTopics] = useState([] as string[]);
-    const [selectedTopics, setSelectedTopics] = useState([] as SelectOption[]);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [filteredRepos, setFilteredRepos] = useState(repos);
-    const [perPage, setPerPage] = useState(10);
-    const [page, setPage] = useState(0);
-    const [repoEditing, setRepoEditing] = useState({} as Repo);
     const [editing, setEditing] = useState(false);
-    const [showDemoMsg, setShowDemoMsg] = useState(shouldShowDemoMsg);
     const [errorMsg, setErrorMsg] = useState("");
+    const [filteredRepos, setFilteredRepos] = useState([] as Repo[]);
+    const [page, setPage] = useState(0);
+    const [perPage, setPerPage] = useState(10);
+    const [repoEditing, setRepoEditing] = useState({} as Repo);
+    const [repos, setRepos] = useState([] as Repo[]);
+    const [reposToAdd, setReposToAdd] = useState([] as Repo[]);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedTopics, setSelectedTopics] = useState([] as SelectOption[]);
+    const [showDemoMsg, setShowDemoMsg] = useState(shouldShowDemoMsg);
+    const [topics, setTopics] = useState([] as string[]);
 
     useEffect(() => {
         fetchData();
@@ -211,7 +211,17 @@ function App() {
             });
     }
 
+    async function confirmAddMany(manyRepos: Repo[]) {
+        setReposToAdd(manyRepos);
+        return true;
+    }
+
     async function handleAddMany(manyRepos: Repo[]) {
+        if (manyRepos.length === 0) {
+            setReposToAdd([]);
+            return;
+        }
+
         return await storageDriver
             .createMany(manyRepos)
             .then((created) => {
@@ -221,7 +231,8 @@ function App() {
             .catch(() => {
                 setErrorMsg("Failed to add repositories [Server error]");
                 return false;
-            });
+            })
+            .finally(() => setReposToAdd([]));
     }
 
     async function handleDelete(repo: Repo) {
@@ -229,7 +240,7 @@ function App() {
             if (status) {
                 // Update local state.
                 const filterDeleted = (r: Repo) => r.id != repo.id;
-                const newRepos = repos.filter(filterDeleted)
+                const newRepos = repos.filter(filterDeleted);
                 setRepos(newRepos);
                 setFilteredRepos(filteredRepos.filter(filterDeleted));
                 setTopics(extractTopics(newRepos));
@@ -311,7 +322,7 @@ function App() {
                 <Menu
                     repos={repos}
                     filtered={filteredRepos}
-                    onImport={handleAddMany}
+                    onImport={confirmAddMany}
                     onDelete={handleDeleteMany}
                 />
                 <h1>STARRED REPOS</h1>
@@ -328,7 +339,11 @@ function App() {
                     values={["", "stars", "name"]}
                     onSelect={handleSort}
                 />
-                <AddItem onAdd={handleAddItem} onAddMany={handleAddMany} />
+                <AddItem onAdd={handleAddItem} onAddMany={confirmAddMany} />
+                <RepoSelect
+                    repos={reposToAdd}
+                    onConfirmSelection={handleAddMany}
+                />
                 <Pagination
                     page={page}
                     perPage={perPage}

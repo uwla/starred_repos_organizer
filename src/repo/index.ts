@@ -23,7 +23,7 @@ const RepoProvider = {
         // 3. It is user account if array has only two items (DOMAIN and USER).
         return url.replace(/https?:\/\//, "")
             .replace(/\/$/, "")
-            .split("/").length === 3;
+            .split("/").length === 2;
     },
 
     sanitizeUrl(url: string) {
