@@ -175,6 +175,9 @@ function App() {
             case "name":
                 cmp = (a: Repo, b: Repo) => a.name.localeCompare(b.name);
                 break;
+            case "forks":
+                cmp = (a: Repo, b: Repo) => b.forks - a.forks;
+                break;
             default:
                 throw Error("unknown sort option");
         }
@@ -352,7 +355,7 @@ function App() {
                 />
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}
                 <SortOptions
-                    values={["", "stars", "name"]}
+                    values={["", "stars", "name", "forks"]}
                     onSelect={handleSort}
                 />
                 <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
