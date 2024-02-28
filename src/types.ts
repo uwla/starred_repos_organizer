@@ -9,7 +9,7 @@ type Repo = {
     name: string;
     description: string;
     topics: Array<string>;
-    html_url: string;
+    url: string;
     homepage: string;
     lang: string;
     license: string;

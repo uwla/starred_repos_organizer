@@ -194,7 +194,7 @@ function App() {
     }
 
     async function handleAddItem(repo: Repo) {
-        if (repos.find((r: Repo) => r.html_url === repo.html_url)) {
+        if (repos.find((r: Repo) => r.url === repo.url)) {
             setErrorMsg("Repo already added!");
             return false;
         }
@@ -357,7 +357,7 @@ function App() {
                         .map((repo: Repo) => {
                             return (
                                 <RepoItem
-                                    key={repo.html_url}
+                                    key={repo.url}
                                     repo={repo}
                                     onTopicClick={handleTopicClicked}
                                     onDelete={() => handleDelete(repo)}

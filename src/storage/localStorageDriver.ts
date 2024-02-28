@@ -34,7 +34,7 @@ const localStorageDriver: StorageDriver = {
     async updateRepo(repo: Repo) {
         const repos = getRepos();
         const index = repos.findIndex(
-            (r: Repo) => (r.html_url = repo.html_url)
+            (r: Repo) => (r.url = repo.url)
         );
         if (index === -1) throw Error("Repo does not exist yet.");
         repos.splice(index, 1, repo);
@@ -44,7 +44,7 @@ const localStorageDriver: StorageDriver = {
     async deleteRepo(repo: Repo) {
         const repos = getRepos();
         const index = repos.findIndex(
-            (r: Repo) => (r.html_url === repo.html_url)
+            (r: Repo) => (r.url === repo.url)
         );
         if (index === -1) return false;
         repos.splice(index, 1);

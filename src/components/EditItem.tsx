@@ -18,14 +18,14 @@ interface Props {
 function EditItem(props: Props) {
     const { topics, editing, onHide, onUpdate, repo } = props;
     const [repoName, setRepoName] = useState(repo.name);
-    const [repoUrl, setRepoUrl] = useState(repo.html_url);
+    const [repoUrl, setRepoUrl] = useState(repo.url);
     const [repoTopics, setRepoTopics] = useState(
         topicsToOptions(repo.topics || [])
     );
 
     useEffect(() => {
         setRepoName(props.repo.name);
-        setRepoUrl(props.repo.html_url);
+        setRepoUrl(props.repo.url);
         setRepoTopics(topicsToOptions(props.repo.topics || []));
     }, [props]);
 

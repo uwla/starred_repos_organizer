@@ -14,7 +14,7 @@ const map = {
     "forks_count": "forks",
     "path_with_namespace": "full_name",
     "homepage": "homepage",
-    "web_url": "html_url",
+    "web_url": "url",
     "is_template": "template",
     "license.nickname": "license",
     "name": "name",

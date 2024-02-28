@@ -91,16 +91,16 @@ function RepoItem(props: Props) {
 
     // Tactic to avoid nested JSX.
     const repoLinks = [];
-    if (repo.html_url.includes("github.com")) {
+    if (repo.url.includes("github.com")) {
         repoLinks.push(
-            <Card.Link key="1" href={repo.html_url}>
+            <Card.Link key="1" href={repo.url}>
                 <IconGitHub fontSize="small" />
                 <span>GitHub</span>
             </Card.Link>
         );
-    } else if (repo.html_url.includes("gitlab.com")) {
+    } else if (repo.url.includes("gitlab.com")) {
         repoLinks.push(
-            <Card.Link key="1" href={repo.html_url}>
+            <Card.Link key="1" href={repo.url}>
                 <IconGitLab fontSize="small" />
                 <span>GitLab</span>
             </Card.Link>

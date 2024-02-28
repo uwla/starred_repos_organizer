@@ -11,14 +11,14 @@ const uniqueRepos = (repos: Repo[]): Repo[] => {
 
     // Extract URLs to detect duplicate repositories.
     const urls = {} as { [key: string]: boolean };
-    unique.forEach((r: Repo) => (urls[r.html_url as string] = false));
+    unique.forEach((r: Repo) => (urls[r.url as string] = false));
 
     // Reverse order so the most recently added repos will prevail.
     unique.reverse();
 
     // Prevent duplicated repos by applying a URL filter.
     unique = unique.filter((r: Repo) => {
-        const url = r.html_url;
+        const url = r.url;
         if (urls[url] == true) return false;
         urls[url] = true;
         return true;

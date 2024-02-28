@@ -14,7 +14,7 @@ const map= {
     "forks_count": "forks",
     "full_name": "full_name",
     "homepage": "homepage",
-    "html_url": "html_url",
+    "html_url": "url",
     "is_template": "template",
     "language": "lang",
     "license.spdx_id": "license",

@@ -82,14 +82,14 @@ app.post(`/${name}`, async (req, res) => {
 
     // Extract URLs to detect duplicate repositories.
     const urls = {} as { [key: string]: boolean };
-    repos.forEach((r: Item) => (urls[r.html_url as string] = false));
+    repos.forEach((r: Item) => (urls[r.url as string] = false));
 
     // Reverse order so the most recently added repos will prevail.
     repos.reverse();
 
     // Prevent duplicated repos by applying a URL filter.
     db.data.repo = repos.filter((r: Item) => {
-        const url = r.html_url as string;
+        const url = r.url as string;
         if (urls[url] == true) return false;
         urls[url] = true;
         return true;

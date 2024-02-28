@@ -46,7 +46,7 @@ function RepoSelect(props: Props) {
                 <div className="repos-to-add">
                     {checkboxes.map((checkbox: RepoCheckbox, index: number) => {
                         const { repo, checked } = checkbox;
-                        const { html_url, full_name } = repo;
+                        const { url, full_name } = repo;
                         const cssId = `add-${index}`;
                         return (
                             <div key={index}>
@@ -56,7 +56,7 @@ function RepoSelect(props: Props) {
                                     id={cssId}
                                 />
                                 <label htmlFor={cssId}>
-                                    <a href={html_url}>{full_name}</a>
+                                    <a href={url}>{full_name}</a>
                                 </label>
                             </div>
                         );
