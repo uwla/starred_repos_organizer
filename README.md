@@ -75,10 +75,9 @@ You can also save the demo files locally and it will work offline.
 - [x] Support for GitHub
 - [x] Support for GitLab
 - [x] Support for CodeBerg
-- [ ] Support for SourceHut
-- [ ] Support for SourceForge
 - [ ] Support for custom GitLab instance
 - [ ] Support for custom Gitea instance
+- [ ] Support for custom Gogs instance
 - [ ] Option to specifying provider
 - [ ] Option to set auth tokens
 
