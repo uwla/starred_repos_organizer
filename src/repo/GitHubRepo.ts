@@ -1,51 +1,43 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { Repo, RepoProvider, ResponseData, ResponseKeyMapper } from "../types";
-import { parseResponse } from "../utils";
+import ApiClient from "./ApiClient";
 
-const baseURL = "https://api.github.com";
-const apiClient = axios.create({ baseURL });
+class GitHubRepo extends ApiClient implements RepoProvider {
+    constructor(baseURL = "https://api.github.com") {
+        super(baseURL);
+    }
 
-// Array used to map response object to our data structure.
-const map= {
-    "archived": "archived",
-    "created_at": "created_at",
-    "description": "description",
-    "fork": "forked",
-    "forks_count": "forks",
-    "full_name": "full_name",
-    "homepage": "homepage",
-    "html_url": "url",
-    "is_template": "template",
-    "language": "lang",
-    "license.spdx_id": "license",
-    "name": "name",
-    "owner.login": "owner",
-    "owner.type": "owner_type",
-    "pushed_at": "last_push",
-    "stargazers_count": "stars",
-    "topics": "topics",
-    "updated_at": "last_update",
-} as ResponseKeyMapper;
+    responseDataMapper(): ResponseKeyMapper {
+        return {
+            archived: "archived",
+            created_at: "created_at",
+            description: "description",
+            fork: "forked",
+            forks_count: "forks",
+            full_name: "full_name",
+            homepage: "homepage",
+            html_url: "url",
+            is_template: "template",
+            language: "lang",
+            "license.spdx_id": "license",
+            name: "name",
+            "owner.login": "owner",
+            "owner.type": "owner_type",
+            pushed_at: "last_push",
+            stargazers_count: "stars",
+            topics: "topics",
+            updated_at: "last_update",
+        };
+    }
 
-const parseGitHubResponse = (data: ResponseData) => parseResponse(data, map);
-
-const GitHubRepo: RepoProvider = {
     async getRepo(url: string): Promise<Repo> {
-        const match = url.match(/github.com\/([^/]+)\/([^/?#]+)/);
-        if (match == null) {
-            throw new Error("GitHub repository URL is ill-formed.");
-        }
-
-        const userName = match[1];
-        const repoName = match[2];
-        let repo = {} as Repo;
-        await apiClient
+        const [userName, repoName] = this.extractRepoFullNameFromUrl(url);
+        return this.apiClient
             .get(`/repos/${userName}/${repoName}`)
-            .then((response: AxiosResponse) => {
-                repo = parseGitHubResponse(response.data as ResponseData);
-            });
-        return repo;
-    },
+            .then((response: AxiosResponse) =>
+                this.parseResponse(response.data as ResponseData)
+            );
+    }
 
     async getUserStarredRepos(userName: string): Promise<Repo[]> {
         const repos = [] as Repo[];
@@ -59,15 +51,17 @@ const GitHubRepo: RepoProvider = {
         // data per page until there are no more pages.
         do {
             endpoint = `${baseEndpoint}&page=${page}`;
-            await apiClient.get(endpoint).then((response: AxiosResponse) => {
-                data = response.data as ResponseData[];
-                repos.push(...data.map(parseGitHubResponse));
-            });
+            await this.apiClient
+                .get(endpoint)
+                .then((response: AxiosResponse) => {
+                    data = response.data as ResponseData[];
+                    repos.push(...data.map(this.parseResponse));
+                });
             page += 1;
         } while (data.length == perPage);
 
         return repos;
-    },
-};
+    }
+}
 
 export default GitHubRepo;

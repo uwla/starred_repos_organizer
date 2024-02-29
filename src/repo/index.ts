@@ -4,9 +4,9 @@ import GitHubRepo from "./GitHubRepo";
 import GitLabRepo from "./GitLabRepo";
 
 const providers = {
-    codeberg: CodebergRepo,
-    github: GitHubRepo,
-    gitlab: GitLabRepo,
+    codeberg: new CodebergRepo(),
+    github: new GitHubRepo(),
+    gitlab: new GitLabRepo(),
 } as { [key: string]: RepoProvider };
 
 const RepoProvider = {
@@ -40,10 +40,7 @@ const RepoProvider = {
         return providers[provider].getRepo(url);
     },
 
-    async getUserStarredRepos(
-        url: string,
-        provider: string = ""
-    ): Promise<Repo[]> {
+    async getUserStarredRepos(url: string, provider: string): Promise<Repo[]> {
         url = RepoProvider.sanitizeUrl(url);
         const userName = url.replace(/.*\//, "");
         return providers[provider].getUserStarredRepos(userName);
