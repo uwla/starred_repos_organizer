@@ -71,12 +71,16 @@ You can also save the demo files locally and it will work offline.
 - [x] Option to delete all repos
 - [x] Option to delete filtered repos
 - [x] Show notifications on success
+- [x] Manage topics globally
 - [x] Support for GitHub
 - [x] Support for GitLab
-- [ ] Support for CodeBerg
-- [ ] Support for Gitea
+- [x] Support for CodeBerg
 - [ ] Support for SourceHut
 - [ ] Support for SourceForge
+- [ ] Support for custom GitLab instance
+- [ ] Support for custom Gitea instance
+- [ ] Option to specifying provider
+- [ ] Option to set auth tokens
 
 ## Contributing
 

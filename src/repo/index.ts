@@ -1,16 +1,19 @@
 import { Repo, RepoProvider } from "../types";
+import CodebergRepo from "./CodebergRepo";
 import GitHubRepo from "./GitHubRepo";
 import GitLabRepo from "./GitLabRepo";
 
 const providers = {
-    gitlab: GitLabRepo,
+    codeberg: CodebergRepo,
     github: GitHubRepo,
+    gitlab: GitLabRepo,
 } as { [key: string]: RepoProvider };
 
 const RepoProvider = {
     determineProvider(url: string): string {
-        if (url.includes("github.com")) return "github";
-        if (url.includes("gitlab.com")) return "gitlab";
+        if (url.includes("codeberg.org/")) return "codeberg";
+        if (url.includes("github.com/")) return "github";
+        if (url.includes("gitlab.com/")) return "gitlab";
         throw new Error("provider not found");
     },
 
