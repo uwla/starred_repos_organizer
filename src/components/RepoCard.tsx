@@ -2,6 +2,7 @@ import {
     IconType,
     SiAwesomelists,
     SiC,
+    SiCodeberg as IconCodeberg,
     SiCplusplus,
     SiCsharp,
     SiCss3,
@@ -105,15 +106,21 @@ function RepoCard(props: Props) {
             <Card.Body>
                 <Card.Text>{repo.description}</Card.Text>
                 <Stack direction="horizontal" gap={3} className="repo-details">
+                    {url.includes("codeberg.org/") && (
+                        <Card.Link href={url}>
+                            <IconCodeberg />
+                            <span>Codeberg</span>
+                        </Card.Link>
+                    )}
                     {url.includes("github.com/") && (
                         <Card.Link href={url}>
-                            <IconGitHub fontSize="small" />
+                            <IconGitHub />
                             <span>GitHub</span>
                         </Card.Link>
                     )}
                     {url.includes("gitlab.com/") && (
                         <Card.Link href={url}>
-                            <IconGitLab fontSize="small" />
+                            <IconGitLab />
                             <span>GitLab</span>
                         </Card.Link>
                     )}
