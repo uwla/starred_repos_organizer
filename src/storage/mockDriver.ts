@@ -1,7 +1,7 @@
 import { StorageDriver, Repo } from "../types";
 import data from "../../user-data-sample.json";
 
-const repos = (data.repo as Repo[]).reverse();
+const repos = data.repo as Repo[];
 
 const mockDriver: StorageDriver = {
     async fetchRepos() {
