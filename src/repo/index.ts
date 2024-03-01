@@ -38,7 +38,10 @@ const RepoProvider = {
         return url.replace(/\/$/, "");
     },
 
-    async getRepo(url: string, provider: RepoProvider | null): Promise<Repo> {
+    async getRepo(
+        url: string,
+        provider: RepoProvider | null = null
+    ): Promise<Repo> {
         url = RepoProvider.sanitizeUrl(url);
         if (provider === null) provider = RepoProvider.determineProvider(url);
         return provider.getRepo(url);
