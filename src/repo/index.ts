@@ -3,11 +3,12 @@ import GiteaRepo from "./GiteaRepo";
 import GitHubRepo from "./GitHubRepo";
 import GitLabRepo from "./GitLabRepo";
 
-const GitLab = new GitLabRepo();
 const GitHub = new GitHubRepo();
+const GitLab = new GitLabRepo();
+const Gitea = new GiteaRepo();
 const CodeBerg = new GiteaRepo("codeberg.org");
 CodeBerg.providerSlug = "codeberg";
-const providers = [CodeBerg, GitHub, GitLab] as RepoProvider[];
+const providers = [CodeBerg, GitHub, GitLab, Gitea] as RepoProvider[];
 
 const RepoProvider = {
     determineProvider(url: string): RepoProvider {

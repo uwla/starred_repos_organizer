@@ -3,7 +3,7 @@ import { Repo, RepoProvider, ResponseData, ResponseKeyMapper } from "../types";
 import BaseRepo from "./BaseRepo";
 
 class GiteaRepo extends BaseRepo implements RepoProvider {
-    constructor(domain: string) {
+    constructor(domain: string = "gitea.com") {
         const baseURL = `https://${domain}/api/v1`;
         super({ baseURL, domain, providerSlug: "gitea" });
     }
