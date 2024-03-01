@@ -37,7 +37,7 @@ function Menu(props: Props) {
 
     // Handles exporting files.
     const handleDownload = (repos: Repo[]) => {
-        const data = { repos };
+        const data = { repo: repos };
         const fileName = "starred-repos";
         const exportType = exportFromJSON.types.json;
         exportFromJSON({ data, fileName, exportType });
