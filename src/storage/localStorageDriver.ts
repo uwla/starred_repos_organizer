@@ -22,14 +22,15 @@ const localStorageDriver: StorageDriver = {
     },
     async createRepo(repo: Repo) {
         const repos = getRepos();
-        repos.unshift(assignId(repo));
+        const created = assignId(repo);
+        repos.unshift(created);
         setRepos(repos);
-        return repo;
+        return created;
     },
     async createMany(repos: Repo[]) {
         const newRepos = uniqueRepos([...repos, ...getRepos()]).map(assignId);
         setRepos(newRepos);
-        return repos;
+        return newRepos;
     },
     async updateRepo(repo: Repo) {
         const repos = getRepos();
