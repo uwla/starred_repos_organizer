@@ -1,31 +1,37 @@
-# REPO STARS ORGANIZER
+# STARRED REPOS ORGANIZER
 
 Organizer your starred repositories from various sources.
 
-A live working demo is available at <https://uwla.github.io/repo_stars_organizer>.
+A live working demo is available at <https://uwla.github.io/starred_repos_organizer>.
 
 ## Features
 
-- Starred repositories from GitHub and GitLab (support for Gitea, SourceHut, etc, coming soon).
-- Import starred repositories from any public user profile.
+- Star repositories from GitHub, GitLab, Codeberg, self-hosted Gitlab instance,
+  self-hosted Gitea instance, and more coming soon.
 - No account needed, save starred repositories locally.
+- Import starred repositories from any public user profile on Github or Gitlab.
+- Import repositories from JSON file.
+- Export repositories to JSON file.
+- Export filtered results only to JSON file.
 - Modify repository topics by adding new ones or deleting existing.
 - More privacy by not exposing your interests to the internet.
-- Works offline (except for adding repositories because needs to fetch data).
-- Search filter and topic filter.
+- Works offline (except when fetching remote data).
+- Sort by name, stars or forks.
+- Text search and topic filter.
+- Pagination.
 
 ## Usage
 
 Go to the demo page and use the app.
 
-You can also save the demo files locally and it will work offline.
+You can also save the demo files to a folder and open them in the browser.
 
 ### Development
 
 1. Clone the repo and `cd` into:
 
     ```shell
-    git clone https://github.com/uwla/repo_stars_organizer && cd repo_stars_organizer
+    git clone https://github.com/uwla/starred_repos_organizer && cd starred_repos_organizer
     ```
 
 2. Install dependencies:
@@ -75,9 +81,9 @@ You can also save the demo files locally and it will work offline.
 - [x] Support for GitHub
 - [x] Support for GitLab
 - [x] Support for CodeBerg
-- [ ] Support for custom GitLab instance
-- [ ] Support for custom Gitea instance
-- [ ] Support for custom Gogs instance
+- [x] Support for self-hosted GitLab instance
+- [x] Support for self-hosted Gitea instance
+- [ ] Support for self-hosted Gogs instance
 - [ ] Option to specifying provider
 - [ ] Option to set auth tokens
 
