@@ -61,7 +61,7 @@ function RepoAdd(props: Props) {
                     RepoProvider.addProvider(new GiteaRepo(domain));
                     break;
                 default:
-                    throw new Error("Unknown custom provider")
+                    throw new Error("Unknown custom provider");
             }
         }
 
@@ -112,9 +112,7 @@ function RepoAdd(props: Props) {
                     {showCustomProvider && (
                         <div className="custom-provider">
                             <p>Select custom provider:</p>
-                            <Form.Select
-                                onChange={handleSelect}
-                            >
+                            <Form.Select onChange={handleSelect}>
                                 <option value="gitlab">Gitlab</option>
                                 <option value="gitea">Gitea</option>
                             </Form.Select>
@@ -123,9 +121,9 @@ function RepoAdd(props: Props) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="danger" onClick={handleHide}>
-                        Cancel
+                        CANCEL
                     </Button>
-                    <Button onClick={handleSubmit}>Add</Button>
+                    <Button onClick={handleSubmit}>ADD</Button>
                 </Modal.Footer>
             </Modal>
         </>
