@@ -1,0 +1,10 @@
+.custom-provider {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+}
+
+.custom-provider > * {
+    width: auto !important;
+    margin: 0;
+}

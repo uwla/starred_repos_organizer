@@ -1,9 +1,10 @@
 import { AxiosResponse } from "axios";
 import { Repo, RepoProvider, ResponseData, ResponseKeyMapper } from "../types";
-import ApiClient from "./ApiClient";
+import BaseRepo from "./BaseRepo";
 
-class GitLabRepo extends ApiClient implements RepoProvider {
-    constructor(baseURL = "https://gitlab.com/api/v4") {
+class GitLabRepo extends BaseRepo implements RepoProvider {
+    constructor(domain = "gitlab.com") {
+        const baseURL = `https://${domain}/api/v4`
         super(baseURL);
     }
 

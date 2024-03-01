@@ -1,20 +1,24 @@
 import { Repo, RepoProvider } from "../types";
-import CodebergRepo from "./CodebergRepo";
+import GiteaRepo from "./GiteaRepo";
 import GitHubRepo from "./GitHubRepo";
 import GitLabRepo from "./GitLabRepo";
 
-const providers = {
-    codeberg: new CodebergRepo(),
-    github: new GitHubRepo(),
-    gitlab: new GitLabRepo(),
-} as { [key: string]: RepoProvider };
+const providers = [
+    // new GiteaRepo("codeberg.org"), // codeberg
+    new GitHubRepo(),
+    new GitLabRepo(),
+] as RepoProvider[];
 
 const RepoProvider = {
-    determineProvider(url: string): string {
-        if (url.includes("codeberg.org/")) return "codeberg";
-        if (url.includes("github.com/")) return "github";
-        if (url.includes("gitlab.com/")) return "gitlab";
+    determineProvider(url: string): RepoProvider {
+        for (const provider of providers) {
+            if (provider.matchURL(url)) return provider;
+        }
         throw new Error("provider not found");
+    },
+
+    addProvider(provider: RepoProvider) {
+        providers.push(provider);
     },
 
     isUserProfileUrl(url: string) {
@@ -34,17 +38,21 @@ const RepoProvider = {
         return url.replace(/\/$/, "");
     },
 
-    async getRepo(url: string, provider: string = ""): Promise<Repo> {
+    async getRepo(url: string, provider: RepoProvider | null): Promise<Repo> {
         url = RepoProvider.sanitizeUrl(url);
-        if (provider == "") provider = RepoProvider.determineProvider(url);
-        return providers[provider].getRepo(url);
+        if (provider === null) provider = RepoProvider.determineProvider(url);
+        return provider.getRepo(url);
     },
 
-    async getUserStarredRepos(url: string, provider: string): Promise<Repo[]> {
+    async getUserStarredRepos(
+        url: string,
+        provider: RepoProvider
+    ): Promise<Repo[]> {
         url = RepoProvider.sanitizeUrl(url);
         const userName = url.replace(/.*\//, "");
-        return providers[provider].getUserStarredRepos(userName);
+        return provider.getUserStarredRepos(userName);
     },
 };
 
 export default RepoProvider;
+export { GitHubRepo, GiteaRepo, GitLabRepo };

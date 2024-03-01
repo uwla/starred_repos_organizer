@@ -1,10 +1,11 @@
 import { AxiosResponse } from "axios";
 import { Repo, RepoProvider, ResponseData, ResponseKeyMapper } from "../types";
-import GitHubRepo from "./GitHubRepo";
+import BaseRepo from "./BaseRepo";
 
-class CodebergRepo extends GitHubRepo implements RepoProvider {
-    constructor(baseURL = "https://codeberg.org/api/v1") {
-        super(baseURL);
+class GiteaRepo extends BaseRepo implements RepoProvider {
+    constructor(domain: string) {
+        const baseURL = `https://${domain}/api/v1`;
+        super(baseURL, domain);
     }
 
     responseDataMapper(): ResponseKeyMapper {
@@ -44,7 +45,29 @@ class CodebergRepo extends GitHubRepo implements RepoProvider {
     }
 
     // ! WARNING: getUserStarredRepos WON'T WORK WITHOUT AN AUTH TOKEN
-    // async getUserStarredRepos(userName: string): Promise<Repo[]>
+    async getUserStarredRepos(userName: string): Promise<Repo[]> {
+        const repos = [] as Repo[];
+        let data = [] as ResponseData[];
+        let page = 1;
+        const perPage = 100;
+        const baseEndpoint = `/users/${userName}/starred?per_page=${perPage}`;
+        let endpoint = "";
+
+        // Due to Gitea API's limit of 100 items per page, we need to fetch
+        // data per page until there are no more pages.
+        do {
+            endpoint = `${baseEndpoint}&page=${page}`;
+            await this.apiClient
+                .get(endpoint)
+                .then((response: AxiosResponse) => {
+                    data = response.data as ResponseData[];
+                    repos.push(...data.map(this.parseResponse));
+                });
+            page += 1;
+        } while (data.length == perPage);
+
+        return repos;
+    }
 }
 
-export default CodebergRepo;
+export default GiteaRepo;

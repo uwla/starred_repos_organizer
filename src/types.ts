@@ -29,6 +29,7 @@ type Repo = {
 type RepoKey = keyof Repo;
 
 interface RepoProvider {
+    matchURL: (url: string) => boolean;
     getRepo: (url: string) => Promise<Repo>;
     getUserStarredRepos: (userName: string) => Promise<Repo[]>;
 }

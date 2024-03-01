@@ -1,25 +1,18 @@
 import { Repo, ResponseData, ResponseKeyMapper } from "../types";
 import axios, { AxiosInstance } from "axios";
+import { extractDomain } from "../utils";
 
-abstract class ApiClient {
+abstract class BaseRepo {
     apiClient: AxiosInstance;
+    domain: string;
 
-    constructor(baseURL: string) {
+    constructor(baseURL: string, baseDomain: string = "") {
         this.apiClient = axios.create({ baseURL });
+        if (baseDomain === "") baseDomain = extractDomain(baseURL);
+        this.domain = baseDomain;
     }
 
     abstract responseDataMapper(): ResponseKeyMapper;
-
-    extractRepoFullNameFromUrl(url: string): string[] {
-        const match = url.match(/[\d\w.]+\.[\d\w]+\/([^/]+)\/([^/?#]+)/i);
-        if (match == null) {
-            throw new Error("Repository URL is ill-formed.");
-        }
-
-        const userName = match[1] ;
-        const repoName = match[2];
-        return [userName, repoName];
-    }
 
     parseResponse(data: ResponseData): Repo {
         const map = this.responseDataMapper();
@@ -39,6 +32,21 @@ abstract class ApiClient {
         }
         return repo;
     }
+
+    extractRepoFullNameFromUrl(url: string): string[] {
+        const match = url.match(/[\d\w.]+\.[\d\w]+\/([^/]+)\/([^/?#]+)/i);
+        if (match == null) {
+            throw new Error("Repository URL is ill-formed.");
+        }
+
+        const userName = match[1];
+        const repoName = match[2];
+        return [userName, repoName];
+    }
+
+    matchURL(url: string): boolean {
+        return url.match(RegExp(`^(https?://)?${this.domain}/`)) != null;
+    }
 }
 
-export default ApiClient;
+export default BaseRepo;

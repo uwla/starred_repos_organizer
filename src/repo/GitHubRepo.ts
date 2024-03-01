@@ -1,10 +1,10 @@
 import { AxiosResponse } from "axios";
 import { Repo, RepoProvider, ResponseData, ResponseKeyMapper } from "../types";
-import ApiClient from "./ApiClient";
+import BaseRepo from "./BaseRepo";
 
-class GitHubRepo extends ApiClient implements RepoProvider {
-    constructor(baseURL = "https://api.github.com") {
-        super(baseURL);
+class GitHubRepo extends BaseRepo implements RepoProvider {
+    constructor() {
+        super("https://api.github.com", "github.com");
     }
 
     responseDataMapper(): ResponseKeyMapper {

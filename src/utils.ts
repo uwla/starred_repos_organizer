@@ -35,8 +35,12 @@ const randomId = () => Math.random().toString().slice(2, 8);
 
 const assignId = (repo: Repo) => ({ ...repo, id: randomId() });
 
+const extractDomain = (url: string) =>
+    url.replace(/(https?:\/\/)?([\w\d.]+\.[\w\d]+)\/?.*/, "$2");
+
 export {
     assignId,
+    extractDomain,
     optionsToTopics,
     randomId,
     topicsToOptions,
