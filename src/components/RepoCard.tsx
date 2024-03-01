@@ -8,6 +8,7 @@ import {
     SiCss3,
     SiGithub as IconGitHub,
     SiGitlab as IconGitLab,
+    SiGitea as IconGitea,
     SiGnubash,
     SiHtml5,
     SiJavascript,
@@ -73,7 +74,7 @@ const languageIcons = {
 
 function RepoCard(props: Props) {
     const { onClickTopic, onEdit, onDelete, onRefresh, repo } = props;
-    const { homepage, forks, stars, url } = repo;
+    const { homepage, forks, stars, url, provider } = repo;
     const topics = [...repo.topics].sort();
     const lang = (repo.lang || "").toLowerCase();
     const LanguageIcon = languageIcons[lang];
@@ -106,22 +107,33 @@ function RepoCard(props: Props) {
             <Card.Body>
                 <Card.Text>{repo.description}</Card.Text>
                 <Stack direction="horizontal" gap={3} className="repo-details">
-                    {url.includes("codeberg.org/") && (
+                    {provider === "codeberg" && (
                         <Card.Link href={url}>
                             <IconCodeberg />
                             <span>Codeberg</span>
                         </Card.Link>
                     )}
-                    {url.includes("github.com/") && (
+                    {provider === "github" && (
                         <Card.Link href={url}>
                             <IconGitHub />
                             <span>GitHub</span>
                         </Card.Link>
                     )}
-                    {url.includes("gitlab.com/") && (
+                    {provider === "gitlab" && (
                         <Card.Link href={url}>
                             <IconGitLab />
                             <span>GitLab</span>
+                        </Card.Link>
+                    )}
+                    {provider === "gitea" && (
+                        <Card.Link href={url}>
+                            <IconGitea />
+                            <span>Gitea</span>
+                        </Card.Link>
+                    )}
+                    {provider === "url" && (
+                        <Card.Link href={url}>
+                            <span>URL</span>
                         </Card.Link>
                     )}
                     {homepage && (

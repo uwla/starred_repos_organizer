@@ -3,6 +3,14 @@ type SelectOption = {
     value: string;
 };
 
+type ProviderSlug =
+    | "github"
+    | "gitlab"
+    | "gitea"
+    | "codeberg"
+    | "gogs"
+    | "url";
+
 type Repo = {
     id: string;
     full_name: string;
@@ -23,6 +31,7 @@ type Repo = {
     template: boolean;
     owner: string;
     owner_type: string;
+    provider: ProviderSlug; // github, gitlab, gitea, ...
     stars: number;
 };
 
@@ -56,4 +65,5 @@ export type {
     RepoProvider,
     ResponseData,
     ResponseKeyMapper,
+    ProviderSlug as ProviderSlugs,
 };

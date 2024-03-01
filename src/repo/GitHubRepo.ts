@@ -4,7 +4,11 @@ import BaseRepo from "./BaseRepo";
 
 class GitHubRepo extends BaseRepo implements RepoProvider {
     constructor() {
-        super("https://api.github.com", "github.com");
+        super({
+            baseURL: "https://api.github.com",
+            domain: "github.com",
+            providerSlug: "github",
+        });
     }
 
     responseDataMapper(): ResponseKeyMapper {

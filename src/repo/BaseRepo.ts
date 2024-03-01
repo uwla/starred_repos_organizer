@@ -1,15 +1,22 @@
-import { Repo, ResponseData, ResponseKeyMapper } from "../types";
+import { ProviderSlugs, Repo, ResponseData, ResponseKeyMapper } from "../types";
 import axios, { AxiosInstance } from "axios";
 import { extractDomain } from "../utils";
+
+interface Props {
+    baseURL: string,
+    domain?: string,
+    providerSlug?: ProviderSlugs,
+}
 
 abstract class BaseRepo {
     apiClient: AxiosInstance;
     domain: string;
+    providerSlug: ProviderSlugs;
 
-    constructor(baseURL: string, baseDomain: string = "") {
+    constructor({baseURL, domain, providerSlug} : Props) {
         this.apiClient = axios.create({ baseURL });
-        if (baseDomain === "") baseDomain = extractDomain(baseURL);
-        this.domain = baseDomain;
+        this.domain = domain || extractDomain(baseURL);
+        this.providerSlug = providerSlug || "url";
     }
 
     abstract responseDataMapper(): ResponseKeyMapper;
@@ -30,6 +37,10 @@ abstract class BaseRepo {
 
             repo[map[key]] = val as never;
         }
+
+        // Some providers: GitHub, GitLab, Codeberg, Gitea, Gogs, ...
+        repo.provider = this.providerSlug;
+
         return repo;
     }
 

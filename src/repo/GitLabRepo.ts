@@ -4,8 +4,8 @@ import BaseRepo from "./BaseRepo";
 
 class GitLabRepo extends BaseRepo implements RepoProvider {
     constructor(domain = "gitlab.com") {
-        const baseURL = `https://${domain}/api/v4`
-        super(baseURL);
+        const baseURL = `https://${domain}/api/v4`;
+        super({ baseURL, domain, providerSlug: "gitlab" });
     }
 
     responseDataMapper(): ResponseKeyMapper {

@@ -5,7 +5,7 @@ import BaseRepo from "./BaseRepo";
 class GiteaRepo extends BaseRepo implements RepoProvider {
     constructor(domain: string) {
         const baseURL = `https://${domain}/api/v1`;
-        super(baseURL, domain);
+        super({ baseURL, domain, providerSlug: "gitea" });
     }
 
     responseDataMapper(): ResponseKeyMapper {
