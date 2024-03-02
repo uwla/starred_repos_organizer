@@ -17,6 +17,11 @@ abstract class BaseRepo {
         this.apiClient = axios.create({ baseURL });
         this.domain = domain || extractDomain(baseURL);
         this.providerSlug = providerSlug || "url";
+
+        // Sometimes the `this` keyword becomes undefined in class methods when
+        // the method is passed as an argument to a high-order function. In that
+        // case, we need to bind `this`.
+        this.parseResponse = this.parseResponse.bind(this);
     }
 
     abstract responseDataMapper(): ResponseKeyMapper;
