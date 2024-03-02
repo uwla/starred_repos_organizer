@@ -9,13 +9,14 @@ const setRepos = (repos: Repo[]) =>
     localStorage.setItem("repos", JSON.stringify(repos));
 
 const isDemo = process.env.NODE_ENV === "demo";
-const firstTimeAccess = localStorage.getItem("repos") === null;
+let firstTimeAccess = localStorage.getItem("repos") === null;
 
 const localStorageDriver: StorageDriver = {
     async fetchRepos() {
         // DEMO MODE: load sample data for demo app.
         if (isDemo && firstTimeAccess) {
             setRepos(sampleData.repo as Repo[]);
+            firstTimeAccess = false;
         }
 
         return getRepos();
