@@ -4,10 +4,12 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "dev": "concurrently --kill-others \"npm run serve-app\" \"npm run serve-api\"",
+        "dev": "vite",
+        "dev-rest": "concurrently --kill-others \"npm run serve:*\"",
         "build": "tsc && vite build",
-        "serve-app": "vite",
-        "serve-api": "tsx src/server",
+        "build:demo": "NODE_ENV=demo npm run build",
+        "serve:app": "vite",
+        "serve:api": "tsx src/server",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview"
     },
