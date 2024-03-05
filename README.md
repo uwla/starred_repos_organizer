@@ -91,6 +91,11 @@ You can also save the demo files to a folder and open them in the browser.
 
 Contributions are welcome.
 
+## Credits
+
+Thanks [Keziah Moselle](https://github.com/KeziahMoselle) for the original
+inspiration by his project [export-github-stars](https://github.com/KeziahMoselle/export-github-stars).
+
 ## License
 
 MIT.
