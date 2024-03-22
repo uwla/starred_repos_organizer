@@ -5,10 +5,10 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "dev-rest": "concurrently --kill-others \"npm run serve:*\"",
+        "dev:rest": "concurrently --kill-others \"npm run serve:*\"",
         "build": "tsc && vite build",
         "build:demo": "NODE_ENV=demo npm run build",
-        "serve:app": "vite",
+        "serve:app": "VITE_STORAGE_DRIVER=rest vite",
         "serve:api": "tsx src/server",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview"
