@@ -24,11 +24,15 @@ A live working demo is available at <https://uwla.github.io/starred_repos_organi
 
 Go to the demo page and use the app.
 
-You can also save the demo files to a folder and open them in the browser.
+You can also download the webpage using a modern browser, such as Chrome and
+Firefox, and then open the files locally.
 
-### Development
+Lastly, you can follow the development instructions to launch a local
+development server or build the files locally.
 
-1. Clone the repo and `cd` into:
+## Development
+
+1. Clone the repo and `cd` into it:
 
     ```shell
     git clone https://github.com/uwla/starred_repos_organizer && cd starred_repos_organizer
@@ -48,19 +52,24 @@ You can also save the demo files to a folder and open them in the browser.
 
     This is where the data will be stored.
 
-4. Launch the app:
+4. Run the scripts:
+
+    To start development server using localStorage for storage:
 
     ```shell
     npm run dev
     ```
 
-    Alternatively, you can build the app and launch two different serves, an
-    API server, and a server for the website:
+    To start development server using an REST server for storage:
+
+    ```shell
+    npm run dev:rest
+    ```
+
+    To build the demo app:
 
     ```shell
     npm run build
-    python -m http.server -d dist/ & # launch http server on background
-    npm run server-api # start api server
     ```
 
 ## Roadmap
@@ -84,7 +93,7 @@ You can also save the demo files to a folder and open them in the browser.
 - [x] Support for self-hosted GitLab instance
 - [x] Support for self-hosted Gitea instance
 - [ ] Support for self-hosted Gogs instance
-- [ ] Option to specifying provider
+- [x] Option to specify provider type
 - [ ] Option to set auth tokens
 
 ## Contributing
@@ -94,7 +103,7 @@ Contributions are welcome.
 ## Credits
 
 Thanks [Keziah Moselle](https://github.com/KeziahMoselle) for the original
-inspiration by his project [export-github-stars](https://github.com/KeziahMoselle/export-github-stars).
+inspiration from his project [export-github-stars](https://github.com/KeziahMoselle/export-github-stars).
 
 ## License
 
