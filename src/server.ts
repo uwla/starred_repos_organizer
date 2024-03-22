@@ -1,13 +1,20 @@
 import { App } from "@tinyhttp/app";
 import { cors } from "@tinyhttp/cors";
-import { Data, Item, isItem } from "json-server/lib/service";
+import { Data, isItem } from "json-server/lib/service";
 import { json } from "milliparsec";
 import { JSONFile } from "lowdb/node";
 import { Low } from "lowdb";
 import { Observer } from "json-server/lib/observer";
 import { watch } from "chokidar";
 import chalk from "chalk";
-import { uniqueRepos } from "./utils";
+import {
+    addRepo,
+    addRepos,
+    delRepo,
+    delRepos,
+    updateRepo,
+    updateRepos,
+} from "./utils";
 import { Repo } from "./types";
 
 /* -------------------------------------------------------------------------- */
@@ -24,8 +31,6 @@ await db.read();
 // Database helpers
 const dbRepos = () => db.data.repo as Repo[];
 const findRepo = (id: string) => dbRepos().find((r: Repo) => r.id === id);
-const findRepoIndex = (id: string) =>
-    dbRepos().findIndex((r: Repo) => r.id === id);
 
 /* -------------------------------------------------------------------------- */
 
@@ -67,51 +72,26 @@ app.post(`/repo`, async (req, res) => {
     if (method === "delete") {
         const ids = data.ids as string[];
         const repos = dbRepos();
-        const toDel = {} as { [key: string]: boolean };
-        ids.forEach((id: string) => (toDel[id] = true));
-        const newRepos = repos.filter((r: Repo) => !toDel[r.id]);
-        const deleted = repos.filter((r: Repo) => toDel[r.id]);
-        db.data.repo = newRepos;
+        db.data.repo = delRepos(repos, ids);
         db.write();
-        res.send(deleted);
+        const success = repos.length - ids.length === db.data.repo.length;
+        res.send({ success });
         return;
     }
 
     if (method === "put") {
-        const toUpdate = data.repos as Repo[];
-        const id2repo = {} as { [key: string]: Repo };
-        toUpdate.forEach((r: Repo) => (id2repo[r.id] = r));
-        repos.forEach((repo: Repo, index: number) => {
-            const id = repo.id;
-            if (id2repo[id] !== undefined) {
-                repos[index] = id2repo[id];
-            }
-        });
-        db.data.repo = repos;
+        db.data.repo = updateRepos(repos, data.repos as Repo[]);
         db.write();
-        res.send(toUpdate);
+        res.send(data.repos);
         return;
     }
 
-    // helper to assign random ID to created items.
-    const randomId = () => Math.random().toString().slice(2, 8);
-    const assignId = (item: Item) => ({ ...item, id: randomId() });
-
     // create one or many items at once.
     if (Array.isArray(data)) {
-        item = [] as Item[];
-        while (data[item.length] != null) {
-            item.push(data[item.length] as Item);
-        }
-        item = item.map(assignId);
-        repos.unshift(...(item as Repo[]));
+        db.data.repo = addRepos(repos, data as Repo[]);
     } else {
-        item = assignId(data);
-        repos.unshift(item as Repo);
+        db.data.repo = addRepo(repos, data as Repo);
     }
-
-    // Make it unique.
-    db.data.repo = uniqueRepos(repos as Repo[]);
 
     // Write to DB
     await db.write();
@@ -120,30 +100,23 @@ app.post(`/repo`, async (req, res) => {
 
 // Update repo
 app.post(`/repo/:id`, async (req, res) => {
-    const { id = "" } = req.params;
     if (!isItem(req.body)) {
         res.send("Expected resource");
         return;
     }
-    const repo = req.body as Repo;
-    const repos = dbRepos();
-    const index = findRepoIndex(id);
-    repos.splice(index, 1, repo);
-    db.data.repo = repos;
+    db.data.repo = updateRepo(dbRepos(), req.body as Repo);
     db.write();
-    res.send(repo);
+    res.send(req.body);
 });
 
 // Delete single repo.
 app.delete(`/repo/:id`, async (req, res) => {
     const { id = "" } = req.params;
     const repos = dbRepos();
-    const index = findRepoIndex(id);
-    const repo = repos[index];
-    repos.splice(index, 1);
-    db.data.repo = repos;
+    db.data.repo = delRepo(repos, id);
     db.write();
-    res.send(repo);
+    const success = repos.length - 1 === db.data.repo.length;
+    res.send({ success });
 });
 
 // Start server

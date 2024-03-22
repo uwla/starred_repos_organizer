@@ -1,5 +1,13 @@
 import { StorageDriver, Repo } from "../types";
-import { assignId, uniqueRepos } from "../utils";
+import {
+    addRepo,
+    addRepos,
+    assignId,
+    delRepo,
+    delRepos,
+    updateRepo,
+    updateRepos,
+} from "../utils";
 import sampleData from "../../user-data-sample.json";
 
 const getRepos = () =>
@@ -18,61 +26,37 @@ const localStorageDriver: StorageDriver = {
             setRepos(sampleData.repo as Repo[]);
             firstTimeAccess = false;
         }
-
         return getRepos();
     },
     async createRepo(repo: Repo) {
-        const repos = getRepos();
         const created = assignId(repo);
-        repos.unshift(created);
-        setRepos(repos);
+        setRepos(addRepo(getRepos(), created));
         return created;
     },
     async createMany(repos: Repo[]) {
-        const newRepos = uniqueRepos([...repos, ...getRepos()]).map(assignId);
-        setRepos(newRepos);
-        return newRepos;
+        const created = repos.map(assignId);
+        setRepos(addRepos(getRepos(), created));
+        return created;
     },
     async updateRepo(repo: Repo) {
-        const repos = getRepos();
-        const index = repos.findIndex(
-            (r: Repo) => (r.id === repo.id)
-        );
-        if (index === -1) throw Error("Repo does not exist yet.");
-        repos.splice(index, 1, repo);
-        setRepos(repos);
+        setRepos(updateRepo(getRepos(), repo));
         return repo;
     },
     async updateMany(repos: Repo[]) {
-        const current = getRepos();
-        const id2repo = {} as { [key:string] : Repo};
-        repos.forEach((r: Repo) => id2repo[r.id] = r);
-        current.forEach((repo: Repo, index: number) => {
-            const id = repo.id;
-            if (id2repo[id] !== undefined) {
-                current[index] = id2repo[id];
-            }
-        })
-        setRepos(current);
+        setRepos(updateRepos(getRepos(), repos));
         return repos;
     },
     async deleteRepo(repo: Repo) {
-        const repos = getRepos();
-        const index = repos.findIndex(
-            (r: Repo) => (r.id === repo.id)
-        );
-        if (index === -1) return false;
-        repos.splice(index, 1);
-        setRepos(repos);
-        return true;
+        const oldRepos = getRepos();
+        const newRepos = delRepo(oldRepos, repo);
+        setRepos(newRepos);
+        return oldRepos.length > newRepos.length;
     },
     async deleteMany(repos: Repo[]) {
-        const currentRepos = getRepos();
-        const ids = {} as { [key: string]: boolean };
-        repos.forEach((r: Repo) => (ids[r.id] = true));
-        const newRepos = currentRepos.filter((r: Repo) => !ids[r.id]);
+        const oldRepos = getRepos();
+        const newRepos = delRepos(oldRepos, repos);
         setRepos(newRepos);
-        return true;
+        return oldRepos.length > newRepos.length;
     },
 };
 
