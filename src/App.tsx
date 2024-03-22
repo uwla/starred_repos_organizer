@@ -405,7 +405,7 @@ function App() {
                         .map((repo: Repo) => {
                             return (
                                 <RepoCard
-                                    key={repo.url}
+                                    key={repo.id}
                                     repo={repo}
                                     onClickTopic={handleTopicClicked}
                                     onEdit={() => handleEdit(repo)}
