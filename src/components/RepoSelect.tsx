@@ -52,7 +52,7 @@ function RepoSelect(props: Props) {
                 <div className="mb-3">
                     <Form.Control
                         type="text"
-                        placeholder="Search..."
+                        placeholder="search repository by name.."
                         onChange={handleInput}
                     ></Form.Control>
                 </div>
@@ -82,9 +82,7 @@ function RepoSelect(props: Props) {
                                 </div>
                             );
                         })}
-                        <div className="select-menu-empty">
-                            No repositories found.
-                        </div>
+                    <div className="select-menu-empty">No topic found.</div>
                 </div>
             </Modal.Body>
             <Modal.Footer>

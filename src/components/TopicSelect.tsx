@@ -1,4 +1,4 @@
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Form } from "react-bootstrap";
 import { Checkbox } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -18,8 +18,9 @@ const mapChecked = (t: string) =>
     ({ topic: t, checked: true } as TopicCheckbox);
 
 function RepoSelect(props: Props) {
-    const { show, topics, onConfirmSelection, onHide} = props;
+    const { show, topics, onConfirmSelection, onHide } = props;
     const [checkboxes, setCheckboxes] = useState(topics.map(mapChecked));
+    const [search, setSearch] = useState("");
 
     // Use Effect is likely not needed
     useEffect(() => setCheckboxes(topics.map(mapChecked)), [topics]);
@@ -31,7 +32,14 @@ function RepoSelect(props: Props) {
         onConfirmSelection(topics);
     };
 
-    const toggleChecked = (index: number) => {
+    const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value);
+    };
+
+    const toggleChecked = (topic: string) => {
+        const index = checkboxes.findIndex(
+            (c: TopicCheckbox) => c.topic === topic
+        );
         checkboxes[index].checked = !checkboxes[index].checked;
         setCheckboxes([...checkboxes]);
     };
@@ -42,26 +50,35 @@ function RepoSelect(props: Props) {
                 <Modal.Title>MANAGE TOPICS</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Uncheck topics to delete them. Checked topics will remain.</p>
+                <p>
+                    Uncheck topics to delete them. Checked topics will remain.
+                </p>
+                <div className="mb-3">
+                    <Form.Control
+                        type="text"
+                        placeholder="search topic..."
+                        onChange={handleInput}
+                    ></Form.Control>
+                </div>
                 <div className="select-menu">
-                    {checkboxes.map(
-                        (checkbox: TopicCheckbox, index: number) => {
+                    {checkboxes
+                        .filter((checkbox: TopicCheckbox) => {
+                            return checkbox.topic.includes(search);
+                        })
+                        .map((checkbox: TopicCheckbox, index: number) => {
                             const { topic, checked } = checkbox;
                             const cssId = `topic-checkbox-${index}`;
                             return (
-                                <div key={index} class="select-checkbox">
+                                <div key={index} className="select-checkbox">
                                     <Checkbox
                                         checked={checked}
-                                        onChange={() => toggleChecked(index)}
+                                        onChange={() => toggleChecked(topic)}
                                         id={cssId}
                                     />
-                                    <label htmlFor={cssId}>
-                                        {topic}
-                                    </label>
+                                    <label htmlFor={cssId}>{topic}</label>
                                 </div>
                             );
-                        }
-                    )}
+                        })}
                 </div>
             </Modal.Body>
             <Modal.Footer>
