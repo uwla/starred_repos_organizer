@@ -18,6 +18,14 @@
     padding: .5em 0;
 }
 
-.select-menu > div:hover {
+.select-menu > .select-checkbox:hover {
     background-color: #eee;
+}
+
+.select-menu .select-checkbox + .select-menu-empty {
+    display: none;
+}
+
+.select-menu-empty {
+    padding: .5em 0;
 }

@@ -49,7 +49,7 @@ function RepoSelect(props: Props) {
                             const { topic, checked } = checkbox;
                             const cssId = `topic-checkbox-${index}`;
                             return (
-                                <div key={index}>
+                                <div key={index} class="select-checkbox">
                                     <Checkbox
                                         checked={checked}
                                         onChange={() => toggleChecked(index)}
