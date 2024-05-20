@@ -7,27 +7,27 @@ const topicsToOptions = (topics: string[]): SelectOption[] =>
     topics.map((topic: string) => ({ value: topic, label: topic }));
 
 const uniqueRepos = (repos: Repo[]): Repo[] => {
-    let unique = [...repos] as Repo[];
-
-    // Extract URLs to detect duplicate repositories.
-    const urls = {} as { [key: string]: boolean };
-    unique.forEach((r: Repo) => (urls[r.url as string] = false));
-
-    // Reverse order so the most recently added repos will prevail.
-    unique.reverse();
+    let unique = [] as Repo[];
+    const urls = {} as { [key: string]: number };
 
     // Prevent duplicated repos by applying a URL filter.
-    unique = unique.filter((r: Repo) => {
+    repos.forEach((r: Repo) => {
         const url = r.url;
-        if (urls[url] == true) return false;
-        urls[url] = true;
-        return true;
+        if (urls[url] === undefined) {
+            urls[url] = unique.length;
+            unique.push(r);
+            return;
+        }
+        const ind = urls[url];
+
+        // preserve locally modified attributes
+        if (unique[ind].modified) {
+            r.topics = unique[ind].topics;
+            r.id = unique[ind].id;
+        }
+        unique[ind] = r;
     });
 
-    // Re-reverse to cancel the first reverse.
-    unique.reverse();
-
-    // Return result.
     return unique;
 };
 

@@ -25,7 +25,7 @@ import {
     SortOptions,
     TopicFilter,
 } from "./components";
-import { optionsToTopics } from "./utils";
+import { optionsToTopics, uniqueRepos } from "./utils";
 import { Repo, RepoKey, SelectOption } from "./types";
 import storageDriver from "./storage";
 import "./App.css";
@@ -235,7 +235,7 @@ function App() {
         return await storageDriver
             .createMany(manyRepos)
             .then((created) => {
-                updateStateRepos([...created, ...repos]);
+                updateStateRepos(uniqueRepos([...created, ...repos]));
                 setSuccessMsg("Repositories added");
                 return true;
             })
