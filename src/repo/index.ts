@@ -10,7 +10,7 @@ const CodeBerg = new GiteaRepo("codeberg.org");
 CodeBerg.providerSlug = "codeberg";
 const providers = [CodeBerg, GitHub, GitLab, Gitea] as RepoProvider[];
 
-const RepoProvider = {
+const repoProvider = {
     determineProvider(url: string): RepoProvider {
         for (const provider of providers) {
             if (provider.matchURL(url)) return provider;
@@ -43,8 +43,8 @@ const RepoProvider = {
         url: string,
         provider: RepoProvider | null = null
     ): Promise<Repo> {
-        url = RepoProvider.sanitizeUrl(url);
-        if (provider === null) provider = RepoProvider.determineProvider(url);
+        url = repoProvider.sanitizeUrl(url);
+        if (provider === null) provider = repoProvider.determineProvider(url);
         return provider.getRepo(url);
     },
 
@@ -52,11 +52,11 @@ const RepoProvider = {
         url: string,
         provider: RepoProvider
     ): Promise<Repo[]> {
-        url = RepoProvider.sanitizeUrl(url);
+        url = repoProvider.sanitizeUrl(url);
         const userName = url.replace(/.*\//, "");
         return provider.getUserStarredRepos(userName);
     },
 };
 
-export default RepoProvider;
+export default repoProvider;
 export { GitHubRepo, GiteaRepo, GitLabRepo };
