@@ -1,0 +1,6 @@
+.repo-grid {
+    display: grid;
+    gap: 1em;
+    align-items: stretch;
+    grid-template-columns: 1fr 1fr;
+}

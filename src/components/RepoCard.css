@@ -1,3 +1,10 @@
+.repo-card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: .5em;
+}
+
 .repo-details > a {
     text-decoration: none;
 }

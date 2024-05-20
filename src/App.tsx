@@ -2,6 +2,7 @@ import {
     Alert,
     Button,
     Container,
+    Form,
     Stack,
     Toast,
     ToastContainer,
@@ -12,15 +13,15 @@ import {
     GitHub as GitHubIcon,
     Undo as UndoIcon,
 } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { MultiValue } from "react-select";
 import {
     Menu,
     Pagination,
     RepoAdd,
-    RepoCard,
     RepoEdit,
     RepoList,
+    RepoGrid,
     RepoSelect,
     SearchFilter,
     SortOptions,
@@ -97,6 +98,7 @@ const shouldShowDemoMsg =
 function App() {
     // state
     const [deletedRepos, setDeletedRepos] = useState([] as Repo[]);
+    const [Display, setDisplay] = useState(() => RepoList);
     const [editing, setEditing] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [filteredRepos, setFilteredRepos] = useState([] as Repo[]);
@@ -161,6 +163,20 @@ function App() {
         setPage(0);
         const plainTopics = optionsToTopics(topics);
         setFilteredRepos(applyFilters(repos, searchQuery, plainTopics));
+    }
+
+    function handleSelectDisplay(event: React.ChangeEvent<HTMLSelectElement>) {
+        const value = event.target.value;
+        switch (value) {
+            case "grid":
+                setDisplay(() => RepoGrid);
+                break;
+            case "list":
+                setDisplay(() => RepoList);
+                break;
+            default:
+                break;
+        }
     }
 
     function handleTopicClicked(topic: string) {
@@ -400,15 +416,24 @@ function App() {
                     )}
                 </Stack>
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}
-                <SortOptions
-                    values={["", "stars", "name", "forks"]}
-                    onSelect={handleSort}
-                />
-                <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
                 <RepoSelect
                     repos={reposToAdd}
                     onConfirmSelection={handleAddMany}
                 />
+                <Stack gap={4} direction="horizontal">
+                    <SortOptions
+                        values={["", "stars", "name", "forks"]}
+                        onSelect={handleSort}
+                    />
+                    <Stack direction="horizontal" className="sort-options">
+                        <p>View as </p>
+                        <Form.Select onChange={handleSelectDisplay}>
+                            <option value="list">List</option>
+                            <option value="grid">Grid</option>
+                        </Form.Select>
+                    </Stack>
+                </Stack>
+                <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
                 <Pagination
                     page={page}
                     perPage={perPage}
@@ -416,7 +441,7 @@ function App() {
                     onPageChange={handlePageChange}
                     onPerPageChange={handlePerPageChange}
                 />
-                <RepoList
+                <Display
                     repos={filteredRepos.slice(
                         page * perPage,
                         (page + 1) * perPage

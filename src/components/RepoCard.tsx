@@ -80,7 +80,7 @@ function RepoCard(props: Props) {
     const LanguageIcon = languageIcons[lang];
 
     return (
-        <Card>
+        <Card className="repo-card">
             <Card.Header>
                 <Card.Title>{repo.name}</Card.Title>
                 <Card.Subtitle>{repo.full_name}</Card.Subtitle>

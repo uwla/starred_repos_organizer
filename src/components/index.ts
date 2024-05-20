@@ -4,6 +4,7 @@ import RepoAdd from "./RepoAdd";
 import RepoCard from "./RepoCard";
 import RepoEdit from "./RepoEdit";
 import RepoList from "./RepoList";
+import RepoGrid from "./RepoGrid";
 import RepoSelect from "./RepoSelect";
 import SearchFilter from "./SearchFilter";
 import SortOptions from "./SortOptions";
@@ -16,6 +17,7 @@ export {
     RepoCard,
     RepoEdit,
     RepoList,
+    RepoGrid,
     RepoSelect,
     SearchFilter,
     SortOptions,
