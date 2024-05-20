@@ -106,6 +106,7 @@ function App() {
     const [repos, setRepos] = useState([] as Repo[]);
     const [reposToAdd, setReposToAdd] = useState([] as Repo[]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [sortBy, setSortBy] = useState("");
     const [selectedTopics, setSelectedTopics] = useState([] as SelectOption[]);
     const [showDemoMsg, setShowDemoMsg] = useState(shouldShowDemoMsg);
     const [successMsg, setSuccessMsg] = useState("");
@@ -168,8 +169,15 @@ function App() {
     }
 
     function handleSort(value: string) {
+        setSortBy(value);
+        setRepos(sortRepos([...repos], value));
+        setFilteredRepos(sortRepos([...filteredRepos], value));
+    }
+
+    function sortRepos(repos: Repo[], sortBy: string) {
         let cmp: (a: Repo, b: Repo) => number;
-        switch (value) {
+
+        switch (sortBy) {
             case "":
                 cmp = (a: Repo, b: Repo) => a.index - b.index;
                 break;
@@ -186,15 +194,11 @@ function App() {
                 throw Error("unknown sort option");
         }
 
-        // Both repository arrays need to be sorted.
-        // The filtered repos needs to be sorted because data its content is
-        // rendered after basic pagination. It is also necessary the repos to be
-        // sorted because the filteredRepos is updated based on it.
-        setRepos([...repos].sort(cmp));
-        setFilteredRepos([...filteredRepos].sort(cmp));
+        return repos.sort(cmp);
     }
 
     function updateStateRepos(newRepos: Repo[]) {
+        newRepos = sortRepos(newRepos, sortBy);
         setRepos(newRepos);
         setFilteredRepos(newRepos);
         setTopics(extractTopics(newRepos));
