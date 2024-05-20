@@ -31,8 +31,9 @@ type Repo = {
     template: boolean;
     owner: string;
     owner_type: string;
-    provider: ProviderSlug; // github, gitlab, gitea, ...
     stars: number;
+    modified: boolean; // modified locally?
+    provider: ProviderSlug; // github, gitlab, gitea, ...
 };
 
 type RepoKey = keyof Repo;

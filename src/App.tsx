@@ -283,7 +283,10 @@ function App() {
         setEditing(true);
     }
 
-    async function handleUpdate(repo: Repo) {
+    async function handleUpdate(repo: Repo, modified = false) {
+        // this marks the repo to be updated as been locally modified.
+        repo.modified = modified;
+
         return storageDriver
             .updateRepo(repo)
             .then((updated: Repo) => {
@@ -319,10 +322,12 @@ function App() {
         // Get the updated version of the repository.
         const updated = await RepoProvider.getRepo(repo.url);
 
-        // Preserve the topics, which may have been overwritten locally.
-        updated.topics = repo.topics;
+        if (repo.modified) {
+            // Preserve the topics, which may have been overwritten locally.
+            updated.topics = repo.topics;
+        }
 
-        // Also, we want to make sure the id was not overwritten.
+        // preserve original id
         updated.id = repo.id;
 
         // Then, update it.
@@ -492,7 +497,7 @@ function App() {
                     repo={editingRepo}
                     editing={editing}
                     onHide={() => setEditing(false)}
-                    onUpdate={handleUpdate}
+                    onUpdate={(repo) => handleUpdate(repo, true)}
                 />
             </Container>
             <footer>
