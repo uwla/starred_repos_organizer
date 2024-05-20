@@ -20,6 +20,7 @@ import {
     RepoAdd,
     RepoCard,
     RepoEdit,
+    RepoList,
     RepoSelect,
     SearchFilter,
     SortOptions,
@@ -415,22 +416,16 @@ function App() {
                     onPageChange={handlePageChange}
                     onPerPageChange={handlePerPageChange}
                 />
-                <Stack gap={3}>
-                    {filteredRepos
-                        .slice(page * perPage, (page + 1) * perPage)
-                        .map((repo: Repo) => {
-                            return (
-                                <RepoCard
-                                    key={repo.id}
-                                    repo={repo}
-                                    onClickTopic={handleTopicClicked}
-                                    onEdit={() => handleEdit(repo)}
-                                    onDelete={() => handleDelete(repo)}
-                                    onRefresh={() => handleRefresh(repo)}
-                                />
-                            );
-                        })}
-                </Stack>
+                <RepoList
+                    repos={filteredRepos.slice(
+                        page * perPage,
+                        (page + 1) * perPage
+                    )}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onRefresh={handleRefresh}
+                    onTopicClicked={handleTopicClicked}
+                />
                 <Pagination
                     page={page}
                     perPage={perPage}

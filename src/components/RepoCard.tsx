@@ -42,11 +42,11 @@ import { Repo } from "../types";
 import "./RepoCard.css";
 
 interface Props {
-    onClickTopic: (topic: string) => void;
-    onEdit: () => void;
-    onDelete: () => void;
-    onRefresh: () => void;
     repo: Repo;
+    onEdit: (repo: Repo) => void;
+    onDelete: (repo: Repo) => void;
+    onRefresh: (repo: Repo) => void;
+    onTopicClicked: (topic: string) => void;
 }
 
 const languageIcons = {
@@ -73,7 +73,7 @@ const languageIcons = {
 } as { [key: string]: IconType };
 
 function RepoCard(props: Props) {
-    const { onClickTopic, onEdit, onDelete, onRefresh, repo } = props;
+    const { onTopicClicked: onClickTopic, onEdit, onDelete, onRefresh, repo } = props;
     const { homepage, forks, stars, url, provider } = repo;
     const topics = [...repo.topics].sort();
     const lang = (repo.lang || "").toLowerCase();
@@ -89,15 +89,15 @@ function RepoCard(props: Props) {
                         <IconGear fontSize="small" />
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item onClick={onEdit}>
+                        <Dropdown.Item onClick={() => onEdit(repo)}>
                             <IconEdit fontSize="small" />
                             &nbsp; edit
                         </Dropdown.Item>
-                        <Dropdown.Item onClick={onRefresh}>
+                        <Dropdown.Item onClick={() => onRefresh(repo)}>
                             <IconRefresh fontSize="small" />
                             &nbsp; refresh
                         </Dropdown.Item>
-                        <Dropdown.Item onClick={onDelete}>
+                        <Dropdown.Item onClick={() => onDelete(repo)}>
                             <IconDelete fontSize="small" />
                             &nbsp; remove
                         </Dropdown.Item>
