@@ -342,7 +342,14 @@ function App() {
         const topicsDict = {} as { [key: string]: boolean };
         selectedTopics.forEach((t: string) => (topicsDict[t] = true));
         const filterTopics = (topic: string) => topicsDict[topic];
-        repos.forEach((r: Repo) => (r.topics = r.topics.filter(filterTopics)));
+        repos.forEach((r: Repo) => {
+            const newTopics = r.topics.filter(filterTopics);
+            if (newTopics.length !== r.topics.length) {
+                r.topics = newTopics;
+                r.modified = true;
+            }
+        });
+
         storageDriver
             .updateMany(repos)
             .then(updateStateRepos)
