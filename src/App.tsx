@@ -13,7 +13,7 @@ import {
     GitHub as GitHubIcon,
     Undo as UndoIcon,
 } from "@mui/icons-material";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MultiValue } from "react-select";
 import {
     Menu,
@@ -101,6 +101,7 @@ function App() {
     const [Display, setDisplay] = useState(() => RepoList);
     const [editing, setEditing] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+    const [appClasses, setAppClasses] = useState("");
     const [filteredRepos, setFilteredRepos] = useState([] as Repo[]);
     const [page, setPage] = useState(0);
     const [perPage, setPerPage] = useState(10);
@@ -141,6 +142,11 @@ function App() {
 
     /* ---------------------------------------------------------------------- */
     // internal handlers
+
+    function toggleAppWidth() {
+        if (appClasses === "") setAppClasses("full-width");
+        else setAppClasses("");
+    }
 
     function handlePageChange(page: number) {
         setPage(page);
@@ -392,12 +398,13 @@ function App() {
                 This app is running on demo mode. Sample data has been loaded.
                 Data is saved to local storage and can be exported/imported.
             </Alert>
-            <Container id="app">
+            <Container id="app" className={appClasses}>
                 <Menu
                     repos={repos}
                     filtered={filteredRepos}
                     onImport={confirmAddMany}
                     onDelete={handleDeleteMany}
+                    onToggleExpand={toggleAppWidth}
                 />
                 <h1>STARRED REPOS</h1>
                 <SearchFilter onSubmit={handleSearch} />

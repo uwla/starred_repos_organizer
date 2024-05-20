@@ -13,6 +13,13 @@ html {
     position: relative;
 }
 
+#app.full-width {
+    width: 90%;
+    max-width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
 #app > * {
     margin-top: 1em;
 }
@@ -31,11 +38,13 @@ html {
     right: 1em;
 }
 
-#error-msg, #success-msg {
+#error-msg,
+#success-msg {
     padding: 0;
 }
 
-#error-msg .alert, #success-msg .alert {
+#error-msg .alert,
+#success-msg .alert {
     margin: 0;
 }
 
@@ -44,9 +53,7 @@ html {
     flex-direction: row;
 }
 
-#app .stack-filter > :first-child
-
-{
+#app .stack-filter > :first-child {
     flex-grow: 1;
 }
 

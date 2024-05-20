@@ -3,6 +3,7 @@ import {
     Download as IconDownload,
     Upload as IconUpload,
     Delete as IconDelete,
+    Fullscreen as IconFullscreen
 } from "@mui/icons-material";
 import { Button, Dropdown, Modal } from "react-bootstrap";
 import { useState } from "react";
@@ -17,10 +18,11 @@ interface Props {
     filtered: Repo[];
     onImport: (repos: Repo[]) => void;
     onDelete: (repos: Repo[]) => Promise<void>;
+    onToggleExpand: () => void;
 }
 
 function Menu(props: Props) {
-    const { repos, filtered, onImport, onDelete } = props;
+    const { repos, filtered, onImport, onDelete, onToggleExpand } = props;
     const [showConfirmDelete, setShowConfirmDelete] = useState(false);
     const [toDelete, setToDelete] = useState(repos);
 
@@ -82,6 +84,9 @@ function Menu(props: Props) {
                             <IconDelete /> DELETE FILTERED
                         </Dropdown.Item>
                     )}
+                    <Dropdown.Item onClick={onToggleExpand}>
+                        <IconFullscreen /> EXPAND
+                    </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
             <Modal show={showConfirmDelete} onHide={hideModal}>

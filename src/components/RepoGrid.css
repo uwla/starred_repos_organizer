@@ -4,3 +4,15 @@
     align-items: stretch;
     grid-template-columns: 1fr 1fr;
 }
+
+@media screen and (min-width: 1099px) and (max-width: 1499px) {
+    #app.full-width .repo-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media screen and (min-width: 1500px) {
+    #app.full-width .repo-grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
