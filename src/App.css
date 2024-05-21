@@ -38,16 +38,6 @@ html {
     right: 1em;
 }
 
-#error-msg,
-#success-msg {
-    padding: 0;
-}
-
-#error-msg .alert,
-#success-msg .alert {
-    margin: 0;
-}
-
 #app .stack-filter {
     gap: 0.5em;
     flex-direction: row;
@@ -59,28 +49,6 @@ html {
 
 label {
     cursor: pointer;
-}
-
-footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-top: 1px solid #ddd;
-    padding: 0.5em;
-    line-height: 1;
-    gap: 0.25em;
-}
-
-footer a {
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-
-footer svg {
-    font-size: 1em !important;
 }
 
 .toasts {

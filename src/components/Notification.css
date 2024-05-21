@@ -1,0 +1,7 @@
+.notification {
+    padding: 0 !important;
+}
+
+.notification .alert {
+    margin: 0 !important;
+}

@@ -30,7 +30,7 @@ function SearchFilter(props: Props) {
                 type="text"
                 onChange={handleInput}
                 onKeyDown={handleKey}
-                placeholder="Search..."
+                placeholder="search..."
             ></Form.Control>
             <Button variant="primary" onClick={handleClick}>
                 <IconSearch />

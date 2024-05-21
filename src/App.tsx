@@ -2,7 +2,6 @@ import {
     Alert,
     Button,
     Container,
-    Form,
     Stack,
     Toast,
     ToastContainer,
@@ -10,7 +9,6 @@ import {
 import {
     Close as CloseIcon,
     Edit as EditIcon,
-    GitHub as GitHubIcon,
     Undo as UndoIcon,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
@@ -26,6 +24,9 @@ import {
     SearchFilter,
     SortOptions,
     TopicFilter,
+    LayoutOptions,
+    Footer,
+    Notification,
 } from "./components";
 import { optionsToTopics, uniqueRepos } from "./utils";
 import { Repo, RepoKey, SelectOption } from "./types";
@@ -171,8 +172,7 @@ function App() {
         setFilteredRepos(applyFilters(repos, searchQuery, plainTopics));
     }
 
-    function handleSelectDisplay(event: React.ChangeEvent<HTMLSelectElement>) {
-        const value = event.target.value;
+    function handleSelectDisplay(value: string) {
         switch (value) {
             case "grid":
                 setDisplay(() => RepoGrid);
@@ -388,6 +388,7 @@ function App() {
 
     return (
         <>
+            {/* DEMO MESSAGE INFO */}
             <Alert
                 id="demo-msg"
                 variant="warning"
@@ -398,7 +399,12 @@ function App() {
                 This app is running on demo mode. Sample data has been loaded.
                 Data is saved to local storage and can be exported/imported.
             </Alert>
+
             <Container id="app" className={appClasses}>
+                {/* <!-- HEADER --> */}
+                <h1>STARRED REPOS</h1>
+
+                {/* <!-- OPTIONS --> */}
                 <Menu
                     repos={repos}
                     filtered={filteredRepos}
@@ -406,41 +412,40 @@ function App() {
                     onDelete={handleDeleteMany}
                     onToggleExpand={toggleAppWidth}
                 />
-                <h1>STARRED REPOS</h1>
-                <SearchFilter onSubmit={handleSearch} />
-                <Stack className="stack-filter">
-                    <TopicFilter
-                        topics={topics}
-                        selected={selectedTopics}
-                        onSelect={(value: MultiValue<SelectOption>) =>
-                            handleSelect(value as SelectOption[])
-                        }
-                    />
-                    {topics.length > 0 && (
+
+                {/* <!-- TOPIC FILTER & TOPIC EDITOR --> */}
+                {topics.length > 0 && (
+                    <Stack className="stack-filter">
+                        <TopicFilter
+                            topics={topics}
+                            selected={selectedTopics}
+                            onSelect={(value: MultiValue<SelectOption>) =>
+                                handleSelect(value as SelectOption[])
+                            }
+                        />
                         <Button onClick={() => setPickingTopics(true)}>
                             <EditIcon />
                         </Button>
-                    )}
-                </Stack>
+                    </Stack>
+                )}
+
+                {/* <!-- SEARCH --> */}
+                <SearchFilter onSubmit={handleSearch} />
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}
-                <RepoSelect
-                    repos={reposToAdd}
-                    onConfirmSelection={handleAddMany}
-                />
+
+                {/* DISPLAY OPTIONS */}
                 <Stack gap={4} direction="horizontal">
                     <SortOptions
                         values={["", "stars", "name", "forks"]}
                         onSelect={handleSort}
                     />
-                    <Stack direction="horizontal" className="sort-options">
-                        <p>View as </p>
-                        <Form.Select onChange={handleSelectDisplay}>
-                            <option value="list">List</option>
-                            <option value="grid">Grid</option>
-                        </Form.Select>
-                    </Stack>
+                    <LayoutOptions onSelect={handleSelectDisplay} />
                 </Stack>
+
+                {/* ADD BUTTON */}
                 <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
+
+                {/* TOP PAGINATION */}
                 <Pagination
                     page={page}
                     perPage={perPage}
@@ -448,6 +453,8 @@ function App() {
                     onPageChange={handlePageChange}
                     onPerPageChange={handlePerPageChange}
                 />
+
+                {/* ITEMS */}
                 <Display
                     repos={filteredRepos.slice(
                         page * perPage,
@@ -458,6 +465,8 @@ function App() {
                     onRefresh={handleRefresh}
                     onTopicClicked={handleTopicClicked}
                 />
+
+                {/* BOTTOM PAGINATION */}
                 <Pagination
                     page={page}
                     perPage={perPage}
@@ -465,41 +474,46 @@ function App() {
                     onPageChange={handlePageChange}
                     onPerPageChange={handlePerPageChange}
                 />
+
+                {/* MODAL SELECT REPOSITORIES */}
+                <RepoSelect
+                    repos={reposToAdd}
+                    onConfirmSelection={handleAddMany}
+                />
+
+                {/* MODAL EDIT REPOSITORIES */}
+                <RepoEdit
+                    topics={topics}
+                    repo={editingRepo}
+                    editing={editing}
+                    onHide={() => setEditing(false)}
+                    onUpdate={(repo) => handleUpdate(repo, true)}
+                />
+
+                {/* MODAL EDIT TOPICS */}
+                <TopicSelect
+                    show={pickingTopics}
+                    topics={topics}
+                    onHide={() => setPickingTopics(false)}
+                    onConfirmSelection={handleTopicsPicking}
+                />
+
+                {/* NOTIFICATION TOASTS */}
                 <ToastContainer
                     className="toasts"
                     containerPosition="fixed"
                     position="bottom-start"
                 >
-                    <Toast
-                        id="error-msg"
-                        show={errorMsg != ""}
-                        autohide={true}
-                        delay={5000}
-                        onClose={() => setErrorMsg("")}
-                    >
-                        <Alert
-                            variant="danger"
-                            dismissible={true}
-                            onClose={() => setErrorMsg("")}
-                        >
-                            {errorMsg}
-                        </Alert>
-                    </Toast>
-                    <Toast
-                        id="success-msg"
-                        show={successMsg != ""}
-                        autohide={true}
-                        delay={5000}
+                    <Notification
+                        variant="success"
+                        message={successMsg}
                         onClose={() => setSuccessMsg("")}
-                    >
-                        <Alert
-                            variant="success"
-                            dismissible={true}
-                            onClose={() => setSuccessMsg("")}
-                        >
-                            {successMsg}
-                        </Alert>
-                    </Toast>
+                    />
+                    <Notification
+                        variant="danger"
+                        message={errorMsg}
+                        onClose={() => setErrorMsg("")}
+                    />
                     {deletedRepos.map((r: Repo) => (
                         <Toast
                             key={r.id}
@@ -524,26 +538,10 @@ function App() {
                         </Toast>
                     ))}
                 </ToastContainer>
-                <TopicSelect
-                    show={pickingTopics}
-                    topics={topics}
-                    onHide={() => setPickingTopics(false)}
-                    onConfirmSelection={handleTopicsPicking}
-                />
-                <RepoEdit
-                    topics={topics}
-                    repo={editingRepo}
-                    editing={editing}
-                    onHide={() => setEditing(false)}
-                    onUpdate={(repo) => handleUpdate(repo, true)}
-                />
             </Container>
-            <footer>
-                <a href="https://github.com/uwla/repo_stars_organizer">
-                    Source Code
-                </a>
-                <GitHubIcon />
-            </footer>
+
+            {/* <!-- FOOTER --> */}
+            <Footer />
         </>
     );
 }
