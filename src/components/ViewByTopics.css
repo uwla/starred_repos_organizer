@@ -1,0 +1,9 @@
+.topic-view section {
+    margin-top: 2em;
+}
+
+.topic-view h2 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: .25em;
+    margin-bottom: 1em;
+}

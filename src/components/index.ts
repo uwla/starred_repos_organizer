@@ -13,6 +13,8 @@ import SearchFilter from "./SearchFilter";
 import SortOptions from "./SortOptions";
 import TopicFilter from "./TopicFilter";
 import ViewPagination from "./ViewPagination";
+import ViewByTopics from './ViewByTopics';
+import TopicSelect from "./TopicSelect";
 
 export {
     Footer,
@@ -29,5 +31,7 @@ export {
     SearchFilter,
     SortOptions,
     TopicFilter,
+    TopicSelect,
     ViewPagination,
+    ViewByTopics,
 };

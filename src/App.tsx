@@ -11,6 +11,7 @@ import {
     Edit as EditIcon,
     Undo as UndoIcon,
 } from "@mui/icons-material";
+import { Checkbox } from "@mui/material";
 import { useEffect, useState } from "react";
 import { MultiValue } from "react-select";
 import {
@@ -23,17 +24,18 @@ import {
     SearchFilter,
     SortOptions,
     TopicFilter,
+    TopicSelect,
     LayoutOptions,
     Footer,
     Notification,
     ViewPagination,
+    ViewByTopics,
 } from "./components";
-import { optionsToTopics, uniqueRepos } from "./utils";
+import { optionsToTopics, uniqueRepos, extractTopics } from "./utils";
 import { Repo, RepoKey, SelectOption } from "./types";
 import storageDriver from "./storage";
-import "./App.css";
 import RepoProvider from "./repo";
-import TopicSelect from "./components/TopicSelect";
+import "./App.css";
 
 /* -------------------------------------------------------------------------- */
 // Utilities
@@ -83,13 +85,6 @@ function applyFilters(repos: Repo[], search: string, topics: string[]) {
     return filterByTopics(filterBySearch(repos, search), topics);
 }
 
-function extractTopics(repos: Repo[]): string[] {
-    let topics = repos.map((item: Repo) => item.topics).flat();
-    topics = [...new Set(topics)];
-    topics.sort();
-    return topics;
-}
-
 /* -------------------------------------------------------------------------- */
 // Main
 
@@ -114,6 +109,7 @@ function App() {
     const [showDemoMsg, setShowDemoMsg] = useState(shouldShowDemoMsg);
     const [successMsg, setSuccessMsg] = useState("");
     const [topics, setTopics] = useState([] as string[]);
+    const [View, setView] = useState(() => ViewPagination);
 
     useEffect(() => {
         fetchData();
@@ -423,13 +419,22 @@ function App() {
                         onSelect={handleSort}
                     />
                     <LayoutOptions onSelect={handleSelectDisplay} />
+                    <Stack direction="horizontal">
+                        <Checkbox
+                            onChange={(_, v) => {
+                                if (v) setView(() => ViewByTopics);
+                                else setView(() => ViewPagination);
+                            }}
+                        />
+                        <span>Group by topic (slow, experimental feat)</span>
+                    </Stack>
                 </Stack>
 
                 {/* ADD BUTTON */}
                 <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
 
                 {/* MAIN VIEW */}
-                <ViewPagination
+                <View
                     repos={filteredRepos}
                     sortFn={getSortFn(sortBy)}
                     Display={Display}

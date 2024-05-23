@@ -17,7 +17,7 @@ interface TopicCheckbox {
 const mapChecked = (t: string) =>
     ({ topic: t, checked: true } as TopicCheckbox);
 
-function RepoSelect(props: Props) {
+function TopicSelect(props: Props) {
     const { show, topics, onConfirmSelection, onHide } = props;
     const [checkboxes, setCheckboxes] = useState(topics.map(mapChecked));
     const [search, setSearch] = useState("");
@@ -93,4 +93,4 @@ function RepoSelect(props: Props) {
     );
 }
 
-export default RepoSelect;
+export default TopicSelect;

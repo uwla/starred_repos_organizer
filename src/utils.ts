@@ -6,6 +6,12 @@ const optionsToTopics = (topics: SelectOption[]): string[] =>
 const topicsToOptions = (topics: string[]): SelectOption[] =>
     topics.map((topic: string) => ({ value: topic, label: topic }));
 
+const extractTopics = (repos: Repo[]): string[] => {
+    let topics = repos.map((item: Repo) => item.topics).flat();
+    topics = [...new Set(topics)];
+    topics.sort();
+    return topics;
+}
 const uniqueRepos = (repos: Repo[]): Repo[] => {
     let unique = [] as Repo[];
     const urls = {} as { [key: string]: number };
@@ -96,4 +102,5 @@ export {
     randomId,
     topicsToOptions,
     uniqueRepos,
+    extractTopics
 };
