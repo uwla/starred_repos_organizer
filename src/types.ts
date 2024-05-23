@@ -3,13 +3,7 @@ type SelectOption = {
     value: string;
 };
 
-type ProviderSlug =
-    | "github"
-    | "gitlab"
-    | "gitea"
-    | "codeberg"
-    | "gogs"
-    | "url";
+type ProviderSlug = "github" | "gitlab" | "gitea" | "codeberg" | "gogs" | "url";
 
 type Repo = {
     id: string;
@@ -58,7 +52,22 @@ type ResponseData = { [key: string]: never };
 
 type ResponseKeyMapper = { [key: string]: RepoKey };
 
+interface DisplayProps {
+    repos: Repo[];
+    onEdit: (repo: Repo) => void;
+    onRefresh: (repo: Repo) => void;
+    onDelete: (repo: Repo) => void;
+    onTopicClicked: (topic: string) => void;
+}
+
+interface ViewProps extends DisplayProps {
+    sortFn: (a: Repo, b: Repo) => number;
+    Display: (props: DisplayProps) => JSX.Element;
+}
+
 export type {
+    ViewProps,
+    DisplayProps,
     StorageDriver,
     SelectOption,
     Repo,

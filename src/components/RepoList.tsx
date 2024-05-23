@@ -1,16 +1,8 @@
 import { Stack } from "react-bootstrap";
-import { Repo } from "../types";
+import { DisplayProps, Repo } from "../types";
 import RepoCard from "./RepoCard";
 
-interface Props {
-    repos: Repo[];
-    onEdit: (repo: Repo) => void;
-    onRefresh: (repo: Repo) => void;
-    onDelete: (repo: Repo) => void;
-    onTopicClicked: (topic: string) => void;
-}
-
-function RepoList(props: Props) {
+function RepoList(props: DisplayProps) {
     const { repos, onEdit, onDelete, onRefresh, onTopicClicked } = props;
     return (
         <Stack gap={3}>

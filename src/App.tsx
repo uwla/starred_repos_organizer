@@ -15,7 +15,6 @@ import { useEffect, useState } from "react";
 import { MultiValue } from "react-select";
 import {
     Menu,
-    Pagination,
     RepoAdd,
     RepoEdit,
     RepoList,
@@ -27,6 +26,7 @@ import {
     LayoutOptions,
     Footer,
     Notification,
+    ViewPagination,
 } from "./components";
 import { optionsToTopics, uniqueRepos } from "./utils";
 import { Repo, RepoKey, SelectOption } from "./types";
@@ -104,8 +104,6 @@ function App() {
     const [errorMsg, setErrorMsg] = useState("");
     const [appClasses, setAppClasses] = useState("");
     const [filteredRepos, setFilteredRepos] = useState([] as Repo[]);
-    const [page, setPage] = useState(0);
-    const [perPage, setPerPage] = useState(10);
     const [editingRepo, setEditingRepo] = useState({} as Repo);
     const [pickingTopics, setPickingTopics] = useState(false);
     const [repos, setRepos] = useState([] as Repo[]);
@@ -137,7 +135,6 @@ function App() {
             setFilteredRepos(repos);
             setSelectedTopics([]);
             setSearchQuery("");
-            setPage(0);
         });
     }
 
@@ -149,25 +146,14 @@ function App() {
         else setAppClasses("");
     }
 
-    function handlePageChange(page: number) {
-        setPage(page);
-    }
-
-    function handlePerPageChange(perPage: number) {
-        setPage(0);
-        setPerPage(perPage);
-    }
-
     function handleSearch(text: string) {
         setSearchQuery(text);
-        setPage(0);
         const plainTopics = optionsToTopics(selectedTopics);
         setFilteredRepos(applyFilters(repos, text, plainTopics));
     }
 
     function handleSelect(topics: SelectOption[]) {
         setSelectedTopics(topics);
-        setPage(0);
         const plainTopics = optionsToTopics(topics);
         setFilteredRepos(applyFilters(repos, searchQuery, plainTopics));
     }
@@ -193,39 +179,36 @@ function App() {
 
     function handleSort(value: string) {
         setSortBy(value);
-        setRepos(sortRepos([...repos], value));
-        setFilteredRepos(sortRepos([...filteredRepos], value));
     }
 
-    function sortRepos(repos: Repo[], sortBy: string) {
-        let cmp: (a: Repo, b: Repo) => number;
-
+    function getSortFn(sortBy: string) {
         switch (sortBy) {
             case "":
-                cmp = (a: Repo, b: Repo) => a.index - b.index;
-                break;
+                return function (a: Repo, b: Repo) {
+                    return 0;
+                    return (a.index || 0) - (b.index || 0);
+                };
             case "stars":
-                cmp = (a: Repo, b: Repo) => (b.stars || 0) - (a.stars || 0);
-                break;
+                return function (a: Repo, b: Repo) {
+                    return (b.stars || 0) - (a.stars || 0);
+                };
             case "name":
-                cmp = (a: Repo, b: Repo) => a.name.localeCompare(b.name);
-                break;
+                return function (a: Repo, b: Repo) {
+                    return a.name.localeCompare(b.name);
+                };
             case "forks":
-                cmp = (a: Repo, b: Repo) => (b.forks || 0) - (a.forks || 0);
-                break;
+                return function (a: Repo, b: Repo) {
+                    return (b.forks || 0) - (a.forks || 0);
+                };
             default:
                 throw Error("unknown sort option");
         }
-
-        return repos.sort(cmp);
     }
 
     function updateStateRepos(newRepos: Repo[]) {
-        newRepos = sortRepos(newRepos, sortBy);
         setRepos(newRepos);
         setFilteredRepos(newRepos);
         setTopics(extractTopics(newRepos));
-        setPage(0);
         setSearchQuery("");
     }
 
@@ -445,34 +428,15 @@ function App() {
                 {/* ADD BUTTON */}
                 <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
 
-                {/* TOP PAGINATION */}
-                <Pagination
-                    page={page}
-                    perPage={perPage}
-                    count={filteredRepos.length}
-                    onPageChange={handlePageChange}
-                    onPerPageChange={handlePerPageChange}
-                />
-
-                {/* ITEMS */}
-                <Display
-                    repos={filteredRepos.slice(
-                        page * perPage,
-                        (page + 1) * perPage
-                    )}
+                {/* MAIN VIEW */}
+                <ViewPagination
+                    repos={filteredRepos}
+                    sortFn={getSortFn(sortBy)}
+                    Display={Display}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                     onRefresh={handleRefresh}
                     onTopicClicked={handleTopicClicked}
-                />
-
-                {/* BOTTOM PAGINATION */}
-                <Pagination
-                    page={page}
-                    perPage={perPage}
-                    count={filteredRepos.length}
-                    onPageChange={handlePageChange}
-                    onPerPageChange={handlePerPageChange}
                 />
 
                 {/* MODAL SELECT REPOSITORIES */}

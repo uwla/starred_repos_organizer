@@ -12,6 +12,7 @@ import RepoSelect from "./RepoSelect";
 import SearchFilter from "./SearchFilter";
 import SortOptions from "./SortOptions";
 import TopicFilter from "./TopicFilter";
+import ViewPagination from "./ViewPagination";
 
 export {
     Footer,
@@ -28,4 +29,5 @@ export {
     SearchFilter,
     SortOptions,
     TopicFilter,
+    ViewPagination,
 };

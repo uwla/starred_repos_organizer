@@ -1,16 +1,8 @@
-import { Repo } from "../types";
+import { DisplayProps, Repo } from "../types";
 import RepoCard from "./RepoCard";
 import './RepoGrid.css'
 
-interface Props {
-    repos: Repo[];
-    onEdit: (repo: Repo) => void;
-    onRefresh: (repo: Repo) => void;
-    onDelete: (repo: Repo) => void;
-    onTopicClicked: (topic: string) => void;
-}
-
-function RepoGrid(props: Props) {
+function RepoGrid(props: DisplayProps) {
     const { repos, onEdit, onDelete, onRefresh, onTopicClicked } = props;
     return (
         <div className="repo-grid">
