@@ -1,9 +1,19 @@
-.topic-view section {
-    margin-top: 2em;
+.topic-view .accordion {
+    margin-top: 1.5em;
 }
 
-.topic-view h2 {
+.topic-view .accordion-collapse {
+    border: none !important;
+    background-color: unset !important;
+}
+
+.topic-view .accordion-button.collapsed {
     border-bottom: 1px solid #ccc;
-    padding-bottom: .25em;
-    margin-bottom: 1em;
+}
+
+.topic-view .accordion-body {
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    padding-top: 1em;
 }

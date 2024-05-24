@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Repo, ViewProps } from "../types";
 import "./ViewByTopics.css";
+import { Accordion } from "react-bootstrap";
 
 function ViewByTopics(props: ViewProps) {
     const {
@@ -31,23 +32,28 @@ function ViewByTopics(props: ViewProps) {
 
     useEffect(() => {
         updateMap();
-        console.log("updated...");
     }, [repos]);
 
     return (
         <div className="topic-view">
-            {Object.keys(map).sort().map((topic) => (
-                <section key={topic}>
-                    <h2>{topic}</h2>
-                    <Display
-                        repos={map[topic].sort(sortFn)}
-                        onEdit={onEdit}
-                        onDelete={onDelete}
-                        onRefresh={onRefresh}
-                        onTopicClicked={onTopicClicked}
-                    />
-                </section>
-            ))}
+            {Object.keys(map)
+                .sort()
+                .map((topic) => (
+                    <Accordion defaultActiveKey="0">
+                        <Accordion.Item key={topic} eventKey="0">
+                            <Accordion.Header>{topic}</Accordion.Header>
+                            <Accordion.Body>
+                                <Display
+                                    repos={map[topic].sort(sortFn)}
+                                    onEdit={onEdit}
+                                    onDelete={onDelete}
+                                    onRefresh={onRefresh}
+                                    onTopicClicked={onTopicClicked}
+                                />
+                            </Accordion.Body>
+                        </Accordion.Item>
+                    </Accordion>
+                ))}
         </div>
     );
 }
