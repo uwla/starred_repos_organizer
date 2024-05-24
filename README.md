@@ -2,7 +2,7 @@
 
 Organizer your starred repositories from various sources.
 
-A live working demo is available at <https://uwla.github.io/starred_repos_organizer>.
+A live instance is available at <https://uwla.github.io/starred_repos_organizer>.
 
 ## Features
 
@@ -18,7 +18,9 @@ A live working demo is available at <https://uwla.github.io/starred_repos_organi
 - Works offline (except when fetching remote data).
 - Sort by name, stars or forks.
 - Text search and topic filter.
-- Pagination.
+- Display items as list or grid
+- Pagination view
+- Group-by-topics view
 
 ## Usage
 
@@ -87,6 +89,9 @@ development server or build the files locally.
 - [x] Option to delete filtered repos
 - [x] Show notifications on success
 - [x] Manage topics globally
+- [x] Display items in list
+- [x] Display items in grid
+- [x] Group items by topic
 - [x] Support for GitHub
 - [x] Support for GitLab
 - [x] Support for CodeBerg
@@ -102,7 +107,7 @@ Contributions are welcome.
 
 ## Credits
 
-Thanks [Keziah Moselle](https://github.com/KeziahMoselle) for the original
+Thanks [Keziah Moselle](https://github.com/KeziahMoselle) for the
 inspiration from his project [export-github-stars](https://github.com/KeziahMoselle/export-github-stars).
 
 ## License
