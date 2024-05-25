@@ -2,7 +2,8 @@
     margin-top: 1.5em;
 }
 
-.topic-view .accordion-collapse {
+.topic-view .accordion-collapse,
+.topic-view .accordion-item {
     border: none !important;
     background-color: unset !important;
 }
