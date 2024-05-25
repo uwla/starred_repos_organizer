@@ -19,12 +19,15 @@ function ViewByTopics(props: ViewProps) {
     function updateMap() {
         const newMap = {} as { [key: string]: Repo[] };
         repos.forEach((repo) => {
-            repo.topics.forEach((topic) => {
+            let topics = repo.topics;
+            if (topics.length === 0) {
+                topics = ["~~ none ~~"];
+            }
+            topics.forEach((topic) => {
                 if (!newMap[topic]) {
-                    newMap[topic] = [repo];
-                } else {
-                    newMap[topic].push(repo);
+                    newMap[topic] = [];
                 }
+                newMap[topic].push(repo);
             });
         });
         setMap(newMap);
