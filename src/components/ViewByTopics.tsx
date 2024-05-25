@@ -41,7 +41,9 @@ function ViewByTopics(props: ViewProps) {
                 .map((topic) => (
                     <Accordion defaultActiveKey="0">
                         <Accordion.Item key={topic} eventKey="0">
-                            <Accordion.Header>{topic}</Accordion.Header>
+                            <Accordion.Header>
+                                {topic} ({map[topic].length})
+                            </Accordion.Header>
                             <Accordion.Body>
                                 <Display
                                     repos={map[topic].sort(sortFn)}
