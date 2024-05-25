@@ -94,7 +94,7 @@ const shouldShowDemoMsg =
 function App() {
     // state
     const [deletedRepos, setDeletedRepos] = useState([] as Repo[]);
-    const [Display, setDisplay] = useState(() => RepoList);
+    const [Display, setDisplay] = useState(() => RepoGrid);
     const [editing, setEditing] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [appClasses, setAppClasses] = useState("");

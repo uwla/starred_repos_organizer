@@ -15,8 +15,8 @@ function LayoutOptions(props: Props) {
         <Stack direction="horizontal" className="sort-options">
             <p>View as</p>
             <Form.Select onChange={handleChange}>
-                <option value="list">List</option>
                 <option value="grid">Grid</option>
+                <option value="list">List</option>
             </Form.Select>
         </Stack>
     );
