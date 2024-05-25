@@ -76,7 +76,16 @@ function filterBySearch(repos: Repo[], search: string) {
 
 function filterByTopics(repos: Repo[], topics: string[]) {
     if (topics.length == 0) return repos;
+
+    // whether we want repos without topics
+    const emptyTopics = topics[0] === "-- none --";
+
     return repos.filter((repo: Repo) => {
+        // if we want empty topics, filter the repo which has no topic
+        if (emptyTopics) {
+            return repo.topics.length === 0;
+        }
+
         return topics.every((topic: string) => repo.topics.includes(topic));
     });
 }

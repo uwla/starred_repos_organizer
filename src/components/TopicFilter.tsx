@@ -16,8 +16,7 @@ interface Props {
 
 function TopicFilter(props: Props) {
     const { creatable, topics, selected, onSelect } = props;
-    const options = topicsToOptions(topics);
-
+    const options = topicsToOptions([...topics, '-- none --']);
     const SelectComponent = creatable ? CreatableSelect : Select;
 
     return (
