@@ -22,11 +22,10 @@ import {
     RepoGrid,
     RepoSelect,
     SearchFilter,
-    SortOptions,
     TopicFilter,
     TopicSelect,
-    LayoutOptions,
     Footer,
+    Select,
     Notification,
     ViewPagination,
     ViewByTopics,
@@ -371,11 +370,16 @@ function App() {
 
                 {/* DISPLAY OPTIONS */}
                 <Stack gap={4} direction="horizontal">
-                    <SortOptions
+                    <Select
+                        text="Sort by:"
                         values={["", "stars", "name", "forks"]}
                         onSelect={handleSort}
                     />
-                    <LayoutOptions onSelect={handleSelectDisplay} />
+                    <Select
+                        text="View as:"
+                        values={["grid", "list"]}
+                        onSelect={handleSelectDisplay}
+                    />
                     <Stack direction="horizontal">
                         <Checkbox
                             onChange={(_, v) => {

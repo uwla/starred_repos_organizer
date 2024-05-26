@@ -1,14 +1,15 @@
 import { ChangeEvent } from "react";
 import { Form, Stack } from "react-bootstrap";
-import './SortOptions.css'
+import './Select.css'
 
 interface Props {
+    text: string;
     values: string[];
     onSelect: (value: string) => void;
 }
 
-function SortOptions(props: Props) {
-    const { values, onSelect } = props;
+function Select(props: Props) {
+    const { values, onSelect, text } = props;
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
         onSelect(e.target.value);
@@ -16,7 +17,7 @@ function SortOptions(props: Props) {
 
     return (
         <Stack direction="horizontal" className="sort-options">
-            <p>Sort by:</p>
+            <p>{text}</p>
             <Form.Select onChange={handleChange} >
                 {values.map((value: string) => {
                     return (
@@ -30,4 +31,4 @@ function SortOptions(props: Props) {
     );
 }
 
-export default SortOptions;
+export default Select;

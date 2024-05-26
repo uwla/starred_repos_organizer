@@ -1,5 +1,4 @@
 import Footer from "./Footer";
-import LayoutOptions from "./LayoutOptions";
 import Menu from "./Menu";
 import Notification from "./Notification";
 import Pagination from "./Pagination";
@@ -10,7 +9,7 @@ import RepoGrid from "./RepoGrid";
 import RepoList from "./RepoList";
 import RepoSelect from "./RepoSelect";
 import SearchFilter from "./SearchFilter";
-import SortOptions from "./SortOptions";
+import Select from "./Select";
 import TopicFilter from "./TopicFilter";
 import ViewPagination from "./ViewPagination";
 import ViewByTopics from './ViewByTopics';
@@ -18,7 +17,6 @@ import TopicSelect from "./TopicSelect";
 
 export {
     Footer,
-    LayoutOptions,
     Menu,
     Notification,
     Pagination,
@@ -29,7 +27,7 @@ export {
     RepoList,
     RepoSelect,
     SearchFilter,
-    SortOptions,
+    Select,
     TopicFilter,
     TopicSelect,
     ViewPagination,
