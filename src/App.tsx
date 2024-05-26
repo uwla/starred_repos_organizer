@@ -31,68 +31,16 @@ import {
     ViewPagination,
     ViewByTopics,
 } from "./components";
-import { optionsToTopics, uniqueRepos, extractTopics } from "./utils";
-import { Repo, RepoKey, SelectOption } from "./types";
+import {
+    optionsToTopics,
+    uniqueRepos,
+    extractTopics,
+    applyFilters,
+} from "./utils";
+import { Repo, SelectOption } from "./types";
 import storageDriver from "./storage";
 import RepoProvider from "./repo";
 import "./App.css";
-
-/* -------------------------------------------------------------------------- */
-// Utilities
-function filterRepo(repo: Repo, normalizedQuery: string) {
-    const searchableKeys = [
-        "full_name",
-        "description",
-        "topics",
-        "lang",
-    ] as RepoKey[];
-
-    for (const key of searchableKeys) {
-        const field = repo[key];
-        let hasMatch = false;
-
-        // Search string field by checking if the value includes the query.
-        if (typeof field === "string") {
-            hasMatch = field.toLowerCase().includes(normalizedQuery);
-        }
-
-        // Search array field by checking if any value includes the query.
-        if (Array.isArray(field)) {
-            hasMatch = field.some((val: string) =>
-                val.toLowerCase().includes(normalizedQuery)
-            );
-        }
-
-        if (hasMatch) return true;
-    }
-    return false;
-}
-
-function filterBySearch(repos: Repo[], search: string) {
-    if (search == "") return repos;
-    const normalizedQuery = search.toLowerCase();
-    return repos.filter((repo: Repo) => filterRepo(repo, normalizedQuery));
-}
-
-function filterByTopics(repos: Repo[], topics: string[]) {
-    if (topics.length == 0) return repos;
-
-    // whether we want repos without topics
-    const emptyTopics = topics[0] === "-- none --";
-
-    return repos.filter((repo: Repo) => {
-        // if we want empty topics, filter the repo which has no topic
-        if (emptyTopics) {
-            return repo.topics.length === 0;
-        }
-
-        return topics.every((topic: string) => repo.topics.includes(topic));
-    });
-}
-
-function applyFilters(repos: Repo[], search: string, topics: string[]) {
-    return filterByTopics(filterBySearch(repos, search), topics);
-}
 
 /* -------------------------------------------------------------------------- */
 // Main
