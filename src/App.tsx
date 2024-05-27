@@ -228,9 +228,10 @@ function App() {
 
     async function handleDeleteMany(repos: Repo[]) {
         if (repos.length === 0) return;
-        await storageDriver.deleteMany(repos)
+        await storageDriver
+            .deleteMany(repos)
             .then(fetchData)
-            .then(()=> setSuccessMsg(`${repos.length} repos deleted`));
+            .then(() => setSuccessMsg(`${repos.length} repos deleted`));
     }
 
     function closeUndoDeleteToast(repo: Repo) {
@@ -345,6 +346,7 @@ function App() {
                 <Menu
                     repos={repos}
                     filtered={filteredRepos}
+                    sortFn={getSortFn(sortBy)}
                     onImport={confirmAddMany}
                     onDelete={handleDeleteMany}
                     onToggleExpand={toggleAppWidth}

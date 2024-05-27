@@ -5,7 +5,7 @@ import {
     Delete as IconDelete,
     Fullscreen as IconFullscreen,
 } from "@mui/icons-material";
-import { Button, Dropdown, Modal } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
 import { useState } from "react";
 import exportFromJSON from "export-from-json";
 import { useFilePicker } from "use-file-picker";
@@ -20,10 +20,12 @@ interface Props {
     onImport: (repos: Repo[]) => void;
     onDelete: (repos: Repo[]) => Promise<void>;
     onToggleExpand: () => void;
+    sortFn: (a: Repo, b: Repo) => number;
 }
 
 function Menu(props: Props) {
-    const { repos, filtered, onImport, onDelete, onToggleExpand } = props;
+    const { repos, filtered, onImport, onDelete, onToggleExpand, sortFn } =
+        props;
     const [toDelete, setToDelete] = useState([] as Repo[]);
     const [toExport, setToExport] = useState([] as Repo[]);
 
@@ -89,13 +91,13 @@ function Menu(props: Props) {
 
             <RepoSelect
                 title="CONFIRM REPOSITORIES TO DELETE"
-                repos={toDelete}
+                repos={toDelete.sort(sortFn)}
                 onSelect={handleDelete}
             />
 
             <RepoSelect
                 title="CONFIRM REPOSITORIES TO EXPORT"
-                repos={toExport}
+                repos={toExport.sort(sortFn)}
                 onSelect={handleDownload}
             />
         </>
