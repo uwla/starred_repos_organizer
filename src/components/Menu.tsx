@@ -3,7 +3,7 @@ import {
     Download as IconDownload,
     Upload as IconUpload,
     Delete as IconDelete,
-    Fullscreen as IconFullscreen
+    Fullscreen as IconFullscreen,
 } from "@mui/icons-material";
 import { Button, Dropdown, Modal } from "react-bootstrap";
 import { useState } from "react";
@@ -12,6 +12,7 @@ import { useFilePicker } from "use-file-picker";
 import { SelectedFiles } from "use-file-picker/types";
 import { Repo } from "../types";
 import "./Menu.css";
+import RepoSelect from "./RepoSelect";
 
 interface Props {
     repos: Repo[];
@@ -23,8 +24,8 @@ interface Props {
 
 function Menu(props: Props) {
     const { repos, filtered, onImport, onDelete, onToggleExpand } = props;
-    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-    const [toDelete, setToDelete] = useState(repos);
+    const [toDelete, setToDelete] = useState([] as Repo[]);
+    const [toExport, setToExport] = useState([] as Repo[]);
 
     // Handles importing files.
     const { openFilePicker } = useFilePicker({
@@ -39,20 +40,16 @@ function Menu(props: Props) {
 
     // Handles exporting files.
     const handleDownload = (repos: Repo[]) => {
+        setToExport([]);
+        if (repos.length === 0) return;
         const data = { repo: repos };
         const fileName = "starred-repos";
         const exportType = exportFromJSON.types.json;
         exportFromJSON({ data, fileName, exportType });
     };
 
-    const confirmDelete = (repos: Repo[]) => {
-        setToDelete(repos);
-        setShowConfirmDelete(true);
-    };
-
-    const hideModal = () => setShowConfirmDelete(false);
-
-    const handleDelete = () => onDelete(toDelete).then(hideModal);
+    const hideModal = () => setToDelete([]);
+    const handleDelete = (repos: Repo[]) => onDelete(repos).then(hideModal);
 
     return (
         <>
@@ -65,22 +62,22 @@ function Menu(props: Props) {
                         <IconUpload /> IMPORT
                     </Dropdown.Item>
                     {repos.length > 0 && (
-                        <Dropdown.Item onClick={() => handleDownload(repos)}>
+                        <Dropdown.Item onClick={() => setToExport(repos)}>
                             <IconDownload /> EXPORT
                         </Dropdown.Item>
                     )}
                     {filtered.length > 0 && filtered.length < repos.length && (
-                        <Dropdown.Item onClick={() => handleDownload(filtered)}>
+                        <Dropdown.Item onClick={() => setToExport(filtered)}>
                             <IconDownload /> EXPORT FILTERED
                         </Dropdown.Item>
                     )}
                     {repos.length > 0 && (
-                        <Dropdown.Item onClick={() => confirmDelete(repos)}>
+                        <Dropdown.Item onClick={() => setToDelete(repos)}>
                             <IconDelete /> DELETE ALL
                         </Dropdown.Item>
                     )}
                     {filtered.length > 0 && filtered.length < repos.length && (
-                        <Dropdown.Item onClick={() => confirmDelete(filtered)}>
+                        <Dropdown.Item onClick={() => setToDelete(filtered)}>
                             <IconDelete /> DELETE FILTERED
                         </Dropdown.Item>
                     )}
@@ -89,23 +86,18 @@ function Menu(props: Props) {
                     </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-            <Modal show={showConfirmDelete} onHide={hideModal}>
-                <Modal.Header>
-                    <Modal.Title>DELETE REPOSITORIES</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Do you really want to delete {toDelete.length} starred
-                    repositories?
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="danger" onClick={handleDelete}>
-                        YES
-                    </Button>
-                    <Button variant="success" onClick={hideModal}>
-                        NO
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+
+            <RepoSelect
+                title="CONFIRM REPOSITORIES TO DELETE"
+                repos={toDelete}
+                onSelect={handleDelete}
+            />
+
+            <RepoSelect
+                title="CONFIRM REPOSITORIES TO EXPORT"
+                repos={toExport}
+                onSelect={handleDownload}
+            />
         </>
     );
 }

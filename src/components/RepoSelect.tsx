@@ -6,7 +6,8 @@ import "./RepoSelect.css";
 
 interface Props {
     repos: Repo[];
-    onConfirmSelection: (repos: Repo[]) => void;
+    onSelect: (repos: Repo[]) => void;
+    title: string;
 }
 
 interface RepoCheckbox {
@@ -17,7 +18,7 @@ interface RepoCheckbox {
 const mapChecked = (r: Repo) => ({ repo: r, checked: true } as RepoCheckbox);
 
 function RepoSelect(props: Props) {
-    const { repos, onConfirmSelection } = props;
+    const { repos, onSelect, title } = props;
     const [checkboxes, setCheckboxes] = useState(repos.map(mapChecked));
     const [search, setSearch] = useState("");
 
@@ -25,13 +26,13 @@ function RepoSelect(props: Props) {
     useEffect(() => setCheckboxes(repos.map(mapChecked)), [repos]);
 
     // We suppose that, after hiding the modal, the repos prop is set to empty.
-    const handleHide = () => onConfirmSelection([]);
+    const handleHide = () => onSelect([]);
 
     // Confirm the user has selected the added topics;
     const handleSubmit = () => {
         const filtered = checkboxes.filter((c: RepoCheckbox) => c.checked);
         const repos = filtered.map((r: RepoCheckbox) => r.repo);
-        onConfirmSelection(repos);
+        onSelect(repos);
     };
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +47,7 @@ function RepoSelect(props: Props) {
     return (
         <Modal show={repos.length > 0} onHide={handleHide}>
             <Modal.Header>
-                <Modal.Title>ADD REPOSITORIES</Modal.Title>
+                <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div className="mb-3">
@@ -54,7 +55,7 @@ function RepoSelect(props: Props) {
                         type="text"
                         placeholder="search repository by name.."
                         onChange={handleInput}
-                    ></Form.Control>
+                    />
                 </div>
                 <div className="select-menu">
                     {checkboxes
@@ -87,9 +88,11 @@ function RepoSelect(props: Props) {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="danger" onClick={handleHide}>
-                    Cancel
+                    CANCEL
                 </Button>
-                <Button onClick={handleSubmit}>Add</Button>
+                <Button onClick={handleSubmit}>
+                    CONFIRM
+                </Button>
             </Modal.Footer>
         </Modal>
     );

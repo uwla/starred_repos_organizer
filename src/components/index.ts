@@ -11,9 +11,9 @@ import RepoSelect from "./RepoSelect";
 import SearchFilter from "./SearchFilter";
 import Select from "./Select";
 import TopicFilter from "./TopicFilter";
-import ViewPagination from "./ViewPagination";
-import ViewByTopics from './ViewByTopics';
 import TopicSelect from "./TopicSelect";
+import ViewByTopics from './ViewByTopics';
+import ViewPagination from "./ViewPagination";
 
 export {
     Footer,
@@ -30,6 +30,6 @@ export {
     Select,
     TopicFilter,
     TopicSelect,
-    ViewPagination,
     ViewByTopics,
+    ViewPagination,
 };

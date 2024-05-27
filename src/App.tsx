@@ -228,7 +228,10 @@ function App() {
     }
 
     async function handleDeleteMany(repos: Repo[]) {
-        await storageDriver.deleteMany(repos).then(fetchData);
+        if (repos.length === 0) return;
+        await storageDriver.deleteMany(repos)
+            .then(fetchData)
+            .then(()=> setSuccessMsg(`${repos.length} repos deleted`));
     }
 
     function closeUndoDeleteToast(repo: Repo) {
@@ -407,8 +410,9 @@ function App() {
 
                 {/* MODAL SELECT REPOSITORIES */}
                 <RepoSelect
+                    title="ADD REPOSITORIES"
                     repos={reposToAdd}
-                    onConfirmSelection={handleAddMany}
+                    onSelect={handleAddMany}
                 />
 
                 {/* MODAL EDIT REPOSITORIES */}
