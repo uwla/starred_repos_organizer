@@ -8,25 +8,24 @@ import './RepoEdit.css'
 
 interface Props {
     repo: Repo;
-    editing: boolean;
     topics: string[];
     onUpdate: (repo: Repo) => Promise<boolean>;
     onHide: () => void;
 }
 
 function RepoEdit(props: Props) {
-    const { topics, editing, onHide, onUpdate, repo } = props;
+    const { topics, onHide, onUpdate, repo } = props;
     const [repoName, setRepoName] = useState(repo.name);
     const [repoUrl, setRepoUrl] = useState(repo.url);
     const [repoTopics, setRepoTopics] = useState(
         topicsToOptions(repo.topics || [])
     );
 
-    useEffect(() => {
-        setRepoName(props.repo.name);
-        setRepoUrl(props.repo.url);
-        setRepoTopics(topicsToOptions(props.repo.topics || []));
-    }, [props]);
+    // useEffect(() => {
+    //     setRepoName(props.repo.name);
+    //     setRepoUrl(props.repo.url);
+    //     setRepoTopics(topicsToOptions(props.repo.topics || []));
+    // }, [repo]);
 
     function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -40,7 +39,7 @@ function RepoEdit(props: Props) {
     }
 
     return (
-        <Modal size="lg" show={editing} onHide={onHide}>
+        <Modal size="lg" show={true} onHide={onHide}>
             <Modal.Header>
                 <Modal.Title>EDIT REPO</Modal.Title>
             </Modal.Header>
