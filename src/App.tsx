@@ -137,7 +137,6 @@ function App() {
         switch (sortBy) {
             case "":
                 return function (a: Repo, b: Repo) {
-                    return 0;
                     return (a.index || 0) - (b.index || 0);
                 };
             case "stars":
