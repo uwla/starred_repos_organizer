@@ -244,7 +244,6 @@ function App() {
     }
 
     function handleEdit(r: Repo) {
-        console.log("editing ", r)
         setEditingRepo(r);
         setEditing(true);
     }
@@ -421,12 +420,14 @@ function App() {
                 />
 
                 {/* MODAL EDIT REPOSITORIES */}
-                {editing && (<RepoEdit
-                    topics={topics}
-                    repo={editingRepo}
-                    onHide={() => setEditing(false)}
-                    onUpdate={(repo) => handleUpdate(repo, true)}
-                />)}
+                {editing && (
+                    <RepoEdit
+                        topics={topics}
+                        repo={editingRepo}
+                        onHide={() => setEditing(false)}
+                        onUpdate={(repo) => handleUpdate(repo, true)}
+                    />
+                )}
 
                 {/* MODAL EDIT TOPICS */}
                 <TopicSelect
