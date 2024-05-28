@@ -370,7 +370,6 @@ function App() {
 
                 {/* <!-- SEARCH --> */}
                 <SearchFilter onSubmit={handleSearch} />
-                {searchQuery && <p>Search results for "{searchQuery}"</p>}
 
                 {/* DISPLAY OPTIONS */}
                 <Stack gap={4} direction="horizontal">
@@ -400,6 +399,15 @@ function App() {
                     {/* ADD BUTTON */}
                     <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
                 </Stack>
+
+                {/* filtered results stats */}
+                {searchQuery && <p>Search results for "{searchQuery}"</p>}
+                {filteredRepos.length !== repos.length && (
+                    <p>
+                        Showing {filteredRepos.length} repositories filtered
+                        from {repos.length}
+                    </p>
+                )}
 
                 {/* MAIN VIEW */}
                 <View
