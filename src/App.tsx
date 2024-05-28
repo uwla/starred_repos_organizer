@@ -394,10 +394,13 @@ function App() {
                         />
                         <span>Group by topic</span>
                     </Stack>
-                </Stack>
 
-                {/* ADD BUTTON */}
-                <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
+                    {/* SPACER */}
+                    <div className="flex-grow"></div>
+
+                    {/* ADD BUTTON */}
+                    <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
+                </Stack>
 
                 {/* MAIN VIEW */}
                 <View

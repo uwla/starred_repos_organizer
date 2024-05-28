@@ -55,6 +55,10 @@ label {
     cursor: pointer;
 }
 
+.flex-grow {
+    flex-grow: 2;
+}
+
 .toasts {
     padding: 1em;
 }
