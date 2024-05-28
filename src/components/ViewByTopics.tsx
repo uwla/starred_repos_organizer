@@ -15,6 +15,7 @@ function ViewByTopics(props: ViewProps) {
     } = props;
 
     const [map, setMap] = useState({} as { [key: string]: Repo[] });
+    const [currentTopic, setCurrentTopic] = useState("");
 
     function updateMap() {
         const newMap = {} as { [key: string]: Repo[] };
@@ -38,16 +39,16 @@ function ViewByTopics(props: ViewProps) {
     }, [repos]);
 
     return (
-        <div className="topic-view">
+        <Accordion className="topic-view" flush onSelect={(t) => setCurrentTopic(t as string)}>
             {Object.keys(map)
                 .sort()
                 .map((topic) => (
-                    <Accordion defaultActiveKey="0">
-                        <Accordion.Item key={topic} eventKey="0">
-                            <Accordion.Header>
-                                {topic} ({map[topic].length})
-                            </Accordion.Header>
-                            <Accordion.Body>
+                    <Accordion.Item key={topic} eventKey={topic}>
+                        <Accordion.Header>
+                            {topic} ({map[topic].length})
+                        </Accordion.Header>
+                        <Accordion.Body>
+                            {currentTopic === topic && (
                                 <Display
                                     repos={map[topic].sort(sortFn)}
                                     onEdit={onEdit}
@@ -55,11 +56,11 @@ function ViewByTopics(props: ViewProps) {
                                     onRefresh={onRefresh}
                                     onTopicClicked={onTopicClicked}
                                 />
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
+                            )}
+                        </Accordion.Body>
+                    </Accordion.Item>
                 ))}
-        </div>
+        </Accordion>
     );
 }
 

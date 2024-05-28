@@ -392,7 +392,7 @@ function App() {
                                 else setView(() => ViewPagination);
                             }}
                         />
-                        <span>Group by topic (slow, experimental feat)</span>
+                        <span>Group by topic</span>
                     </Stack>
                 </Stack>
 

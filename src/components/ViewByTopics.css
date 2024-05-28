@@ -1,7 +1,3 @@
-.topic-view .accordion {
-    margin-top: 1.5em;
-}
-
 .topic-view .accordion-collapse,
 .topic-view .accordion-item {
     border: none !important;
@@ -15,6 +11,6 @@
 .topic-view .accordion-body {
     padding-left: 0;
     padding-right: 0;
-    padding-bottom: 0;
+    padding-bottom: 1em;
     padding-top: 1em;
 }
