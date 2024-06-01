@@ -138,7 +138,7 @@ function filterByTopics(repos: Repo[], topics: string[]) {
             return repo.topics.length === 0;
         }
 
-        return topics.every((topic: string) => repo.topics.includes(topic));
+        return topics.some((topic: string) => repo.topics.includes(topic));
     });
 }
 
