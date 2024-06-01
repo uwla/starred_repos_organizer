@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Repo, ViewProps } from "../types";
+import { NoTopicsType, Repo, ViewProps } from "../types";
 import "./ViewByTopics.css";
 import { Accordion } from "react-bootstrap";
 
@@ -23,7 +23,7 @@ function ViewByTopics(props: ViewProps) {
         repos.forEach((repo) => {
             let topics = repo.topics;
             if (topics.length === 0) {
-                topics = ["~~ none ~~"];
+                topics = [NoTopicsType];
             }
             topics.forEach((topic) => {
                 if (!newMap[topic]) {

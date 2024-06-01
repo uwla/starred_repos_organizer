@@ -1,4 +1,4 @@
-import { Repo, RepoKey, SelectOption } from "./types";
+import { NoTopicsType, Repo, RepoKey, SelectOption } from "./types";
 
 const optionsToTopics = (topics: SelectOption[]): string[] =>
     topics.map((topic: SelectOption) => topic.value);
@@ -11,7 +11,7 @@ const extractTopics = (repos: Repo[]): string[] => {
     topics = [...new Set(topics)];
     topics.sort();
     return topics;
-}
+};
 const uniqueRepos = (repos: Repo[]): Repo[] => {
     let unique = [] as Repo[];
     const urls = {} as { [key: string]: number };
@@ -130,12 +130,12 @@ function filterByTopics(repos: Repo[], topics: string[]) {
     if (topics.length == 0) return repos;
 
     // whether we want repos without topics
-    const emptyTopics = topics[0] === "-- none --";
+    const emptyTopics = topics.includes(NoTopicsType);
 
     return repos.filter((repo: Repo) => {
         // if we want empty topics, filter the repo which has no topic
-        if (emptyTopics) {
-            return repo.topics.length === 0;
+        if (emptyTopics && repo.topics.length === 0) {
+            return true;
         }
 
         return topics.some((topic: string) => repo.topics.includes(topic));
@@ -160,5 +160,5 @@ export {
     randomId,
     topicsToOptions,
     uniqueRepos,
-    extractTopics
+    extractTopics,
 };

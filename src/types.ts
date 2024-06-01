@@ -66,6 +66,8 @@ interface ViewProps extends DisplayProps {
     Display: (props: DisplayProps) => JSX.Element;
 }
 
+const NoTopicsType = "~~ none ~~";
+
 export type {
     ViewProps,
     DisplayProps,
@@ -78,3 +80,5 @@ export type {
     ResponseKeyMapper,
     ProviderSlug as ProviderSlugs,
 };
+
+export { NoTopicsType };
