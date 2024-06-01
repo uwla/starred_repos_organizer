@@ -6,6 +6,7 @@ import { Accordion } from "react-bootstrap";
 function ViewByTopics(props: ViewProps) {
     const {
         repos,
+        topics,
         sortFn,
         onEdit,
         onRefresh,
@@ -39,8 +40,12 @@ function ViewByTopics(props: ViewProps) {
     }, [repos]);
 
     return (
-        <Accordion className="topic-view" flush onSelect={(t) => setCurrentTopic(t as string)}>
+        <Accordion
+            className="topic-view"
+            onSelect={(t) => setCurrentTopic(t as string)}
+        >
             {Object.keys(map)
+                .filter((t) => !(topics.length > 0 && !topics.includes(t)))
                 .sort()
                 .map((topic) => (
                     <Accordion.Item key={topic} eventKey={topic}>

@@ -61,6 +61,7 @@ interface DisplayProps {
 }
 
 interface ViewProps extends DisplayProps {
+    topics: string[];
     sortFn: (a: Repo, b: Repo) => number;
     Display: (props: DisplayProps) => JSX.Element;
 }

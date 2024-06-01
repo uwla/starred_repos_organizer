@@ -412,6 +412,7 @@ function App() {
                 {/* MAIN VIEW */}
                 <View
                     repos={filteredRepos}
+                    topics={optionsToTopics(selectedTopics)}
                     sortFn={getSortFn(sortBy)}
                     Display={Display}
                     onEdit={handleEdit}
