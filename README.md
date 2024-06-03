@@ -2,9 +2,19 @@
 
 Organizer your starred repositories from various sources.
 
-A live instance is available at <https://uwla.github.io/starred_repos_organizer>.
+Table Of Contents:
+
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Usage](#usage)
+- [Development](#development)
+- [Roadmap](#roadmap)
+- [Credits](#credits)
+- [License](#license)
 
 ## Screenshots
+
+A live instance is available at <https://uwla.github.io/starred_repos_organizer>.
 
 ![Starred Repos Organizer Screenshot 1](./assets/starred_repos_organizer_01.png)
 ![Starred Repos Organizer Screenshot 2](./assets/starred_repos_organizer_02.png)
@@ -108,14 +118,10 @@ development server or build the files locally.
 - [x] Option to specify provider type
 - [ ] Option to set auth tokens
 
-## Contributing
-
-Contributions are welcome.
-
 ## Credits
 
 Thanks [Keziah Moselle](https://github.com/KeziahMoselle) for the
-inspiration from his project [export-github-stars](https://github.com/KeziahMoselle/export-github-stars).
+inspiration from his project [export-github-stars](https://github.com/KeziahMoselle/export-github-stars), which export GitHub starred repositories to a JSON file.
 
 ## License
 
