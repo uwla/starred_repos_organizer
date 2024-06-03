@@ -4,6 +4,13 @@ Organizer your starred repositories from various sources.
 
 A live instance is available at <https://uwla.github.io/starred_repos_organizer>.
 
+## Screenshots
+
+![Starred Repos Organizer Screenshot 1](./assets/starred_repos_organizer_01.png)
+![Starred Repos Organizer Screenshot 2](./assets/starred_repos_organizer_02.png)
+![Starred Repos Organizer Screenshot 3](./assets/starred_repos_organizer_03.png)
+![Starred Repos Organizer Screenshot 4](./assets/starred_repos_organizer_04.png)
+
 ## Features
 
 - Star repositories from GitHub, GitLab, Codeberg, self-hosted Gitlab instance,
