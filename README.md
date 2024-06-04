@@ -4,7 +4,7 @@ Organizer your starred repositories from various sources.
 
 Table Of Contents:
 
-- [Screenshots](#screenshots)
+- [Demo](#demo)
 - [Features](#features)
 - [Usage](#usage)
 - [Development](#development)
@@ -12,9 +12,9 @@ Table Of Contents:
 - [Credits](#credits)
 - [License](#license)
 
-## Screenshots
+## Demo
 
-A live instance is available at <https://uwla.github.io/starred_repos_organizer>.
+A live demo is available at <https://uwla.github.io/starred_repos_organizer>.
 
 ![Starred Repos Organizer Screenshot 1](./assets/starred_repos_organizer_01.png)
 ![Starred Repos Organizer Screenshot 2](./assets/starred_repos_organizer_02.png)
@@ -24,27 +24,29 @@ A live instance is available at <https://uwla.github.io/starred_repos_organizer>
 ## Features
 
 - Star repositories from GitHub, GitLab, Codeberg, self-hosted Gitlab instance,
-  self-hosted Gitea instance, and more coming soon.
-- No account needed, save starred repositories locally.
-- Import starred repositories from any public user profile on Github or Gitlab.
-- Import repositories from JSON file.
-- Export repositories to JSON file.
-- Export filtered results only to JSON file.
-- Modify repository topics by adding new ones or deleting existing.
-- More privacy by not exposing your interests to the internet.
-- Works offline (except when fetching remote data).
-- Sort by name, stars or forks.
-- Text search and topic filter.
-- Display items as list or grid
+  self-hosted Gitea instance (more coming soon)
+- No account needed, save starred repositories locally
+- Import starred repositories from any public user profile on Github or Gitlab
+- Import repositories from JSON file
+- Export repositories to JSON file
+- Export filtered results only to JSON file
+- Modify repository topics by adding new ones or deleting existing
+- More privacy by not exposing your interests to the internet
+- Works offline (except when adding repositories, because it fetches remote data)
+- Can be downloaded as single HTML file to run locally
+- Sort by name, stars or forks
+- Text search and topic filter
+- Display items in list
+- Display items in grid
 - Pagination view
 - Group-by-topics view
 
 ## Usage
 
-Go to the demo page and use the app.
+Go to the demo <https://uwla.github.io/starred_repos_organizer> to use the app.
 
-You can also download the webpage using a modern browser, such as Chrome and
-Firefox, and then open the files locally.
+You can also use it offline: just download the HTML file to your computer and
+open it on your web browser.
 
 Lastly, you can follow the development instructions to launch a local
 development server or build the files locally.
