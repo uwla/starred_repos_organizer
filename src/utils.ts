@@ -12,6 +12,7 @@ const extractTopics = (repos: Repo[]): string[] => {
     topics.sort();
     return topics;
 };
+
 const uniqueRepos = (repos: Repo[]): Repo[] => {
     let unique = [] as Repo[];
     const urls = {} as { [key: string]: number };

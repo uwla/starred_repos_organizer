@@ -45,7 +45,11 @@ function Menu(props: Props) {
         setToExport([]);
         if (repos.length === 0) return;
         const data = { repo: repos };
-        const fileName = "starred-repos";
+        const date = (new Date())
+            .toISOString()
+            .replace('T', '_')
+            .replace(/\..*$/, '');
+        const fileName = "starred-repos_" + date;
         const exportType = exportFromJSON.types.json;
         exportFromJSON({ data, fileName, exportType });
     };
