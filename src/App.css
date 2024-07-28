@@ -10,10 +10,10 @@ html {
 }
 
 #app {
-    margin-top: 2rem;
-    margin-bottom: 3rem;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
     max-width: 900px;
-    min-height: calc(100vh - 8rem); /* margin-bottom + margin-top + footer */
+    min-height: calc(100vh - 8rem); /*padding top + padding bottom + footer */
     position: relative;
 }
 

@@ -106,7 +106,7 @@ function RepoCard(props: Props) {
             </Card.Header>
             <Card.Body>
                 <Card.Text>{repo.description}</Card.Text>
-                <Stack direction="horizontal" gap={3} className="repo-details">
+                <Stack direction="horizontal" gap={2} className="repo-details">
                     {provider === "codeberg" && (
                         <Card.Link href={url}>
                             <IconCodeberg />
@@ -162,7 +162,10 @@ function RepoCard(props: Props) {
                             <LanguageIcon />
                         </div>
                     )}
-                    {topics.some((t: string) => t.startsWith("awesome")) && (
+                    {
+                        (repo.name.toLowerCase().startsWith("awesome") ||
+                        topics.some((t: string) => t.startsWith("awesome")))
+                        && (
                         <div>
                             <SiAwesomelists />
                         </div>
