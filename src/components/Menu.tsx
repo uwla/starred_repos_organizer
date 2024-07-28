@@ -4,6 +4,7 @@ import {
     Upload as IconUpload,
     Delete as IconDelete,
     Fullscreen as IconFullscreen,
+    DarkMode as IconDarkMode,
 } from "@mui/icons-material";
 import { Dropdown } from "react-bootstrap";
 import { useState } from "react";
@@ -20,11 +21,12 @@ interface Props {
     onImport: (repos: Repo[]) => void;
     onDelete: (repos: Repo[]) => Promise<void>;
     onToggleExpand: () => void;
+    onToggleTheme: () => void;
     sortFn: (a: Repo, b: Repo) => number;
 }
 
 function Menu(props: Props) {
-    const { repos, filtered, onImport, onDelete, onToggleExpand, sortFn } =
+    const { repos, filtered, onImport, onDelete, onToggleExpand, onToggleTheme, sortFn } =
         props;
     const [toDelete, setToDelete] = useState([] as Repo[]);
     const [toExport, setToExport] = useState([] as Repo[]);
@@ -87,6 +89,9 @@ function Menu(props: Props) {
                             <IconDelete /> DELETE FILTERED
                         </Dropdown.Item>
                     )}
+                    <Dropdown.Item onClick={onToggleTheme}>
+                        <IconDarkMode /> DARK / LIGHT
+                    </Dropdown.Item>
                     <Dropdown.Item onClick={onToggleExpand}>
                         <IconFullscreen /> EXPAND
                     </Dropdown.Item>

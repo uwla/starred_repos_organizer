@@ -1,3 +1,5 @@
+/* generic styles */
+
 * {
     box-sizing: border-box;
 }
@@ -9,13 +11,21 @@ html {
     width: 100%;
 }
 
+label {
+    cursor: pointer;
+}
+
+/* app */
+
 #app {
     padding-top: 2rem;
     padding-bottom: 3rem;
     max-width: 900px;
-    min-height: calc(100vh - 8rem); /*padding top + padding bottom + footer */
+    min-height: calc(100vh - 2.5rem);
+    /* 2.5em = 1.5em (footer line-height) + 1em (footer padding) */
     position: relative;
 }
+
 
 #app.full-width {
     width: 90%;
@@ -24,7 +34,7 @@ html {
     margin-right: 5%;
 }
 
-#app > * {
+#app>* {
     margin-top: 1em;
 }
 
@@ -34,6 +44,111 @@ html {
     text-align: center;
 }
 
+/* stacks */
+
+#app .stack-filter {
+    gap: 0.5em;
+    flex-direction: row;
+}
+
+#app .stack-filter> :first-child {
+    flex-grow: 1;
+}
+
+/* #app.dark-theme */
+
+body.dark {
+    background: #000;
+    color: #fff;
+}
+
+body.dark .card {
+    --bs-card-border-color: #fff;
+    --bs-card-title-color: #fff;
+    --bs-card-bg: #000;
+    --bs-card-color: #fff;
+    --bs-card-subtitle-color: #fff;
+}
+
+body.dark .modal,
+body.dark .modal-content {
+    --bs-modal-border-color: #fff;
+    --bs-modal-title-color: #fff;
+    --bs-modal-bg: #000;
+    --bs-modal-color: #fff;
+    --bs-modal-subtitle-color: #fff;
+}
+
+body.dark .MuiChip-label {
+    color: #0080ff;
+    border: 1px solid #0080ff;
+}
+
+body.dark .MuiCheckbox-root {
+    color: #fff;
+}
+
+body.dark .MuiTablePagination-toolbar {
+    color: #fff;
+    background-color: #000;
+}
+
+body.dark .MuiTablePagination-toolbar svg {
+    color: #fff;
+}
+
+body.dark .MuiList-root {
+    color: #fff;
+    background-color: #000;
+    border: 1px solid #fff;
+    border-radius: 5px;
+}
+
+body.dark .MuiTablePagination-input {
+    border: 1px solid #fff;
+    border-radius: 5px;
+}
+
+body.dark li.MuiButtonBase-root:hover {
+    background-color: #198754;
+    color: #000;
+}
+
+body.dark .MuiTablePagination-toolbar button:disabled svg {
+    color: grey;
+}
+
+body.dark #root button.dropdown-toggle {
+    --bs-btn-color: #fff;
+    --bs-btn-border-color: #fff;
+    --bs-btn-bg: #000;
+}
+
+body.dark #root .dropdown-menu {
+    --bs-dropdown-color: #fff;
+    --bs-dropdown-link-color: #fff;
+    --bs-dropdown-border-color: #fff;
+    --bs-dropdown-bg: #000;
+}
+
+body.dark .accordion-button {
+    --bs-accordion-btn-color: #fff;
+    --bs-accordion-btn-border-color: #fff;
+    --bs-accordion-btn-bg: #198754;
+}
+
+body.dark input.form-control {
+    --bs-body-bg: #000;
+    --bs-body-color: #fff;
+}
+
+body.dark input.form-control::-webkit-input-placeholder {
+    color: #fff;
+    opacity: 1 !important;
+}
+
+/* demo message */
+
 #demo-msg {
     text-align: center;
 }
@@ -42,22 +157,19 @@ html {
     right: 1em;
 }
 
-#app .stack-filter {
-    gap: 0.5em;
-    flex-direction: row;
+/* fixes */
+
+.MuiChip-label:hover {
+    text-decoration: underline;
 }
 
-#app .stack-filter > :first-child {
-    flex-grow: 1;
-}
-
-label {
-    cursor: pointer;
-}
+/* utils */
 
 .flex-grow {
     flex-grow: 2;
 }
+
+/* TOASTS */
 
 .toasts {
     padding: 1em;
@@ -73,13 +185,13 @@ label {
     gap: 0.3em;
 }
 
-.toasts .toast > button {
+.toasts .toast>button {
     display: flex;
     border-radius: 0;
     padding: 0 0.25em;
 }
 
-.toasts .toast > button.close {
+.toasts .toast>button.close {
     padding: 0;
 }
 

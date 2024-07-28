@@ -29,6 +29,7 @@ function TopicFilter(props: Props) {
             isSearchable
             placeholder="search by topic..."
             closeMenuOnSelect={false}
+            closeMenuOnScroll={false}
             components={animatedComponents}
         />
     );

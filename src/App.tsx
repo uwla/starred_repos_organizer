@@ -50,6 +50,7 @@ const shouldShowDemoMsg =
 
 function App() {
     // saved settings
+    const savedTheme = SettingsManager.get("theme");
     const savedLayout = SettingsManager.get("layout");
     const savedSize = SettingsManager.get("size");
     const savedSortBy = SettingsManager.get("sortBy");
@@ -81,6 +82,7 @@ function App() {
 
     // Asynchronous data fetching
     useEffect(() => {
+        toggleDarkMode(savedTheme);
         fetchData();
     }, []);
 
@@ -105,6 +107,24 @@ function App() {
 
     /* ---------------------------------------------------------------------- */
     // Internal handlers
+
+    function toggleDarkMode(theme = '') {
+        const body = document.body;
+
+        if (theme === 'light' || body.classList.contains('dark')) {
+            body.classList.remove('dark');
+            body.setAttribute('data-bs-theme', 'light');
+            SettingsManager.set("theme", "light");
+            return;
+        }
+
+        if (theme === 'dark' || !body.classList.contains('dark')) {
+            body.classList.add('dark');
+            body.setAttribute('data-bs-theme', 'dark');
+            SettingsManager.set("theme", "dark");
+            return;
+        }
+    }
 
     function toggleAppWidth() {
         if (appCssClasses === "") {
@@ -390,6 +410,7 @@ function App() {
                     onImport={confirmAddMany}
                     onDelete={handleDeleteMany}
                     onToggleExpand={toggleAppWidth}
+                    onToggleTheme={toggleDarkMode}
                 />
 
                 {/* <!-- TOPIC FILTER & TOPIC EDITOR --> */}
