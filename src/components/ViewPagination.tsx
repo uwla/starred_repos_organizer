@@ -14,7 +14,7 @@ function ViewPagination(props: ViewProps) {
     } = props;
 
     const [page, setPage] = useState(0);
-    const [perPage, setPerPage] = useState(10);
+    const [perPage, setPerPage] = useState(20);
 
     function handlePageChange(page: number) {
         setPage(page);

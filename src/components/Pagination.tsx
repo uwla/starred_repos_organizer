@@ -34,6 +34,7 @@ export default function Pagination(props: Props) {
                     component="div"
                     count={count}
                     page={page}
+                    rowsPerPageOptions={[10,20, 50, 100, 200]}
                     onPageChange={handleChangePage}
                     labelRowsPerPage={`Showing ${perPage} items:`}
                     rowsPerPage={perPage}

@@ -37,7 +37,8 @@ import {
     applyFilters,
 } from "./utils";
 import { Repo, SelectOption } from "./types";
-import storageDriver from "./storage";
+import StorageDriver from "./storage";
+import SettingsManager from "./settings"
 import RepoProvider from "./repo";
 import "./App.css";
 
@@ -48,31 +49,43 @@ const shouldShowDemoMsg =
     process.env.NODE_ENV == "demo" && localStorage.getItem("repos") == null;
 
 function App() {
-    // state
+    // saved settings
+    const savedLayout = SettingsManager.get("layout");
+    const savedSize = SettingsManager.get("size");
+    const savedSortBy = SettingsManager.get("sortBy");
+    const savedView = SettingsManager.get("view");
+
+    // default values for state variables
+    const defaultAppCssClass = (savedSize === "full") ? "full-width" : "";
+    const defaultLayout = (savedLayout === "list") ? RepoList : RepoGrid;
+    const defaultView = (savedView === "topics") ? ViewByTopics : ViewPagination;
+
+    // state variables
     const [deletedRepos, setDeletedRepos] = useState([] as Repo[]);
-    const [Display, setDisplay] = useState(() => RepoGrid);
+    const [Layout, setLayout] = useState(() => defaultLayout);
     const [editing, setEditing] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
-    const [appClasses, setAppClasses] = useState("");
+    const [appCssClasses, setAppCssClasses] = useState(defaultAppCssClass);
     const [filteredRepos, setFilteredRepos] = useState([] as Repo[]);
     const [editingRepo, setEditingRepo] = useState({} as Repo);
     const [pickingTopics, setPickingTopics] = useState(false);
     const [repos, setRepos] = useState([] as Repo[]);
     const [reposToAdd, setReposToAdd] = useState([] as Repo[]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [sortBy, setSortBy] = useState("");
+    const [sortBy, setSortBy] = useState(savedSortBy);
     const [selectedTopics, setSelectedTopics] = useState([] as SelectOption[]);
     const [showDemoMsg, setShowDemoMsg] = useState(shouldShowDemoMsg);
     const [successMsg, setSuccessMsg] = useState("");
     const [topics, setTopics] = useState([] as string[]);
-    const [View, setView] = useState(() => ViewPagination);
+    const [View, setView] = useState(() => defaultView);
 
+    // Asynchronous data fetching
     useEffect(() => {
         fetchData();
     }, []);
 
     async function fetchData() {
-        await storageDriver.fetchRepos().then((repos: Repo[]) => {
+        await StorageDriver.fetchRepos().then((repos: Repo[]) => {
             // Assign index to each repo so they can be sorted to the default
             // order later on.
             repos.forEach((repo: Repo, index: number) => (repo.index = index));
@@ -91,11 +104,16 @@ function App() {
     }
 
     /* ---------------------------------------------------------------------- */
-    // internal handlers
+    // Internal handlers
 
     function toggleAppWidth() {
-        if (appClasses === "") setAppClasses("full-width");
-        else setAppClasses("");
+        if (appCssClasses === "") {
+            SettingsManager.set("size", "full");
+            setAppCssClasses("full-width");
+        } else {
+            SettingsManager.set("size", "half");
+            setAppCssClasses("");
+        }
     }
 
     function handleSearch(text: string) {
@@ -110,17 +128,32 @@ function App() {
         setFilteredRepos(applyFilters(repos, searchQuery, plainTopics));
     }
 
-    function handleSelectDisplay(value: string) {
+    function handleSelectLayout(value: string) {
         switch (value) {
             case "grid":
-                setDisplay(() => RepoGrid);
+                setLayout(() => RepoGrid);
                 break;
             case "list":
-                setDisplay(() => RepoList);
+                setLayout(() => RepoList);
                 break;
             default:
-                break;
+                return;
         }
+        SettingsManager.set('layout', value);
+    }
+
+    function handleSelectView(value: string) {
+        switch (value) {
+            case "pagination":
+                setView(() => ViewPagination);
+                break;
+            case "topics":
+                setView(() => ViewByTopics);
+                break;
+            default:
+                return;
+        }
+        SettingsManager.set('view', value);
     }
 
     function handleTopicClicked(topic: string) {
@@ -134,26 +167,33 @@ function App() {
     }
 
     function getSortFn(sortBy: string) {
+        let fn : (a: Repo, b: Repo) => number;
         switch (sortBy) {
             case "":
-                return function (a: Repo, b: Repo) {
+                fn = function (a: Repo, b: Repo) {
                     return (a.index || 0) - (b.index || 0);
                 };
+                break;
             case "stars":
-                return function (a: Repo, b: Repo) {
+                fn = function (a: Repo, b: Repo) {
                     return (b.stars || 0) - (a.stars || 0);
                 };
+                break;
             case "name":
-                return function (a: Repo, b: Repo) {
+                fn = function (a: Repo, b: Repo) {
                     return a.name.localeCompare(b.name);
                 };
+                break;
             case "forks":
-                return function (a: Repo, b: Repo) {
+                fn = function (a: Repo, b: Repo) {
                     return (b.forks || 0) - (a.forks || 0);
                 };
+                break;
             default:
-                throw Error("unknown sort option");
+                throw new Error(`Unknown sort option ${sortBy}`);
         }
+        SettingsManager.set('sortBy', sortBy);
+        return fn;
     }
 
     function updateStateRepos(newRepos: Repo[]) {
@@ -169,7 +209,7 @@ function App() {
             return false;
         }
 
-        return await storageDriver
+        return await StorageDriver
             .createRepo(repo)
             .then((repo) => {
                 updateStateRepos([repo, ...repos]);
@@ -193,7 +233,7 @@ function App() {
             return;
         }
 
-        return await storageDriver
+        return await StorageDriver
             .createMany(manyRepos)
             .then((created) => {
                 updateStateRepos(uniqueRepos([...created, ...repos]));
@@ -208,7 +248,7 @@ function App() {
     }
 
     async function handleDelete(repo: Repo) {
-        await storageDriver.deleteRepo(repo).then((status: boolean) => {
+        await StorageDriver.deleteRepo(repo).then((status: boolean) => {
             if (status) {
                 // Update local state.
                 const filterDeleted = (r: Repo) => r.id != repo.id;
@@ -228,7 +268,7 @@ function App() {
 
     async function handleDeleteMany(repos: Repo[]) {
         if (repos.length === 0) return;
-        await storageDriver
+        await StorageDriver
             .deleteMany(repos)
             .then(fetchData)
             .then(() => setSuccessMsg(`${repos.length} repos deleted`));
@@ -252,7 +292,7 @@ function App() {
         // this marks the repo to be updated as been locally modified.
         repo.modified = modified;
 
-        return storageDriver
+        return StorageDriver
             .updateRepo(repo)
             .then((updated: Repo) => {
                 // Update local repos.
@@ -315,7 +355,7 @@ function App() {
             }
         });
 
-        storageDriver
+        StorageDriver
             .updateMany(repos)
             .then(updateStateRepos)
             .then(() => setPickingTopics(false));
@@ -338,7 +378,7 @@ function App() {
                 Data is saved to local storage and can be exported/imported.
             </Alert>
 
-            <Container id="app" className={appClasses}>
+            <Container id="app" className={appCssClasses}>
                 {/* <!-- HEADER --> */}
                 <h1>STARRED REPOS</h1>
 
@@ -373,21 +413,29 @@ function App() {
 
                 {/* DISPLAY OPTIONS */}
                 <Stack gap={4} direction="horizontal">
+
+                    {/* SORT BY */}
                     <Select
                         text="Sort by:"
+                        selected={sortBy}
                         values={["", "stars", "name", "forks"]}
                         onSelect={handleSort}
                     />
+
+                    {/* LAYOUT */}
                     <Select
                         text="View as:"
+                        selected={SettingsManager.get('layout') || "grid"}
                         values={["grid", "list"]}
-                        onSelect={handleSelectDisplay}
+                        onSelect={handleSelectLayout}
                     />
+
+                    {/* GROUP BY */}
                     <Stack direction="horizontal">
                         <Checkbox
-                            onChange={(_, v) => {
-                                if (v) setView(() => ViewByTopics);
-                                else setView(() => ViewPagination);
+                            onChange={(_, checked) => {
+                                if (checked) handleSelectView('topics');
+                                else handleSelectView('pagination');
                             }}
                         />
                         <span>Group by topic</span>
@@ -400,7 +448,7 @@ function App() {
                     <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
                 </Stack>
 
-                {/* filtered results stats */}
+                {/* STATS FILTERED RESULTS */}
                 {searchQuery && <p>Search results for "{searchQuery}"</p>}
                 {filteredRepos.length !== repos.length && (
                     <p>
@@ -414,7 +462,7 @@ function App() {
                     repos={filteredRepos}
                     topics={optionsToTopics(selectedTopics)}
                     sortFn={getSortFn(sortBy)}
-                    Display={Display}
+                    Display={Layout}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                     onRefresh={handleRefresh}
@@ -428,7 +476,7 @@ function App() {
                     onSelect={handleAddMany}
                 />
 
-                {/* MODAL EDIT REPOSITORIES */}
+                {/* MODAL TO EDIT REPOSITORY */}
                 {editing && (
                     <RepoEdit
                         topics={topics}
@@ -438,7 +486,7 @@ function App() {
                     />
                 )}
 
-                {/* MODAL EDIT TOPICS */}
+                {/* MODAL TO EDIT TOPICS */}
                 <TopicSelect
                     show={pickingTopics}
                     topics={topics}
@@ -452,16 +500,19 @@ function App() {
                     containerPosition="fixed"
                     position="bottom-start"
                 >
+                    {/* SUCCESS NOTIFICATION */}
                     <Notification
                         variant="success"
                         message={successMsg}
                         onClose={() => setSuccessMsg("")}
                     />
+                    {/* ERROR NOTIFICATION */}
                     <Notification
                         variant="danger"
                         message={errorMsg}
                         onClose={() => setErrorMsg("")}
                     />
+                    {/* DELETED NOTIFICATION  W/ UNDO */}
                     {deletedRepos.map((r: Repo) => (
                         <Toast
                             key={r.id}

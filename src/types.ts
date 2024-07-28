@@ -38,6 +38,21 @@ interface RepoProvider {
     getUserStarredRepos: (userName: string) => Promise<Repo[]>;
 }
 
+type Settings = {
+    layout: string;
+    size: string;
+    sortBy: string;
+    theme: string;
+    view: string;
+};
+
+type SettingsKey = keyof Settings;
+
+interface SettingsManager {
+    get: (key: SettingsKey) => string;
+    set: (key: SettingsKey, value: string) => void;
+}
+
 interface StorageDriver {
     fetchRepos: () => Promise<Repo[]>;
     createRepo: (repo: Repo) => Promise<Repo>;
@@ -73,6 +88,9 @@ export type {
     DisplayProps,
     StorageDriver,
     SelectOption,
+    Settings,
+    SettingsKey,
+    SettingsManager,
     Repo,
     RepoKey,
     RepoProvider,

@@ -5,11 +5,12 @@ import './Select.css'
 interface Props {
     text: string;
     values: string[];
+    selected: string;
     onSelect: (value: string) => void;
 }
 
 function Select(props: Props) {
-    const { values, onSelect, text } = props;
+    const { values, onSelect, text, selected } = props;
 
     const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
         onSelect(e.target.value);
@@ -18,7 +19,7 @@ function Select(props: Props) {
     return (
         <Stack direction="horizontal" className="sort-options">
             <p>{text}</p>
-            <Form.Select onChange={handleChange} >
+            <Form.Select onChange={handleChange} value={selected}>
                 {values.map((value: string) => {
                     return (
                         <option key={value} value={value}>
