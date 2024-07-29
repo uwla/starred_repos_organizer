@@ -40,6 +40,8 @@ A live demo is available at <https://uwla.github.io/starred_repos_organizer>.
 - Display items in grid
 - Pagination view
 - Group-by-topics view
+- Dark & Light themes
+- Persistent user preferences
 
 ## Usage
 
