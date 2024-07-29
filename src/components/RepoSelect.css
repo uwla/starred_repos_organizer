@@ -22,6 +22,10 @@
     background-color: #eee;
 }
 
+body.dark .select-menu > .select-checkbox:hover {
+    background-color: #2b296c;
+}
+
 .select-menu .select-checkbox + .select-menu-empty {
     display: none;
 }

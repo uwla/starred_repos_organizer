@@ -118,13 +118,20 @@ body.dark .MuiTablePagination-toolbar button:disabled svg {
     color: grey;
 }
 
-body.dark #root button.dropdown-toggle {
+body.dark button.dropdown-toggle {
     --bs-btn-color: #fff;
     --bs-btn-border-color: #fff;
     --bs-btn-bg: #000;
 }
 
-body.dark #root .dropdown-menu {
+body.dark button.btn-outline-dark {
+    --bs-btn-color: #aaa;
+    --bs-btn-border-color: #aaa;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-border-color: #fff;
+}
+
+body.dark .dropdown-menu {
     --bs-dropdown-color: #fff;
     --bs-dropdown-link-color: #fff;
     --bs-dropdown-border-color: #fff;
@@ -145,6 +152,25 @@ body.dark input.form-control {
 body.dark input.form-control::-webkit-input-placeholder {
     color: #fff;
     opacity: 1 !important;
+}
+
+#react-select-2-listbox>div>div {
+    cursor: pointer;
+}
+
+body.dark #react-select-2-listbox {
+    border: 1px solid #999;
+    border-radius: 5px;
+    background-color: #000;
+}
+
+body.dark #react-select-2-listbox>div>div {
+    background-color: #000;
+    color: #fff;
+}
+
+body.dark #react-select-2-listbox>div>div:hover {
+    background-color: #2b296c;
 }
 
 /* demo message */
