@@ -1,4 +1,5 @@
 import { ViewProps } from "../types";
+import SettingsManager from "../settings";
 import { useState } from "react";
 import Pagination from "./Pagination";
 
@@ -13,8 +14,9 @@ function ViewPagination(props: ViewProps) {
         Display,
     } = props;
 
+    const defaultPerPage = Number(SettingsManager.get('perPage')) || 20;
     const [page, setPage] = useState(0);
-    const [perPage, setPerPage] = useState(20);
+    const [perPage, setPerPage] = useState(defaultPerPage);
 
     function handlePageChange(page: number) {
         setPage(page);
@@ -23,6 +25,7 @@ function ViewPagination(props: ViewProps) {
     function handlePerPageChange(perPage: number) {
         setPage(0);
         setPerPage(perPage);
+        SettingsManager.set('perPage', String(perPage));
     }
 
     return (

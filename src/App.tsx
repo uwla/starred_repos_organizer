@@ -60,6 +60,7 @@ function App() {
     const defaultAppCssClass = (savedSize === "full") ? "full-width" : "";
     const defaultLayout = (savedLayout === "list") ? RepoList : RepoGrid;
     const defaultView = (savedView === "topics") ? ViewByTopics : ViewPagination;
+    const defaultGroupBy = (savedView === "topics");
 
     // state variables
     const [deletedRepos, setDeletedRepos] = useState([] as Repo[]);
@@ -78,6 +79,7 @@ function App() {
     const [showDemoMsg, setShowDemoMsg] = useState(shouldShowDemoMsg);
     const [successMsg, setSuccessMsg] = useState("");
     const [topics, setTopics] = useState([] as string[]);
+    const [groupBy, setGroupBy] = useState(defaultGroupBy);
     const [View, setView] = useState(() => defaultView);
 
     // Asynchronous data fetching
@@ -454,9 +456,11 @@ function App() {
                     {/* GROUP BY */}
                     <Stack direction="horizontal">
                         <Checkbox
+                            checked={groupBy}
                             onChange={(_, checked) => {
                                 if (checked) handleSelectView('topics');
                                 else handleSelectView('pagination');
+                                setGroupBy(checked);
                             }}
                         />
                         <span>Group by topic</span>
