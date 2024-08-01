@@ -44,6 +44,7 @@ type Settings = {
     sortBy: string;
     theme: string;
     view: string;
+    perPage: string;
 };
 
 type SettingsKey = keyof Settings;
