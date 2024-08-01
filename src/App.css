@@ -1,4 +1,5 @@
-/* generic styles */
+/* ────────────────────────────────────────────────────────────────────── */
+/* NORMALIZE CSS */
 
 * {
     box-sizing: border-box;
@@ -11,11 +12,12 @@ html {
     width: 100%;
 }
 
-label {
+label, button, [type=button], a[href] {
     cursor: pointer;
 }
 
-/* app */
+/* ────────────────────────────────────────────────────────────────────── */
+/* APP */
 
 #app {
     padding-top: 2rem;
@@ -25,7 +27,6 @@ label {
     /* 2.5em = 1.5em (footer line-height) + 1em (footer padding) */
     position: relative;
 }
-
 
 #app.full-width {
     width: 90%;
@@ -44,7 +45,19 @@ label {
     text-align: center;
 }
 
-/* stacks */
+/* ────────────────────────────────────────────────────────────────────── */
+/* DEMO MESSAGE */
+
+#demo-msg {
+    text-align: center;
+}
+
+#demo-msg .btn-close {
+    right: 1em;
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* FIXES */
 
 #app .stack-filter {
     gap: 0.5em;
@@ -55,146 +68,22 @@ label {
     flex-grow: 1;
 }
 
-/* #app.dark-theme */
-
-body.dark {
-    background: #000;
-    color: #fff;
-}
-
-body.dark .card {
-    --bs-card-border-color: #fff;
-    --bs-card-title-color: #fff;
-    --bs-card-bg: #000;
-    --bs-card-color: #fff;
-    --bs-card-subtitle-color: #fff;
-}
-
-body.dark .modal,
-body.dark .modal-content {
-    --bs-modal-border-color: #fff;
-    --bs-modal-title-color: #fff;
-    --bs-modal-bg: #000;
-    --bs-modal-color: #fff;
-    --bs-modal-subtitle-color: #fff;
-}
-
-body.dark .MuiChip-label {
-    color: #0080ff;
-    border: 1px solid #0080ff;
-}
-
-body.dark .MuiCheckbox-root {
-    color: #fff;
-}
-
-body.dark .MuiTablePagination-toolbar {
-    color: #fff;
-    background-color: #000;
-}
-
-body.dark .MuiTablePagination-toolbar svg {
-    color: #fff;
-}
-
-body.dark .MuiList-root {
-    color: #fff;
-    background-color: #000;
-    border: 1px solid #fff;
-    border-radius: 5px;
-}
-
-body.dark .MuiTablePagination-input {
-    border: 1px solid #fff;
-    border-radius: 5px;
-}
-
-body.dark li.MuiButtonBase-root:hover {
-    background-color: #198754;
-    color: #000;
-}
-
-body.dark .MuiTablePagination-toolbar button:disabled svg {
-    color: grey;
-}
-
-body.dark button.dropdown-toggle {
-    --bs-btn-color: #fff;
-    --bs-btn-border-color: #fff;
-    --bs-btn-bg: #000;
-}
-
-body.dark button.btn-outline-dark {
-    --bs-btn-color: #aaa;
-    --bs-btn-border-color: #aaa;
-    --bs-btn-hover-color: #fff;
-    --bs-btn-hover-border-color: #fff;
-}
-
-body.dark .dropdown-menu {
-    --bs-dropdown-color: #fff;
-    --bs-dropdown-link-color: #fff;
-    --bs-dropdown-border-color: #fff;
-    --bs-dropdown-bg: #000;
-}
-
-body.dark .accordion-button {
-    --bs-accordion-btn-color: #fff;
-    --bs-accordion-btn-border-color: #fff;
-    --bs-accordion-btn-bg: #198754;
-}
-
-body.dark input.form-control {
-    --bs-body-bg: #000;
-    --bs-body-color: #fff;
-}
-
-body.dark input.form-control::-webkit-input-placeholder {
-    color: #fff;
-    opacity: 1 !important;
-}
-
-#react-select-2-listbox>div>div {
-    cursor: pointer;
-}
-
-body.dark #react-select-2-listbox {
-    border: 1px solid #999;
-    border-radius: 5px;
-    background-color: #000;
-}
-
-body.dark #react-select-2-listbox>div>div {
-    background-color: #000;
-    color: #fff;
-}
-
-body.dark #react-select-2-listbox>div>div:hover {
-    background-color: #2b296c;
-}
-
-/* demo message */
-
-#demo-msg {
-    text-align: center;
-}
-
-#demo-msg .btn-close {
-    right: 1em;
-}
-
-/* fixes */
-
-.MuiChip-label:hover {
+body .MuiChip-label:hover {
     text-decoration: underline;
 }
 
-/* utils */
+body div[id^="react-select"][id$="listbox"]  >div>div {
+    cursor: pointer;
+}
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* UTILS */
 
 .flex-grow {
     flex-grow: 2;
 }
 
+/* ────────────────────────────────────────────────────────────────────── */
 /* TOASTS */
 
 .toasts {
@@ -224,3 +113,134 @@ body.dark #react-select-2-listbox>div>div:hover {
 .toasts .toast svg {
     font-size: 1em;
 }
+
+/* ────────────────────────────────────────────────────────────────────── */
+/* DARK MODE */
+
+body.dark {
+    --dark-color: #fff;
+    --dark-bg: #000;
+    --dark-chip-bg: #0080ff;
+    --dark-menu-bg: #999;
+    --dark-menu-border-color: #2b296c;
+    --dark-menu-chip-bg: #2b296c;
+    --dark-accordion-btn-bg: #198754;
+    --dark-accordion-btn-color: #000
+    --dark-btn-dark-color: #aaa;
+    --dark-btn-dark-color-hover: #fff;
+    background: var(--dark-bg);
+    color: var(--dark-color);
+}
+
+body.dark .card {
+    --bs-card-border-color: var(--dark-color);
+    --bs-card-title-color: var(--dark-color);
+    --bs-card-bg: var(--dark-bg);
+    --bs-card-color: var(--dark-color);
+    --bs-card-subtitle-color: var(--dark-color);
+}
+
+body.dark .modal,
+body.dark .modal-content {
+    --bs-modal-border-color: var(--dark-color);
+    --bs-modal-title-color: var(--dark-color);
+    --bs-modal-bg: var(--dark-bg);
+    --bs-modal-color: var(--dark-color);
+    --bs-modal-subtitle-color: var(--dark-color);
+}
+
+body.dark button.dropdown-toggle {
+    --bs-btn-color: var(--dark-color);
+    --bs-btn-border-color: var(--dark-color);
+    --bs-btn-bg: var(--dark-bg);
+}
+
+body.dark button.btn-outline-dark {
+    --bs-btn-color: #aaa;
+    --bs-btn-border-color: #aaa;
+    --bs-btn-hover-color: var(--dark-color);
+    --bs-btn-hover-border-color: var(--dark-color);
+}
+
+body.dark .dropdown-menu {
+    --bs-dropdown-color: var(--dark-color);
+    --bs-dropdown-link-color: var(--dark-color);
+    --bs-dropdown-border-color: var(--dark-color);
+    --bs-dropdown-bg: var(--dark-bg);
+}
+
+body.dark .accordion-button {
+    --bs-accordion-btn-color: var(--dark-color);
+    --bs-accordion-btn-border-color: var(--dark-color);
+    --bs-accordion-btn-bg: var(--dark-accordion-btn-bg);
+}
+
+body.dark input.form-control {
+    --bs-body-bg: var(--dark-bg);
+    --bs-body-color: var(--dark-color);
+}
+
+body.dark input.form-control::-webkit-input-placeholder {
+    color: var(--dark-color);
+    opacity: 1 !important;
+}
+
+/* MATERIAL UI */
+
+body.dark .MuiChip-label {
+    color: var(--dark-chip-bg);
+    border: 1px solid var(--dark-chip-bg);
+}
+
+body.dark .MuiCheckbox-root {
+    color: var(--dark-color);
+}
+
+body.dark .MuiTablePagination-toolbar {
+    color: var(--dark-color);
+    background-color: var(--dark-bg);
+}
+
+body.dark .MuiTablePagination-toolbar svg {
+    color: var(--dark-color);
+}
+
+body.dark .MuiList-root {
+    color: var(--dark-color);
+    background-color: var(--dark-bg);
+    border: 1px solid var(--dark-color);
+    border-radius: 5px;
+}
+
+body.dark .MuiTablePagination-input {
+    border: 1px solid var(--dark-color);
+    border-radius: 5px;
+}
+
+body.dark li.MuiButtonBase-root:hover {
+    background-color: var(--dark-accordion-btn-bg);
+    color: var(--dark-accordion-btn-color);
+}
+
+body.dark .MuiTablePagination-toolbar button:disabled svg {
+    color: grey;
+}
+
+/* REACT SELECT */
+
+body.dark div[id^="react-select"][id$="listbox"] {
+    border: 1px solid var(--dark-menu-border-color);
+    border-radius: 5px;
+    background-color: var(--dark-menu-bg);
+}
+
+body.dark div[id^="react-select"][id$="listbox"]>div>div {
+    border: 1px solid var(--dark-menu-border-color);
+    background-color: var(--dark-bg);
+    color: var(--dark-color);
+}
+
+body.dark div[id^="react-select"][id$="listbox"]>div>div:hover {
+    background-color: var(--dark-menu-chip-bg);
+}
+
