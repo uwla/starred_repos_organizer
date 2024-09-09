@@ -1,0 +1,35 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build demo
+        run: npm run build:demo
+
+      - name: Rename built files
+        run: mv dist/index.html dist/app.html
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/app.html
+
+permissions:
+  contents: write
