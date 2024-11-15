@@ -57,19 +57,20 @@ development server or build the files locally.
 
 1. Clone the repo and `cd` into it:
 
-    ```shell
+    ```bash
     git clone https://github.com/uwla/starred_repos_organizer && cd starred_repos_organizer
+    cd starred_repos_organizer
     ```
 
 2. Install dependencies:
 
-    ```shell
+    ```bash
     npm install
     ```
 
 3. Copy the local sample file `user-data-sample.json` to `user-data.json`:
 
-    ```shell
+    ```bash
     cp user-data-sample.json user-data.json
     ```
 
@@ -79,19 +80,19 @@ development server or build the files locally.
 
     To start development server using localStorage for storage:
 
-    ```shell
+    ```bash
     npm run dev
     ```
 
     To start development server using an REST server for storage:
 
-    ```shell
+    ```bash
     npm run dev:rest
     ```
 
     To build the demo app:
 
-    ```shell
+    ```bash
     npm run build
     ```
 
