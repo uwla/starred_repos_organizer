@@ -45,13 +45,12 @@ A live demo is available at <https://uwla.github.io/starred_repos_organizer>.
 
 ## Usage
 
-Go to the demo <https://uwla.github.io/starred_repos_organizer> to use the app.
+There are few options (easiest is the first one):
 
-You can also use it offline: just download the HTML file to your computer and
-open it on your web browser.
-
-Lastly, you can follow the development instructions to launch a local
-development server or build the files locally.
+1. Go to the [demo page](https://uwla.github.io/starred_repos_organizer) to use the app.
+2. Download `app.html`from the [latest release](https://github.com/uwla/starred_repos_organizer/releases/tag/v0.0.1-beta).
+3. Download `app.html` from the demo page.
+4. Follow developemnt instructions to launch a local server or build the app locally.
 
 ## Development
 
