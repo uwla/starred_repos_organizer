@@ -46,6 +46,15 @@ const restApiDriver: StorageDriver = {
             .catch(() => (responseStatus = false));
         return responseStatus;
     },
+    // TODO: implement logic
+    async getAllowedTopics() {
+        return []
+    },
+    // TODO: implement logic
+    async setAllowedTopics(topics: string[]) {
+        topics = topics; // avoid build warn
+        return false;
+    }
 };
 
 export default restApiDriver;
