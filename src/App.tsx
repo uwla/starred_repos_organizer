@@ -1,4 +1,11 @@
 import {
+    Close as CloseIcon,
+    Edit as EditIcon,
+    Undo as UndoIcon,
+} from "@mui/icons-material";
+import { Checkbox } from "@mui/material";
+import { useEffect, useState } from "react";
+import {
     Alert,
     Button,
     Container,
@@ -6,41 +13,35 @@ import {
     Toast,
     ToastContainer,
 } from "react-bootstrap";
-import {
-    Close as CloseIcon,
-    Edit as EditIcon,
-    Undo as UndoIcon,
-} from "@mui/icons-material";
-import { Checkbox } from "@mui/material";
-import { useEffect, useState } from "react";
 import { MultiValue } from "react-select";
+import "./App.css";
 import {
+    Footer,
     Menu,
+    Notification,
     RepoAdd,
     RepoEdit,
-    RepoList,
     RepoGrid,
+    RepoList,
     RepoSelect,
     SearchFilter,
+    Select,
     TopicFilter,
     TopicSelect,
-    Footer,
-    Select,
-    Notification,
-    ViewPagination,
     ViewByTopics,
+    ViewPagination,
 } from "./components";
-import {
-    optionsToTopics,
-    uniqueRepos,
-    extractTopics,
-    applyFilters,
-} from "./utils";
-import { Repo, SelectOption } from "./types";
-import StorageDriver from "./storage";
-import SettingsManager from "./settings"
 import RepoProvider from "./repo";
-import "./App.css";
+import SettingsManager from "./settings";
+import StorageDriver from "./storage";
+import { Repo, SelectOption } from "./types";
+import {
+    applyFilters,
+    extractTopics,
+    optionsToTopics,
+    keepOnlyRepoTopics,
+    uniqueRepos,
+} from "./utils";
 
 /* -------------------------------------------------------------------------- */
 // Main
@@ -63,6 +64,7 @@ function App() {
     const defaultGroupBy = (savedView === "topics");
 
     // state variables
+    const [allowedTopics, setAllowedTopics] = useState([] as string[]);
     const [deletedRepos, setDeletedRepos] = useState([] as Repo[]);
     const [Layout, setLayout] = useState(() => defaultLayout);
     const [editing, setEditing] = useState(false);
@@ -105,6 +107,9 @@ function App() {
             setSelectedTopics([]);
             setSearchQuery("");
         });
+        await StorageDriver.getAllowedTopics().then((topics: string[]) => {
+            setAllowedTopics(topics);
+        })
     }
 
     /* ---------------------------------------------------------------------- */
@@ -361,26 +366,25 @@ function App() {
         handleUpdate(updated);
     }
 
-    async function handleTopicsPicking(selectedTopics: string[]) {
-        if (selectedTopics.length === topics.length) {
+    async function handleTopicsPicking(selectedTopics: string[], forceUpdate = false) {
+        if (selectedTopics.length === topics.length && !forceUpdate) {
             setPickingTopics(false);
             return;
         }
-        const topicsDict = {} as { [key: string]: boolean };
-        selectedTopics.forEach((t: string) => (topicsDict[t] = true));
-        const filterTopics = (topic: string) => topicsDict[topic];
-        repos.forEach((r: Repo) => {
-            const newTopics = r.topics.filter(filterTopics);
-            if (newTopics.length !== r.topics.length) {
-                r.topics = newTopics;
-                r.modified = true;
-            }
-        });
+
+        const updatedRepos = keepOnlyRepoTopics(repos, selectedTopics);
 
         StorageDriver
-            .updateMany(repos)
+            .updateMany(updatedRepos)
             .then(updateStateRepos)
             .then(() => setPickingTopics(false));
+    }
+
+    async function handleSetAllowedTopics(topics: string[]) {
+        StorageDriver.setAllowedTopics(topics).then(() => {
+            setAllowedTopics(topics)
+            handleTopicsPicking(topics, true);
+        });
     }
 
     /* ---------------------------------------------------------------------- */
@@ -515,8 +519,10 @@ function App() {
                 <TopicSelect
                     show={pickingTopics}
                     topics={topics}
+                    allowedTopics={allowedTopics}
                     onHide={() => setPickingTopics(false)}
                     onConfirmSelection={handleTopicsPicking}
+                    onUpdateAllowedList={handleSetAllowedTopics}
                 />
 
                 {/* NOTIFICATION TOASTS */}

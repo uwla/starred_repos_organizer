@@ -147,6 +147,20 @@ function applyFilters(repos: Repo[], search: string, topics: string[]) {
     return filterByTopics(filterBySearch(repos, search), topics);
 }
 
+function keepOnlyRepoTopics(repos: Repo[], topics: string[]) {
+    const topicsDict = {} as { [key: string]: boolean };
+    topics.forEach((t: string) => (topicsDict[t] = true));
+    const filterTopics = (topic: string) => topicsDict[topic];
+    repos.forEach((r: Repo) => {
+        const newTopics = r.topics.filter(filterTopics);
+        if (newTopics.length !== r.topics.length) {
+            r.topics = newTopics;
+            r.modified = true;
+        }
+    });
+    return repos;
+}
+
 export {
     addRepo,
     addRepos,
@@ -162,4 +176,5 @@ export {
     topicsToOptions,
     uniqueRepos,
     extractTopics,
+    keepOnlyRepoTopics,
 };

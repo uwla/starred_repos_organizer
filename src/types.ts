@@ -62,6 +62,8 @@ interface StorageDriver {
     updateMany: (repos: Repo[]) => Promise<Repo[]>;
     deleteRepo: (repo: Repo) => Promise<boolean>;
     deleteMany: (repos: Repo[]) => Promise<boolean>;
+    setAllowedTopics: (topics: string[]) => Promise <boolean>;
+    getAllowedTopics: () => Promise <string[]>;
 }
 
 type ResponseData = { [key: string]: never };

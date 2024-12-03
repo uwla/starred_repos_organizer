@@ -1,0 +1,22 @@
+.tablist {
+    display: flex;
+    gap: .5em;
+    margin-bottom: 1em;
+}
+
+.tablist .active {
+    background-color: green;
+}
+
+#allowed-topics p {
+    margin-bottom: 0;
+}
+
+#allowed-topics textarea {
+    display: block;
+    border-radius: 6px;
+    padding: 10px;
+    overflow-y: auto;
+    width: 100%;
+    margin-top: 1em;
+}

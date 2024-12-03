@@ -7,14 +7,33 @@ import {
     delRepos,
     updateRepo,
     updateRepos,
+    keepOnlyRepoTopics,
 } from "../utils";
 import sampleData from "../../user-data-sample.json";
+
+const getAllowedTopics = () => {
+    return JSON.parse(localStorage.getItem("allowed_topics") || "[]");
+}
+
+const setAllowedTopics = (topics: string[]) => {
+    localStorage.setItem('allowed_topics', JSON.stringify(topics));
+}
+
+const filterRepoTopics = (repos: Repo[]) => {
+    const allowedTopics = getAllowedTopics();
+    if (allowedTopics.length == 0) {
+        return repos;
+    }
+    return keepOnlyRepoTopics(repos, allowedTopics);
+}
 
 const getRepos = () =>
     JSON.parse(localStorage.getItem("repos") || "[]") as Repo[];
 
-const setRepos = (repos: Repo[]) =>
-    localStorage.setItem("repos", JSON.stringify(repos));
+const setRepos = (repos: Repo[]) => {
+    const filteredRepos = filterRepoTopics(repos);
+    localStorage.setItem("repos", JSON.stringify(filteredRepos));
+}
 
 const isDemo = process.env.NODE_ENV === "demo";
 let firstTimeAccess = localStorage.getItem("repos") === null;
@@ -57,6 +76,13 @@ const localStorageDriver: StorageDriver = {
         const newRepos = delRepos(oldRepos, repos);
         setRepos(newRepos);
         return oldRepos.length > newRepos.length;
+    },
+    async setAllowedTopics(topics: string[]) {
+        setAllowedTopics(topics);
+        return true
+    },
+    async getAllowedTopics() {
+        return getAllowedTopics();
     },
 };
 

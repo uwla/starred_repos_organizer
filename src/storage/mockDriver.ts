@@ -25,6 +25,12 @@ const mockDriver: StorageDriver = {
     async deleteMany(_: Repo[]) {
         return true;
     },
+    async setAllowedTopics(_: string[]) {
+        return true;
+    },
+    async getAllowedTopics() {
+        return [];
+    }
 };
 
 export default mockDriver;
