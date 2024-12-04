@@ -17,8 +17,9 @@ import RepoSelect from "./RepoSelect";
 
 interface Props {
     repos: Repo[];
+    topicsAllowed: string[];
     filtered: Repo[];
-    onImport: (repos: Repo[]) => void;
+    onImport: (data: any) => void;
     onDelete: (repos: Repo[]) => Promise<void>;
     onToggleExpand: () => void;
     onToggleTheme: () => void;
@@ -26,8 +27,16 @@ interface Props {
 }
 
 function Menu(props: Props) {
-    const { repos, filtered, onImport, onDelete, onToggleExpand, onToggleTheme, sortFn } =
-        props;
+    const {
+        repos,
+        filtered,
+        topicsAllowed,
+        onImport,
+        onDelete,
+        onToggleExpand,
+        onToggleTheme,
+        sortFn,
+    } = props;
     const [toDelete, setToDelete] = useState([] as Repo[]);
     const [toExport, setToExport] = useState([] as Repo[]);
 
@@ -36,9 +45,12 @@ function Menu(props: Props) {
         accept: ".json",
         multiple: false,
         onFilesSuccessfullySelected: (files: SelectedFiles<string>) => {
-            const data = JSON.parse(files.filesContent[0].content);
-            const importedRepos = data.repo as Repo[];
-            onImport(importedRepos);
+            const rawData = JSON.parse(files.filesContent[0].content);
+            const data = {
+                repos: rawData.repos || rawData.repo, // compability with older versions
+                topics_allowed: rawData.topics_allowed || [],
+            }
+            onImport(data);
         },
     });
 
@@ -46,7 +58,10 @@ function Menu(props: Props) {
     const handleDownload = (repos: Repo[]) => {
         setToExport([]);
         if (repos.length === 0) return;
-        const data = { repo: repos };
+        const data = {
+            repos: repos,
+            topics_allowed: topicsAllowed,
+        };
         const date = (new Date())
             .toISOString()
             .replace('T', '_')

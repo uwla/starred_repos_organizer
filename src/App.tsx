@@ -254,6 +254,16 @@ function App() {
         return true;
     }
 
+    async function importData(data: any) {
+        const { repos, topics_allowed } = data;
+        confirmAddMany(repos).then((confirmed: boolean) => {
+            if (confirmed) {
+                StorageDriver.setAllowedTopics(topics_allowed)
+                    .then(() => setAllowedTopics(topics_allowed));
+            }
+        })
+    }
+
     async function handleAddMany(manyRepos: Repo[]) {
         if (manyRepos.length === 0) {
             setReposToAdd([]);
@@ -411,9 +421,10 @@ function App() {
                 {/* <!-- OPTIONS --> */}
                 <Menu
                     repos={repos}
+                    topicsAllowed={allowedTopics}
                     filtered={filteredRepos}
                     sortFn={getSortFn(sortBy)}
-                    onImport={confirmAddMany}
+                    onImport={importData}
                     onDelete={handleDeleteMany}
                     onToggleExpand={toggleAppWidth}
                     onToggleTheme={toggleDarkMode}
