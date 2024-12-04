@@ -216,6 +216,11 @@ function App() {
                     return (b.forks || 0) - (a.forks || 0);
                 };
                 break;
+            case "random":
+                fn = function(_a: Repo, _b: Repo) {
+                    return (Math.random() > 0.5) ? -1 : 1;
+                };
+                break;
             default:
                 throw new Error(`Unknown sort option ${sortBy}`);
         }
@@ -456,7 +461,7 @@ function App() {
                     <Select
                         text="Sort by:"
                         selected={sortBy}
-                        values={["", "stars", "name", "forks"]}
+                        values={["", "stars", "name", "forks", "random"]}
                         onSelect={handleSort}
                     />
 
