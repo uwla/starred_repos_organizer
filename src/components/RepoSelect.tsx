@@ -39,7 +39,9 @@ function RepoSelect(props: Props) {
         setSearch(event.target.value);
     };
 
-    const toggleChecked = (index: number) => {
+    const toggleChecked = (url: string) => {
+        const index = checkboxes.findIndex((checkbox) => checkbox.repo.url === url)
+        if (index === -1) return
         checkboxes[index].checked = !checkboxes[index].checked;
         setCheckboxes([...checkboxes]);
     };
@@ -62,7 +64,7 @@ function RepoSelect(props: Props) {
                         .filter((checkbox: RepoCheckbox) => {
                             const { full_name, name } = checkbox.repo;
                             const toSearch = [full_name, name];
-                            return toSearch.some((item: String) =>
+                            return toSearch.some((item: string) =>
                                 item.includes(search)
                             );
                         })
@@ -71,10 +73,10 @@ function RepoSelect(props: Props) {
                             const { url, full_name } = repo;
                             const cssId = `repo-add-${index}`;
                             return (
-                                <div key={index} className="select-checkbox">
+                                <div key={repo.url} className="select-checkbox">
                                     <Checkbox
                                         checked={checked}
-                                        onChange={() => toggleChecked(index)}
+                                        onChange={() => toggleChecked(repo.url)}
                                         id={cssId}
                                     />
                                     <label htmlFor={cssId}>
