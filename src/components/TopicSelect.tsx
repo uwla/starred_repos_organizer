@@ -58,6 +58,7 @@ function TopicSelect(props: Props) {
         const index = checkboxes.findIndex(
             (c: TopicCheckbox) => c.topic === topic
         );
+        if (index === -1) return
         checkboxes[index].checked = !checkboxes[index].checked;
         setCheckboxes([...checkboxes]);
     };
@@ -105,7 +106,7 @@ function TopicSelect(props: Props) {
                                     const { topic, checked } = checkbox;
                                     const cssId = `topic-checkbox-${index}`;
                                     return (
-                                        <div key={index} className="select-checkbox">
+                                        <div key={topic} className="select-checkbox">
                                             <Checkbox
                                                 checked={checked}
                                                 onChange={() => toggleChecked(topic)}
