@@ -457,20 +457,19 @@ function App() {
                 />
 
                 {/* <!-- TOPIC FILTER & TOPIC EDITOR --> */}
-                {topics.length > 0 && (
-                    <Stack className="stack-filter">
-                        <TopicFilter
-                            topics={topics}
-                            selected={selectedTopics}
-                            onSelect={(value: MultiValue<SelectOption>) =>
-                                handleSelect(value as SelectOption[])
-                            }
-                        />
-                        <Button onClick={() => setPickingTopics(true)}>
-                            <EditIcon />
-                        </Button>
-                    </Stack>
-                )}
+                <Stack className="stack-filter">
+                    <TopicFilter
+                        topics={topics}
+                        selected={selectedTopics}
+                        onSelect={(value: MultiValue<SelectOption>) =>
+                            handleSelect(value as SelectOption[])
+                        }
+                    />
+                    <Button onClick={() => setPickingTopics(true)}>
+                        <EditIcon />
+                    </Button>
+                </Stack>
+
 
                 {/* <!-- SEARCH --> */}
                 <SearchFilter onSubmit={handleSearch} />
