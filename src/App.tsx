@@ -14,7 +14,13 @@ import {
     ToastContainer,
 } from "react-bootstrap";
 import { MultiValue } from "react-select";
-import "./App.css";
+
+import type {
+    Repo,
+    SelectOption,
+    Topic,
+    TopicAliases,
+} from "./types";
 import {
     Footer,
     Menu,
@@ -34,7 +40,6 @@ import {
 import RepoProvider from "./repo";
 import SettingsManager from "./settings";
 import StorageDriver from "./storage";
-import { Repo, SelectOption } from "./types";
 import {
     applyFilters,
     extractTopics,
@@ -42,6 +47,8 @@ import {
     keepOnlyRepoTopics,
     uniqueRepos,
 } from "./utils";
+
+import "./App.css";
 
 /* -------------------------------------------------------------------------- */
 // Main
@@ -65,6 +72,7 @@ function App() {
 
     // state variables
     const [allowedTopics, setAllowedTopics] = useState([] as string[]);
+    const [topicAliases, setTopicAliases] = useState({} as TopicAliases)
     const [deletedRepos, setDeletedRepos] = useState([] as Repo[]);
     const [Layout, setLayout] = useState(() => defaultLayout);
     const [editing, setEditing] = useState(false);
@@ -107,8 +115,11 @@ function App() {
             setSelectedTopics([]);
             setSearchQuery("");
         });
-        await StorageDriver.getAllowedTopics().then((topics: string[]) => {
+        await StorageDriver.getAllowedTopics().then((topics: Topic[]) => {
             setAllowedTopics(topics);
+        })
+        await StorageDriver.getTopicAliases().then((aliases: TopicAliases) => {
+            setTopicAliases(aliases)
         })
     }
 
@@ -325,8 +336,8 @@ function App() {
         handleAddItem(repo);
     }
 
-    function handleEdit(r: Repo) {
-        setEditingRepo(r);
+    function handleEdit(repo: Repo) {
+        setEditingRepo(repo);
         setEditing(true);
     }
 
@@ -381,7 +392,7 @@ function App() {
         handleUpdate(updated);
     }
 
-    async function handleTopicsPicking(selectedTopics: string[], forceUpdate = false) {
+    async function handleTopicsPicking(selectedTopics: Topic[], forceUpdate = false) {
         if (selectedTopics.length === topics.length && !forceUpdate) {
             setPickingTopics(false);
             return;
@@ -395,11 +406,20 @@ function App() {
             .then(() => setPickingTopics(false));
     }
 
-    async function handleSetAllowedTopics(topics: string[]) {
+    async function handleSetAllowedTopics(topics: Topic[]) {
         StorageDriver.setAllowedTopics(topics).then(() => {
             setAllowedTopics(topics)
             handleTopicsPicking(topics, true);
         });
+    }
+
+    async function handleSetTopicAliases(aliases: TopicAliases) {
+        await StorageDriver.setTopicAliases(aliases)
+            .then((success) => {
+                if (success) {
+                    setTopicAliases(aliases)
+                }
+            })
     }
 
     /* ---------------------------------------------------------------------- */
@@ -535,10 +555,12 @@ function App() {
                 <TopicSelect
                     show={pickingTopics}
                     topics={topics}
+                    topicAliases={topicAliases}
                     allowedTopics={allowedTopics}
                     onHide={() => setPickingTopics(false)}
                     onConfirmSelection={handleTopicsPicking}
                     onUpdateAllowedList={handleSetAllowedTopics}
+                    onUpdateTopicAliases={handleSetTopicAliases}
                 />
 
                 {/* NOTIFICATION TOASTS */}

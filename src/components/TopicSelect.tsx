@@ -1,40 +1,103 @@
 import { Button, Modal, Form, Nav } from "react-bootstrap";
 import { Checkbox } from "@mui/material";
 import { useEffect, useState } from "react";
+
+import type { Topic, TopicAliases } from '../types.ts'
 import './TopicSelect.css'
 
 interface Props {
     show: boolean;
-    topics: string[];
-    allowedTopics: string[];
-    onConfirmSelection: (topics: string[]) => void;
-    onUpdateAllowedList: (topics: string[]) => void;
+    topics: Topic[];
+    allowedTopics: Topic[];
+    topicAliases: TopicAliases;
+    onConfirmSelection: (topics: Topic[]) => void;
+    onUpdateAllowedList: (topics: Topic[]) => void;
+    onUpdateTopicAliases: (aliases: TopicAliases) => void;
     onHide: () => void;
 }
 
 interface TopicCheckbox {
-    topic: string;
+    topic: Topic;
     checked: boolean;
 }
 
-const mapChecked = (t: string) =>
-    ({ topic: t, checked: true } as TopicCheckbox);
+function topicToCheckbox (t: Topic) {
+    return {
+        topic: t,
+        checked: true,
+    } as TopicCheckbox;
+}
 
+function aliasesToText(aliases: TopicAliases) {
+    const reversedAliases: Record<Topic, Topic[]> = {}
+
+    for (const key of Object.keys(aliases)) {
+        const value = aliases[key]
+        if (reversedAliases[value] === undefined) {
+            reversedAliases[value] = []
+        }
+        reversedAliases[value].push(key)
+    }
+
+    let text = ""
+
+    for (const key of Object.keys(reversedAliases)) {
+        const lineItems = [key, ...reversedAliases[key]]
+        const line = lineItems.join(" ")
+        text += line + "\n"
+    }
+
+    return text
+}
+
+function textToAliases(text: string): TopicAliases {
+    const aliases: TopicAliases = {}
+
+    for (const line of text.split("\n")) {
+        const topics = line.split(" ")
+
+        if (topics.length < 2) {
+            continue
+        }
+
+        const mainTopic = topics.shift() as Topic
+        for (const topic of topics) {
+            aliases[topic] = mainTopic
+        }
+    }
+
+    return aliases
+}
 function TopicSelect(props: Props) {
-    const { show, topics, allowedTopics, onConfirmSelection, onUpdateAllowedList, onHide } = props;
-    const [checkboxes, setCheckboxes] = useState(topics.map(mapChecked));
+    const {
+        show,
+        topics,
+        allowedTopics,
+        topicAliases,
+        onConfirmSelection,
+        onUpdateAllowedList,
+        onUpdateTopicAliases,
+        onHide,
+    } = props;
     const [search, setSearch] = useState("");
     const [tab, setTab] = useState("edit");
+
     const [allowedList, setAllowedList] = useState(allowedTopics.join("\n"));
-    const [aliasText, setAliasText] = useState("")
+    const [checkboxes, setCheckboxes] = useState(topics.map(topicToCheckbox));
+    const [aliasText, setAliasText] = useState(aliasesToText(topicAliases))
 
-    // Use Effect is likely not needed
     useEffect(() => {
-        setCheckboxes(topics.map(mapChecked))
-        setAllowedList(allowedTopics.join("\n"));
-    }, [allowedTopics, topics]);
+        setCheckboxes(topics.map(topicToCheckbox))
+    }, [topics]);
 
-    // Confirm the user has selected the added topics;
+    useEffect(() => {
+        setAllowedList(allowedTopics.join("\n"));
+    }, [allowedTopics]);
+
+    useEffect(() => {
+        setAliasText(aliasesToText(topicAliases))
+    }, [topicAliases])
+
     const handleSubmit = () => {
         if (tab === "edit") {
             const filtered = checkboxes.filter((c: TopicCheckbox) => c.checked);
@@ -42,6 +105,7 @@ function TopicSelect(props: Props) {
             onConfirmSelection(topics);
             return;
         }
+
         if (tab === "allowed_list") {
             const newAllowedList = allowedList.split("\n")
                 .map(str => str.trim())
@@ -49,8 +113,14 @@ function TopicSelect(props: Props) {
             onUpdateAllowedList(newAllowedList);
             return;
         }
+
         if (tab === "alias_list") {
-            //
+            const cleanText = aliasText.split("\n")
+                .map(str => str.trim())
+                .filter(str => str !== "")
+                .join("\n");
+            onUpdateTopicAliases(textToAliases(cleanText))
+            return
         }
     };
 
@@ -58,7 +128,7 @@ function TopicSelect(props: Props) {
         setSearch(event.target.value);
     };
 
-    const toggleChecked = (topic: string) => {
+    const toggleChecked = (topic: Topic) => {
         const index = checkboxes.findIndex(
             (c: TopicCheckbox) => c.topic === topic
         );
