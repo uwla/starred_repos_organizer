@@ -62,6 +62,7 @@ function Menu(props: Props) {
         if (repos.length === 0) return;
         setToExport([]);
         const data = {
+            date: new Date().toISOString(),
             repos: repos,
             topics_allowed: topicsAllowed,
             topic_aliases: topicAliases,
