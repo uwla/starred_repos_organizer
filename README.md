@@ -31,6 +31,7 @@ A live demo is available at <https://uwla.github.io/starred_repos_organizer>.
 - Export repositories to JSON file
 - Export filtered results only to JSON file
 - Modify repository topics by adding new ones or deleting existing
+- Filter topics by allowed-list and prevent duplicated topics with aliases
 - More privacy by not exposing your interests to the internet
 - Works offline (except when adding repositories, because it fetches remote data)
 - Can be downloaded as single HTML file to run locally
@@ -113,6 +114,8 @@ There are few options (easiest is the first one):
 - [x] Display items in list
 - [x] Display items in grid
 - [x] Group items by topic
+- [x] Filter topics by allowed-list
+- [x] Prevent duplicated topics using aliases
 - [x] Support for GitHub
 - [x] Support for GitLab
 - [x] Support for CodeBerg
