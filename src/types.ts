@@ -5,12 +5,16 @@ type SelectOption = {
 
 type ProviderSlug = "github" | "gitlab" | "gitea" | "codeberg" | "gogs" | "url";
 
+type Topic = string;
+
+type TopicAliases = Record<Topic, Topic>
+
 type Repo = {
     id: string;
     full_name: string;
     name: string;
     description: string;
-    topics: Array<string>;
+    topics: Topic[];
     url: string;
     homepage: string;
     lang: string;
@@ -62,8 +66,12 @@ interface StorageDriver {
     updateMany: (repos: Repo[]) => Promise<Repo[]>;
     deleteRepo: (repo: Repo) => Promise<boolean>;
     deleteMany: (repos: Repo[]) => Promise<boolean>;
-    setAllowedTopics: (topics: string[]) => Promise <boolean>;
-    getAllowedTopics: () => Promise <string[]>;
+
+    getAllowedTopics: () => Promise <Topic[]>;
+    setAllowedTopics: (topics: Topic[]) => Promise<boolean>;
+
+    getTopicAliases: () => Promise<TopicAliases>;
+    setTopicAliases: (aliases: TopicAliases) => Promise<boolean>;
 }
 
 type ResponseData = { [key: string]: never };
@@ -100,6 +108,8 @@ export type {
     ResponseData,
     ResponseKeyMapper,
     ProviderSlug as ProviderSlugs,
+    Topic,
+    TopicAliases
 };
 
 export { NoTopicsType };

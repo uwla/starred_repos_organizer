@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { StorageDriver, Repo } from "../types";
+import type { StorageDriver, Repo, Topic, TopicAliases } from "../types";
 
 const client = axios.create({ baseURL: "http://localhost:3000/repo" });
 
@@ -51,9 +51,18 @@ const restApiDriver: StorageDriver = {
         return []
     },
     // TODO: implement logic
-    async setAllowedTopics(topics: string[]) {
-        topics = topics; // avoid build warn
+    async setAllowedTopics(topics: Topic[]) {
+        topics = topics; // avoid build error
         return false;
+    },
+    // TODO: implement logic
+    async getTopicAliases() {
+        return {}
+    },
+    // TODO: implement logic
+    async setTopicAliases(aliases: TopicAliases) {
+        aliases = aliases // avoid build error
+        return false
     }
 };
 

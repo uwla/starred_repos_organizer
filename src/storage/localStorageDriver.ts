@@ -1,4 +1,9 @@
-import { StorageDriver, Repo } from "../types";
+import type {
+    StorageDriver,
+    Repo,
+    Topic,
+    TopicAliases,
+} from "../types";
 import {
     addRepo,
     addRepos,
@@ -15,8 +20,16 @@ const getAllowedTopics = () => {
     return JSON.parse(localStorage.getItem("allowed_topics") || "[]");
 }
 
-const setAllowedTopics = (topics: string[]) => {
-    localStorage.setItem('allowed_topics', JSON.stringify(topics));
+const getTopicAliases = () => {
+    return JSON.parse(localStorage.getItem("topic_aliases") || "{}")
+}
+
+const setAllowedTopics = (topics: Topic[]) => {
+    localStorage.setItem("allowed_topics", JSON.stringify(topics));
+}
+
+const setTopicAliases = (aliases: TopicAliases) => {
+    localStorage.setItem("topic_aliases", JSON.stringify(aliases))
 }
 
 const filterRepoTopics = (repos: Repo[]) => {
@@ -77,13 +90,20 @@ const localStorageDriver: StorageDriver = {
         setRepos(newRepos);
         return oldRepos.length > newRepos.length;
     },
+    async getAllowedTopics() {
+        return getAllowedTopics();
+    },
     async setAllowedTopics(topics: string[]) {
         setAllowedTopics(topics);
         return true
     },
-    async getAllowedTopics() {
-        return getAllowedTopics();
+    async setTopicAliases(aliases: TopicAliases) {
+        setTopicAliases(aliases)
+        return true
     },
+    async getTopicAliases() {
+        return getTopicAliases()
+    }
 };
 
 export default localStorageDriver;
