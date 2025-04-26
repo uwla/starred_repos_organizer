@@ -26,6 +26,7 @@ function TopicSelect(props: Props) {
     const [search, setSearch] = useState("");
     const [tab, setTab] = useState("edit");
     const [allowedList, setAllowedList] = useState(allowedTopics.join("\n"));
+    const [aliasText, setAliasText] = useState("")
 
     // Use Effect is likely not needed
     useEffect(() => {
@@ -48,6 +49,9 @@ function TopicSelect(props: Props) {
             onUpdateAllowedList(newAllowedList);
             return;
         }
+        if (tab === "alias_list") {
+            //
+        }
     };
 
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +73,11 @@ function TopicSelect(props: Props) {
                 <Modal.Title>MANAGE TOPICS</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Nav variant="tabs" defaultActiveKey={tab} className="mb-3" >
+                <Nav
+                    defaultActiveKey={tab}
+                    variant="tabs"
+                    className="mb-3"
+                >
                     <Nav.Item
                         onClick={() => setTab("edit")}
                     >
@@ -84,17 +92,22 @@ function TopicSelect(props: Props) {
                             ALLOWED LIST
                         </Nav.Link>
                     </Nav.Item>
+                    <Nav.Item
+                        onClick={() => setTab("alias_list")}
+                    >
+                        <Nav.Link eventKey="alias_list">
+                            ALIAS LIST
+                        </Nav.Link>
+                    </Nav.Item>
                 </Nav>
                 {tab === "edit" && (
                     <>
-                        <p>
-                            Uncheck topics to delete them. Checked topics will remain.
-                        </p>
+                        <p>Uncheck topics to delete them. Checked topics will remain.</p>
                         <div className="mb-3">
                             <Form.Control
-                                type="text"
-                                placeholder="search topic..."
                                 onChange={handleInput}
+                                placeholder="search topic..."
+                                type="text"
                             ></Form.Control>
                         </div>
                         <div className="select-menu">
@@ -131,7 +144,33 @@ function TopicSelect(props: Props) {
                             onChange={(e) => setAllowedList(e.target.value)}
                         ></Form.Control>
                     </div>
-                ) }
+                )}
+                {tab === "alias_list" && (
+                    <div id="alias-list">
+                        <p>
+                            To avoid duplicated topics you can set
+                            aliases to be converted to a main topic.
+                            Example:
+                        </p>
+                        <code className="my-2 py-2 d-block">
+                            nvim neovim neovim-plugin nvim-plugin vim
+                        </code>
+                        <p>
+                            Will convert the topics
+                            &nbsp;<code>neovim</code>
+                            &nbsp;<code>neovim-plugin</code>,
+                            &nbsp;<code>nvim-plugin</code> and
+                            &nbsp;<code>vim</code>
+                            &nbsp;to <code>nvim</code>.
+                        </p>
+                        <Form.Control
+                            as="textarea"
+                            rows={10}
+                            value={aliasText}
+                            onChange={(e) => setAliasText(e.target.value)}
+                        ></Form.Control>
+                    </div>
+                )}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="primary" onClick={onHide}>

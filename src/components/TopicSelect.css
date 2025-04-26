@@ -8,8 +8,8 @@
     background-color: green;
 }
 
-#allowed-topics p {
-    margin-bottom: 0;
+#allowed-topics p, #alias-list p {
+    margin-bottom: .5em;
 }
 
 #allowed-topics textarea {
