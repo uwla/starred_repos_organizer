@@ -227,7 +227,7 @@ function TopicSelect(props: Props) {
                         </code>
                         <p>
                             Will convert the topics
-                            &nbsp;<code>command-line</code>
+                            &nbsp;<code>command-line</code>,
                             &nbsp;<code>commandline</code>,
                             &nbsp;<code>command-line-tool</code> and
                             &nbsp;<code>cli-tool</code>

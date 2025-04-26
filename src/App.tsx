@@ -271,11 +271,13 @@ function App() {
     }
 
     async function importData(data: any) {
-        const { repos, topics_allowed } = data;
+        const { repos, topics_allowed, topic_aliases } = data;
         confirmAddMany(repos).then((confirmed: boolean) => {
             if (confirmed) {
                 StorageDriver.setAllowedTopics(topics_allowed)
                     .then(() => setAllowedTopics(topics_allowed));
+                StorageDriver.setTopicAliases(topic_aliases)
+                    .then(() => setTopicAliases(topic_aliases))
             }
         })
     }
@@ -448,6 +450,7 @@ function App() {
                 <Menu
                     repos={repos}
                     topicsAllowed={allowedTopics}
+                    topicAliases={topicAliases}
                     filtered={filteredRepos}
                     sortFn={getSortFn(sortBy)}
                     onImport={importData}

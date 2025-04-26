@@ -11,13 +11,14 @@ import { useState } from "react";
 import exportFromJSON from "export-from-json";
 import { useFilePicker } from "use-file-picker";
 import { SelectedFiles } from "use-file-picker/types";
-import { Repo } from "../types";
+import type { Repo, Topic, TopicAliases } from "../types";
 import "./Menu.css";
 import RepoSelect from "./RepoSelect";
 
 interface Props {
     repos: Repo[];
-    topicsAllowed: string[];
+    topicsAllowed: Topic[];
+    topicAliases: TopicAliases;
     filtered: Repo[];
     onImport: (data: any) => void;
     onDelete: (repos: Repo[]) => Promise<void>;
@@ -31,6 +32,7 @@ function Menu(props: Props) {
         repos,
         filtered,
         topicsAllowed,
+        topicAliases,
         onImport,
         onDelete,
         onToggleExpand,
@@ -49,6 +51,7 @@ function Menu(props: Props) {
             const data = {
                 repos: rawData.repos || rawData.repo, // compability with older versions
                 topics_allowed: rawData.topics_allowed || [],
+                topic_aliases: rawData.topic_aliases || [],
             }
             onImport(data);
         },
@@ -56,11 +59,12 @@ function Menu(props: Props) {
 
     // Handles exporting files.
     const handleDownload = (repos: Repo[]) => {
-        setToExport([]);
         if (repos.length === 0) return;
+        setToExport([]);
         const data = {
             repos: repos,
             topics_allowed: topicsAllowed,
+            topic_aliases: topicAliases,
         };
         const date = (new Date())
             .toISOString()
