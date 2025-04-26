@@ -1,5 +1,8 @@
-requests.http
 user-data.json
+data/
+
+requests.http
+
 .env
 *.bak
 
