@@ -418,6 +418,7 @@ function App() {
             .then((success) => {
                 if (success) {
                     setTopicAliases(aliases)
+                    setPickingTopics(false);
                 }
             })
     }

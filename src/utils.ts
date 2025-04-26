@@ -38,7 +38,7 @@ const uniqueRepos = (repos: Repo[]): Repo[] => {
     return unique;
 };
 
-const randomId = () => Math.random().toString().slice(2, 8);
+const randomId = () => Math.random().toString().slice(2, 12);
 
 const assignId = (repo: Repo) => ({ ...repo, id: randomId() });
 
