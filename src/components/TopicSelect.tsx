@@ -223,15 +223,15 @@ function TopicSelect(props: Props) {
                             Example:
                         </p>
                         <code className="my-2 py-2 d-block">
-                            nvim neovim neovim-plugin nvim-plugin vim
+                            cli command-line commandline command-line-tool cli-tool
                         </code>
                         <p>
                             Will convert the topics
-                            &nbsp;<code>neovim</code>
-                            &nbsp;<code>neovim-plugin</code>,
-                            &nbsp;<code>nvim-plugin</code> and
-                            &nbsp;<code>vim</code>
-                            &nbsp;to <code>nvim</code>.
+                            &nbsp;<code>command-line</code>
+                            &nbsp;<code>commandline</code>,
+                            &nbsp;<code>command-line-tool</code> and
+                            &nbsp;<code>cli-tool</code>
+                            &nbsp;to <code>cli</code>.
                         </p>
                         <Form.Control
                             as="textarea"
