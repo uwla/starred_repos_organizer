@@ -41,23 +41,21 @@ const restApiDriver: StorageDriver = {
         const ids = repos.map((r: Repo) => r.id);
         let responseStatus = false;
         await client
-            .post("/", { _method: "delete", ids })
+            .post("/repos", { _method: "delete", ids })
             .then(() => (responseStatus = true))
             .catch(() => (responseStatus = false));
         return responseStatus;
     },
-    // TODO: implement logic
     async getAllowedTopics() {
-        return []
+        return client.get('/topics/allowed')
     },
     // TODO: implement logic
     async setAllowedTopics(topics: Topic[]) {
         topics = topics; // avoid build error
         return false;
     },
-    // TODO: implement logic
     async getTopicAliases() {
-        return {}
+        return client.get('/topics/aliases')
     },
     // TODO: implement logic
     async setTopicAliases(aliases: TopicAliases) {

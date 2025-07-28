@@ -18,8 +18,8 @@ import {
 import { Repo } from "./types";
 
 /* -------------------------------------------------------------------------- */
-
 // Set up database
+
 const file = "user-data.json"; // path relative to CWD of the process
 const adapter = new JSONFile(file);
 const observer = new Observer(adapter);
@@ -27,20 +27,19 @@ const db = new Low(observer, {}) as Low<Data>;
 await db.read();
 
 /* -------------------------------------------------------------------------- */
-
 // Database helpers
+
 const dbRepos = () => db.data.repo as Repo[];
 const findRepo = (id: string) => dbRepos().find((r: Repo) => r.id === id);
 
 /* -------------------------------------------------------------------------- */
-
 // Set up http app.
+
 const app = new App();
 app.use(json());
 app.use(cors());
 
 /* -------------------------------------------------------------------------- */
-
 // Set up routes
 
 // Get repos
@@ -98,7 +97,7 @@ app.post(`/repo`, async (req, res) => {
     res.send(item);
 });
 
-// Update repo
+// Update single repo
 app.post(`/repo/:id`, async (req, res) => {
     if (!isItem(req.body)) {
         res.send("Expected resource");
@@ -115,9 +114,29 @@ app.delete(`/repo/:id`, async (req, res) => {
     const repos = dbRepos();
     db.data.repo = delRepo(repos, id);
     db.write();
-    const success = repos.length - 1 === db.data.repo.length;
+    const success = (repos.length - 1) === db.data.repo.length;
     res.send({ success });
 });
+
+// Delete single repo.
+app.delete(`/repos`, async (req, res) => {
+    const { ids } = req.body;
+    const repos = dbRepos();
+    db.data.repo = delRepos(repos, ids);
+    db.write();
+    const success = (repos.length - ids.length) === db.data.repo.length;
+    res.send({ success });
+});
+
+app.get('/topics/allowed', async (_request, _response) => {
+    return db.data['topics_allowed'] || []
+})
+
+app.get('/topics/aliases', async (_request, _response) => {
+    return db.data['topic_aliases'] || []
+})
+
+// ──────────────────────────────────────────────────────────────────────
 
 // Start server
 const port = 3000;
