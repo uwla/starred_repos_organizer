@@ -31,6 +31,13 @@ function RepoAdd(props: Props) {
 
     const handleHide = () => setOpen(false);
 
+    const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            handleSubmit();
+        }
+    };
+
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         setUrl(value);
@@ -103,6 +110,7 @@ function RepoAdd(props: Props) {
                         value={url}
                         placeholder="Enter URL"
                         onChange={handleInput}
+                        onKeyDown={handleEnterPress}
                     />
                     <br />
                     <small>
@@ -120,7 +128,7 @@ function RepoAdd(props: Props) {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="danger" onClick={handleHide}>
+                    <Button onClick={handleHide} variant="danger">
                         CANCEL
                     </Button>
                     <Button onClick={handleSubmit}>ADD</Button>
