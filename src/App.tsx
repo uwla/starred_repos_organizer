@@ -16,6 +16,7 @@ import {
 import { MultiValue } from "react-select";
 
 import type {
+    JsonData,
     Repo,
     SelectOption,
     Topic,
@@ -270,7 +271,7 @@ function App() {
         return true;
     }
 
-    async function importData(data: any) {
+    async function importData(data: JsonData) {
         const { repos, topics_allowed, topic_aliases } = data;
         confirmAddMany(repos).then((confirmed: boolean) => {
             if (confirmed) {

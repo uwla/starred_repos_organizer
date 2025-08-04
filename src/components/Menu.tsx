@@ -11,7 +11,7 @@ import { useState } from "react";
 import exportFromJSON from "export-from-json";
 import { useFilePicker } from "use-file-picker";
 import { SelectedFiles } from "use-file-picker/types";
-import type { Repo, Topic, TopicAliases } from "../types";
+import type { JsonData, Repo, Topic, TopicAliases } from "../types";
 import "./Menu.css";
 import RepoSelect from "./RepoSelect";
 
@@ -20,7 +20,7 @@ interface Props {
     topicsAllowed: Topic[];
     topicAliases: TopicAliases;
     filtered: Repo[];
-    onImport: (data: any) => void;
+    onImport: (data: JsonData) => void;
     onDelete: (repos: Repo[]) => Promise<void>;
     onToggleExpand: () => void;
     onToggleTheme: () => void;
@@ -49,6 +49,7 @@ function Menu(props: Props) {
         onFilesSuccessfullySelected: (files: SelectedFiles<string>) => {
             const rawData = JSON.parse(files.filesContent[0].content);
             const data = {
+                date: rawData.date || new Date().toISOString(),
                 repos: rawData.repos || rawData.repo, // compability with older versions
                 topics_allowed: rawData.topics_allowed || [],
                 topic_aliases: rawData.topic_aliases || [],
@@ -61,7 +62,7 @@ function Menu(props: Props) {
     const handleDownload = (repos: Repo[]) => {
         if (repos.length === 0) return;
         setToExport([]);
-        const data = {
+        const data: JsonData = {
             date: new Date().toISOString(),
             repos: repos,
             topics_allowed: topicsAllowed,

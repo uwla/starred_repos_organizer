@@ -78,6 +78,13 @@ type ResponseData = { [key: string]: never };
 
 type ResponseKeyMapper = { [key: string]: RepoKey };
 
+type JsonData = {
+    date: string
+    repos: Repo[]
+    topics_allowed: Topic[]
+    topic_aliases: Record<Topic, Topic>
+}
+
 interface DisplayProps {
     repos: Repo[];
     onEdit: (repo: Repo) => void;
@@ -97,6 +104,7 @@ const NoTopicsType = "~~ none ~~";
 export type {
     ViewProps,
     DisplayProps,
+    JsonData,
     StorageDriver,
     SelectOption,
     Settings,
