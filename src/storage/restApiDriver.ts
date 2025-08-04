@@ -1,38 +1,38 @@
 import axios, { AxiosResponse } from "axios";
 import type { StorageDriver, Repo, Topic, TopicAliases } from "../types";
 
-const client = axios.create({ baseURL: "http://localhost:3000/repo" });
+const client = axios.create({ baseURL: "http://localhost:3000/" });
 
 const restApiDriver: StorageDriver = {
     async fetchRepos() {
         return client
-            .get("/")
+            .get("/repo")
             .then((response: AxiosResponse) => response.data as Repo[]);
     },
     async createRepo(repo: Repo) {
         return client
-            .post("/", repo)
+            .post("/repo", repo)
             .then((response: AxiosResponse) => response.data as Repo);
     },
     async createMany(repos: Repo[]) {
         return client
-            .post("/", repos)
+            .post("/repo", repos)
             .then((response: AxiosResponse) => response.data as Repo[]);
     },
     async updateRepo(repo: Repo) {
         return client
-            .post(`/${repo.id}`, repo)
+            .post(`/repo/${repo.id}`, repo)
             .then((response: AxiosResponse) => response.data as Repo);
     },
     async updateMany(repos: Repo[]) {
         return client
-            .post(`/`, { repos, _method: "PUT" })
+            .post(`/repo`, { repos, _method: "PUT" })
             .then((response: AxiosResponse) => response.data as Repo[]);
     },
     async deleteRepo(repo: Repo) {
         let responseStatus = false;
         await client
-            .delete(`/${repo.id}`)
+            .delete(`/repo/${repo.id}`)
             .then(() => (responseStatus = true))
             .catch(() => (responseStatus = false));
         return responseStatus;
@@ -47,20 +47,28 @@ const restApiDriver: StorageDriver = {
         return responseStatus;
     },
     async getAllowedTopics() {
-        return client.get('/topics/allowed')
+        const topics = (await client.get('/topics/allowed')).data
+        return topics as string[]
     },
-    // TODO: implement logic
     async setAllowedTopics(topics: Topic[]) {
-        topics = topics; // avoid build error
-        return false;
+        let responseStatus = false
+        await client
+            .post('/topics/allowed', { topics })
+            .then(() => responseStatus = true)
+            .catch(() => responseStatus = false)
+        return responseStatus
     },
     async getTopicAliases() {
-        return client.get('/topics/aliases')
+        const aliases = (await client.get('/topics/aliases')).data
+        return aliases as TopicAliases
     },
-    // TODO: implement logic
     async setTopicAliases(aliases: TopicAliases) {
-        aliases = aliases // avoid build error
-        return false
+        let responseStatus = false
+        await client
+            .post('/topics/aliases', { topics: aliases })
+            .then(() => responseStatus = true)
+            .catch(() => responseStatus = false)
+        return responseStatus
     }
 };
 

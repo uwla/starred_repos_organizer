@@ -128,12 +128,28 @@ app.delete(`/repos`, async (req, res) => {
     res.send({ success });
 });
 
-app.get('/topics/allowed', async (_request, _response) => {
-    return db.data['topics_allowed'] || []
+app.get('/topics/allowed', async (_request, response) => {
+    response.send(
+        db.data['topics_allowed'] || []
+    )
 })
 
-app.get('/topics/aliases', async (_request, _response) => {
-    return db.data['topic_aliases'] || []
+app.get('/topics/aliases', async (_request, response) => {
+    response.send(
+        db.data['topic_aliases'] || {}
+    )
+})
+
+app.post('/topics/allowed', async (request, response) => {
+    db.data['topics_allowed'] = request.body.topics
+    db.write()
+    response.send(db.data['topics_allowed'])
+})
+
+app.post('/topics/aliases', async (request, response) => {
+    db.data['topic_aliases'] = request.body.topics
+    db.write()
+    response.send(db.data['topic_aliases'])
 })
 
 // ──────────────────────────────────────────────────────────────────────
