@@ -5,6 +5,12 @@
     padding-bottom: .25em;
 }
 
+.repo-details {
+    flex-wrap: wrap;
+    column-gap: .5rem;
+    row-gap: 0.25rem;
+}
+
 .repo-details > a {
     text-decoration: none;
 }

@@ -106,7 +106,7 @@ function RepoCard(props: Props) {
             </Card.Header>
             <Card.Body>
                 <Card.Text>{repo.description}</Card.Text>
-                <Stack direction="horizontal" gap={2} className="repo-details">
+                <Stack direction="horizontal" className="repo-details">
                     {provider === "codeberg" && (
                         <Card.Link href={url}>
                             <IconCodeberg />
