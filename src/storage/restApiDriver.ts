@@ -16,7 +16,7 @@ const restApiDriver: StorageDriver = {
     },
     async createMany(repos: Repo[]) {
         return client
-            .post("/repo", repos)
+            .post("/repos", repos)
             .then((response: AxiosResponse) => response.data as Repo[]);
     },
     async updateRepo(repo: Repo) {
@@ -26,7 +26,7 @@ const restApiDriver: StorageDriver = {
     },
     async updateMany(repos: Repo[]) {
         return client
-            .post(`/repo`, { repos, _method: "PUT" })
+            .put('/repos', repos)
             .then((response: AxiosResponse) => response.data as Repo[]);
     },
     async deleteRepo(repo: Repo) {
@@ -41,7 +41,7 @@ const restApiDriver: StorageDriver = {
         const ids = repos.map((r: Repo) => r.id);
         let responseStatus = false;
         await client
-            .post("/repos", { _method: "delete", ids })
+            .post('/repos', { _method: 'delete', ids })
             .then(() => (responseStatus = true))
             .catch(() => (responseStatus = false));
         return responseStatus;

@@ -1,6 +1,6 @@
 import { App } from "@tinyhttp/app";
 import { cors } from "@tinyhttp/cors";
-import { Data, isItem } from "json-server/lib/service";
+import { Data } from "json-server/lib/service";
 import { json } from "milliparsec";
 import { JSONFile } from "lowdb/node";
 import { Low } from "lowdb";
@@ -44,18 +44,18 @@ app.use(cors());
 // Set up routes
 
 // Get repos
-app.get("/repo", async (_request, response) => {
+app.get('/repo', async (_request, response) => {
     response.send(dbRepos());
 });
 
 // Get repo
-app.get("/repo/:id", (request, response) => {
+app.get('/repo/:id', (request, response) => {
     const { id = "" } = request.params;
     response.send(findRepo(id));
 });
 
 // Create single repository
-app.post("/repo", async (request, response) => {
+app.post('/repo', async (request, response) => {
     const data = request.body;
     const repo =
         typeof data.url === "string"
@@ -67,14 +67,14 @@ app.post("/repo", async (request, response) => {
 });
 
 // Update single repository
-app.post("/repo/:id", async (request, response) => {
+app.post('/repo/:id', async (request, response) => {
     db.data.repo = updateRepo(dbRepos(), request.body as Repo);
     await db.write();
     response.send(request.body);
 });
 
 // Delete single repository
-app.delete("/repo/:id", async (request, response) => {
+app.delete('/repo/:id', async (request, response) => {
     const { id = "" } = request.params;
     const repos = dbRepos();
     db.data.repo = delRepo(repos, id);
@@ -84,7 +84,7 @@ app.delete("/repo/:id", async (request, response) => {
 });
 
 // Create many repositories
-app.post("/repos", async (request, response) => {
+app.post('/repos', async (request, response) => {
     const data = request.body;
     const repos = dbRepos();
     db.data.repo = addRepos(repos, data as Repo[]);
@@ -102,7 +102,7 @@ app.put('/repos', async (request, response) => {
 });
 
 // Delete multiple repositories
-app.delete(`/repos`, async (request, response) => {
+app.delete('/repos', async (request, response) => {
     const { ids } = request.body;
     const repos = dbRepos();
     db.data.repo = delRepos(repos, ids);
@@ -112,27 +112,27 @@ app.delete(`/repos`, async (request, response) => {
 });
 
 // Get allowed topics
-app.get("/topics/allowed", async (_request, response) => {
-    response.send(db.data["topics_allowed"] || []);
+app.get('/topics/allowed', async (_request, response) => {
+    response.send(db.data['topics_allowed'] || []);
 });
 
 // Get topic aliases
-app.get("/topics/aliases", async (_request, response) => {
-    response.send(db.data["topic_aliases"] || {});
+app.get('/topics/aliases', async (_request, response) => {
+    response.send(db.data['topic_aliases'] || {});
 });
 
 // Set allowed topics
-app.post("/topics/allowed", async (request, response) => {
+app.post('/topics/allowed', async (request, response) => {
     db.data["topics_allowed"] = request.body.topics;
     db.write();
-    response.send(db.data["topics_allowed"]);
+    response.send(db.data['topics_allowed']);
 });
 
 // Set topic aliases
-app.post("/topics/aliases", async (request, response) => {
-    db.data["topic_aliases"] = request.body.topics;
+app.post('/topics/aliases', async (request, response) => {
+    db.data['topic_aliases'] = request.body.topics;
     db.write();
-    response.send(db.data["topic_aliases"]);
+    response.send(db.data['topic_aliases']);
 });
 
 // ──────────────────────────────────────────────────────────────────────
@@ -143,13 +143,13 @@ app.listen(port, () => {
     console.log(
         [
             chalk.bold(`JSON Server started on PORT :${port}`),
-            chalk.gray("Press CTRL-C to stop"),
+            chalk.gray('Press CTRL-C to stop'),
             chalk.gray(`Watching ${file}...`),
-            "",
-            chalk.bold("Index:"),
+            '',
+            chalk.bold('Index:'),
             chalk.gray(`http://localhost:${port}/`),
-            "",
-        ].join("\n"),
+            '',
+        ].join('\n'),
     );
 });
 
