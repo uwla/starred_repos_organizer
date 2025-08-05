@@ -54,79 +54,51 @@ app.get("/repo/:id", (request, response) => {
     response.send(findRepo(id));
 });
 
-// Create repo(s)
+// Create single repository
 app.post("/repo", async (request, response) => {
-    if (!isItem(request.body)) {
-        response.send("Expect request body");
-        return;
-    }
-
     const data = request.body;
-    const repos = dbRepos();
-    let item;
-
-    // The request method (POST, PUT, DELETE)
-    const method = ((data._method as string) || "").toLowerCase();
-
-    // DELETE MANY REPOSITORIES.
-    if (method === "delete") {
-        const ids = data.ids as string[];
-        const repos = dbRepos();
-        db.data.repo = delRepos(repos, ids);
-        await db.write();
-        const success = repos.length - ids.length === db.data.repo.length;
-        response.send({
-            success,
-        });
-        return;
-    }
-
-    // UPDATE MANY REPOSITORIES
-    if (method === "put") {
-        db.data.repo = updateRepos(repos, data.repos as Repo[]);
-        await db.write();
-        response.send(data.repos);
-        return;
-    }
-
-    // CREATE MANY REPOSITORIES
-    if (Array.isArray(data)) {
-        db.data.repo = addRepos(repos, data as Repo[]);
-        await db.write();
-        response.send(item);
-        return;
-    }
-
-    // CREATE SINGLE REPO
     const repo =
         typeof data.url === "string"
             ? await repoProvider.getRepo(data.url)
             : (data as Repo);
-
-    db.data.repo = addRepo(repos, repo as Repo);
+    db.data.repo = addRepo(dbRepos(), repo as Repo);
     await db.write();
-    response.send(repo)
+    response.send(repo);
 });
 
-// Update single repo
+// Update single repository
 app.post("/repo/:id", async (request, response) => {
-    if (!isItem(request.body)) {
-        response.send("Expected resource");
-        return;
-    }
     db.data.repo = updateRepo(dbRepos(), request.body as Repo);
-    db.write();
+    await db.write();
     response.send(request.body);
 });
 
-// Delete single repo.
+// Delete single repository
 app.delete("/repo/:id", async (request, response) => {
     const { id = "" } = request.params;
     const repos = dbRepos();
     db.data.repo = delRepo(repos, id);
     db.write();
-    const success = repos.length - 1 === db.data.repo.length;
+    const success = (repos.length - 1) === db.data.repo.length;
     response.send({ success });
+});
+
+// Create many repositories
+app.post("/repos", async (request, response) => {
+    const data = request.body;
+    const repos = dbRepos();
+    db.data.repo = addRepos(repos, data as Repo[]);
+    await db.write();
+    response.send(db.data.repo);
+});
+
+// Update many repositories
+app.put('/repos', async (request, response) => {
+    const data = request.body;
+    const repos = dbRepos();
+    db.data.repo = updateRepos(repos, data as Repo[]);
+    await db.write();
+    response.send(db.data.repo)
 });
 
 // Delete multiple repositories
@@ -134,25 +106,29 @@ app.delete(`/repos`, async (request, response) => {
     const { ids } = request.body;
     const repos = dbRepos();
     db.data.repo = delRepos(repos, ids);
-    db.write();
-    const success = repos.length - ids.length === db.data.repo.length;
+    await db.write();
+    const success = (repos.length - ids.length) === db.data.repo.length;
     response.send({ success });
 });
 
+// Get allowed topics
 app.get("/topics/allowed", async (_request, response) => {
     response.send(db.data["topics_allowed"] || []);
 });
 
+// Get topic aliases
 app.get("/topics/aliases", async (_request, response) => {
     response.send(db.data["topic_aliases"] || {});
 });
 
+// Set allowed topics
 app.post("/topics/allowed", async (request, response) => {
     db.data["topics_allowed"] = request.body.topics;
     db.write();
     response.send(db.data["topics_allowed"]);
 });
 
+// Set topic aliases
 app.post("/topics/aliases", async (request, response) => {
     db.data["topic_aliases"] = request.body.topics;
     db.write();
