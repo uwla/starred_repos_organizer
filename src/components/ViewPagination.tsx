@@ -1,6 +1,6 @@
 import { ViewProps } from "../types";
 import SettingsManager from "../settings";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
 
 function ViewPagination(props: ViewProps) {
@@ -22,11 +22,23 @@ function ViewPagination(props: ViewProps) {
         setPage(page);
     }
 
-    function handlePerPageChange(perPage: number) {
-        setPage(0);
-        setPerPage(perPage);
-        SettingsManager.set('perPage', String(perPage));
+    function handlePerPageChange(newPerPage: number) {
+        if (perPage === newPerPage) {
+            return
+        }
+
+        const firstEntryIndex = 1 + (page ) * perPage
+        let newPage = Math.ceil(firstEntryIndex / newPerPage)
+        newPage = Math.max(0, newPage - 1) // because index starts from 0
+
+        setPage(newPage);
+        setPerPage(newPerPage);
+        SettingsManager.set('perPage', String(newPerPage));
     }
+
+    useEffect(() => {
+        setPage(0)
+    }, [repos])
 
     return (
         <>
