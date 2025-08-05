@@ -479,7 +479,10 @@ function App() {
                 <SearchFilter onSubmit={handleSearch} />
 
                 {/* DISPLAY OPTIONS */}
-                <Stack gap={4} direction="horizontal">
+                <Stack
+                    direction="horizontal"
+                    id="display-options"
+                >
 
                     {/* SORT BY */}
                     <Select
@@ -510,11 +513,13 @@ function App() {
                         <span>Group by topic</span>
                     </Stack>
 
-                    {/* SPACER */}
-                    <div className="flex-grow"></div>
-
                     {/* ADD BUTTON */}
-                    <RepoAdd onAdd={handleAddItem} onAddMany={confirmAddMany} />
+                    <div class="ml-auto">
+                        <RepoAdd
+                            onAdd={handleAddItem}
+                            onAddMany={confirmAddMany}
+                        />
+                    </div>
                 </Stack>
 
                 {/* STATS FILTERED RESULTS */}

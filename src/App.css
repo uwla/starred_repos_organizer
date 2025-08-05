@@ -45,6 +45,12 @@ label, button, [type=button], a[href] {
     text-align: center;
 }
 
+#display-options {
+    flex-wrap: wrap;
+    column-gap: .75rem;
+    row-gap: .5rem;
+}
+
 /* ────────────────────────────────────────────────────────────────────── */
 /* DEMO MESSAGE */
 
@@ -81,6 +87,14 @@ body div[id^="react-select"][id$="listbox"]  >div>div {
 
 .flex-grow {
     flex-grow: 2;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.ml-auto {
+    margin-left: auto
 }
 
 /* ────────────────────────────────────────────────────────────────────── */
