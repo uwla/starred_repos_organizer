@@ -124,6 +124,8 @@ There are few options (easiest is the first one):
 - [ ] Support for self-hosted Gogs instance
 - [x] Option to specify provider type
 - [ ] Option to set auth tokens
+- [ ] Self-host with Docker
+- [ ] Rest API documentation
 
 ## Credits
 
