@@ -16,6 +16,7 @@ import {
     updateRepos,
 } from "./utils";
 import { Repo } from "./types";
+import repoProvider from "./repo";
 
 /* -------------------------------------------------------------------------- */
 // Set up database
@@ -43,114 +44,120 @@ app.use(cors());
 // Set up routes
 
 // Get repos
-app.get(`/repo`, async (_, res) => {
-    res.send(dbRepos());
+app.get("/repo", async (_request, response) => {
+    response.send(dbRepos());
 });
 
 // Get repo
-app.get(`/repo/:id`, (req, res) => {
-    const { id = "" } = req.params;
-    res.send(findRepo(id));
+app.get("/repo/:id", (request, response) => {
+    const { id = "" } = request.params;
+    response.send(findRepo(id));
 });
 
 // Create repo(s)
-app.post(`/repo`, async (req, res) => {
-    if (!isItem(req.body)) {
-        res.send("Expect request body");
+app.post("/repo", async (request, response) => {
+    if (!isItem(request.body)) {
+        response.send("Expect request body");
         return;
     }
 
-    const data = req.body;
+    const data = request.body;
     const repos = dbRepos();
     let item;
 
-    // The actual method (POST, PUT, DELETE)
+    // The request method (POST, PUT, DELETE)
     const method = ((data._method as string) || "").toLowerCase();
 
-    // Delete many repositories.
+    // DELETE MANY REPOSITORIES.
     if (method === "delete") {
         const ids = data.ids as string[];
         const repos = dbRepos();
         db.data.repo = delRepos(repos, ids);
-        db.write();
+        await db.write();
         const success = repos.length - ids.length === db.data.repo.length;
-        res.send({ success });
+        response.send({
+            success,
+        });
         return;
     }
 
+    // UPDATE MANY REPOSITORIES
     if (method === "put") {
         db.data.repo = updateRepos(repos, data.repos as Repo[]);
-        db.write();
-        res.send(data.repos);
+        await db.write();
+        response.send(data.repos);
         return;
     }
 
-    // create one or many items at once.
+    // CREATE MANY REPOSITORIES
     if (Array.isArray(data)) {
         db.data.repo = addRepos(repos, data as Repo[]);
-    } else {
-        db.data.repo = addRepo(repos, data as Repo);
+        await db.write();
+        response.send(item);
+        return;
     }
 
-    // Write to DB
+    // CREATE SINGLE REPO
+    const repo =
+        typeof data.url === "string"
+            ? await repoProvider.getRepo(data.url)
+            : (data as Repo);
+
+    db.data.repo = addRepo(repos, repo as Repo);
     await db.write();
-    res.send(item);
+    response.send(repo)
 });
 
 // Update single repo
-app.post(`/repo/:id`, async (req, res) => {
-    if (!isItem(req.body)) {
-        res.send("Expected resource");
+app.post("/repo/:id", async (request, response) => {
+    if (!isItem(request.body)) {
+        response.send("Expected resource");
         return;
     }
-    db.data.repo = updateRepo(dbRepos(), req.body as Repo);
+    db.data.repo = updateRepo(dbRepos(), request.body as Repo);
     db.write();
-    res.send(req.body);
+    response.send(request.body);
 });
 
 // Delete single repo.
-app.delete(`/repo/:id`, async (req, res) => {
-    const { id = "" } = req.params;
+app.delete("/repo/:id", async (request, response) => {
+    const { id = "" } = request.params;
     const repos = dbRepos();
     db.data.repo = delRepo(repos, id);
     db.write();
-    const success = (repos.length - 1) === db.data.repo.length;
-    res.send({ success });
+    const success = repos.length - 1 === db.data.repo.length;
+    response.send({ success });
 });
 
-// Delete single repo.
-app.delete(`/repos`, async (req, res) => {
-    const { ids } = req.body;
+// Delete multiple repositories
+app.delete(`/repos`, async (request, response) => {
+    const { ids } = request.body;
     const repos = dbRepos();
     db.data.repo = delRepos(repos, ids);
     db.write();
-    const success = (repos.length - ids.length) === db.data.repo.length;
-    res.send({ success });
+    const success = repos.length - ids.length === db.data.repo.length;
+    response.send({ success });
 });
 
-app.get('/topics/allowed', async (_request, response) => {
-    response.send(
-        db.data['topics_allowed'] || []
-    )
-})
+app.get("/topics/allowed", async (_request, response) => {
+    response.send(db.data["topics_allowed"] || []);
+});
 
-app.get('/topics/aliases', async (_request, response) => {
-    response.send(
-        db.data['topic_aliases'] || {}
-    )
-})
+app.get("/topics/aliases", async (_request, response) => {
+    response.send(db.data["topic_aliases"] || {});
+});
 
-app.post('/topics/allowed', async (request, response) => {
-    db.data['topics_allowed'] = request.body.topics
-    db.write()
-    response.send(db.data['topics_allowed'])
-})
+app.post("/topics/allowed", async (request, response) => {
+    db.data["topics_allowed"] = request.body.topics;
+    db.write();
+    response.send(db.data["topics_allowed"]);
+});
 
-app.post('/topics/aliases', async (request, response) => {
-    db.data['topic_aliases'] = request.body.topics
-    db.write()
-    response.send(db.data['topic_aliases'])
-})
+app.post("/topics/aliases", async (request, response) => {
+    db.data["topic_aliases"] = request.body.topics;
+    db.write();
+    response.send(db.data["topic_aliases"]);
+});
 
 // ──────────────────────────────────────────────────────────────────────
 
@@ -166,7 +173,7 @@ app.listen(port, () => {
             chalk.bold("Index:"),
             chalk.gray(`http://localhost:${port}/`),
             "",
-        ].join("\n")
+        ].join("\n"),
     );
 });
 
