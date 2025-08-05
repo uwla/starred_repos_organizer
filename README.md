@@ -46,12 +46,26 @@ A live demo is available at <https://uwla.github.io/starred_repos_organizer>.
 
 ## Usage
 
-There are few options (easiest is the first one):
+There are few options. The easiest one is to go to the static demo app which is
+hosted via 'github' pages and saves data in your web browser's local storage.
 
-1. Go to the [demo page](https://uwla.github.io/starred_repos_organizer) to use the app.
-2. Download `app.html`from the [latest release](https://github.com/uwla/starred_repos_organizer/releases/tag/v0.0.1-beta).
-3. Download `app.html` from the demo page.
-4. Follow developemnt instructions to launch a local server or build the app locally.
+### Local Storage
+
+The data is saved in the web browser's local storage. Available options are:
+
+- Go to the [demo page](https://uwla.github.io/starred_repos_organizer) to use the app.
+- Download `app.html` from the [latest release](https://github.com/uwla/starred_repos_organizer/releases/tag/v0.0.1-beta).
+- Download `app.html` from the demo page.
+- Build `app.html` locally.
+
+### Server
+
+The data is saved in a remote server. Available options are:
+
+- Run the server via npm script: `npm run dev:rest`
+- Run the server via docker (TODO)
+
+The server can run remotely or locally.
 
 ## Development
 
