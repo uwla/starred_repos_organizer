@@ -41,7 +41,7 @@ const restApiDriver: StorageDriver = {
         const ids = repos.map((r: Repo) => r.id);
         let responseStatus = false;
         await client
-            .post('/repos', { _method: 'delete', ids })
+            .patch('/repos', { ids })
             .then(() => (responseStatus = true))
             .catch(() => (responseStatus = false));
         return responseStatus;
