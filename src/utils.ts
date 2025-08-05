@@ -14,7 +14,7 @@ const extractTopics = (repos: Repo[]): string[] => {
 };
 
 const uniqueRepos = (repos: Repo[]): Repo[] => {
-    let unique = [] as Repo[];
+    const unique = [] as Repo[];
     const urls = {} as { [key: string]: number };
 
     // Prevent duplicated repos by applying a URL filter.
