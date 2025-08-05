@@ -132,7 +132,7 @@ body div[id^="react-select"][id$="listbox"]  >div>div {
 /* DARK MODE */
 
 body.dark {
-    --dark-color: #fff;
+    --dark-color: #bbb;
     --dark-bg: #000;
     --dark-chip-bg: #0080ff;
     --dark-menu-bg: #999;
