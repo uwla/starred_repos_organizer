@@ -514,7 +514,7 @@ function App() {
                     </Stack>
 
                     {/* ADD BUTTON */}
-                    <div class="ml-auto">
+                    <div className="ml-auto">
                         <RepoAdd
                             onAdd={handleAddItem}
                             onAddMany={confirmAddMany}
