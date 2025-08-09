@@ -143,19 +143,16 @@ app.post("/topics/aliases", async (request, response) => {
 
 // Start server
 const port = 3000;
+const host = '0.0.0.0'
 app.listen(port, () => {
     console.log(
         [
-            chalk.bold(`JSON Server started on PORT :${port}`),
-            chalk.gray("Press CTRL-C to stop"),
+            chalk.bold(`JSON Server started on ${host}:${port}`),
+            chalk.gray('Press CTRL-C to stop'),
             chalk.gray(`Watching ${file}...`),
-            "",
-            chalk.bold("Index:"),
-            chalk.gray(`http://localhost:${port}/`),
-            "",
-        ].join("\n"),
+        ].join('\n'),
     );
-});
+}, host);
 
 /* -------------------------------------------------------------------------- */
 
