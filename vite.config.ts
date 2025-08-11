@@ -11,6 +11,7 @@ const ReactCompilerConfig = {
 
 // https://vitejs.dev/config/
 export default defineConfig({
+    base: process.env.VITE_BASE_PATH || defaultBasePath,
     plugins: [
         react({
             babel: {
@@ -21,5 +22,8 @@ export default defineConfig({
         }),
         viteSingleFile(),
     ],
-    base: process.env.VITE_BASE_PATH || defaultBasePath,
+    server: {
+        host: '0.0.0.0',
+        port: 5173
+    }
 });
