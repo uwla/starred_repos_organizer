@@ -40,7 +40,17 @@ const uniqueRepos = (repos: Repo[]): Repo[] => {
 
 const randomId = () => Math.random().toString().slice(2, 12);
 
+const now = () =>  (new Date()).toUTCString()
+
 const assignId = (repo: Repo) => ({ ...repo, id: randomId() });
+
+const assignTimestamp = (repo: Repo) => {
+    return {
+        ...repo,
+        locally_created_at: repo.locally_created_at || now(),
+        locally_updated_at: now()
+    }
+}
 
 const extractDomain = (url: string) =>
     url.replace(/(https?:\/\/)?([\w\d.]+\.[\w\d]+)\/?.*/, "$2");
@@ -164,17 +174,18 @@ function keepOnlyRepoTopics(repos: Repo[], topics: string[]) {
 export {
     addRepo,
     addRepos,
-    delRepo,
-    delRepos,
-    updateRepo,
-    updateRepos,
     applyFilters,
     assignId,
+    assignTimestamp,
+    delRepo,
+    delRepos,
     extractDomain,
+    extractTopics,
+    keepOnlyRepoTopics,
     optionsToTopics,
     randomId,
     topicsToOptions,
     uniqueRepos,
-    extractTopics,
-    keepOnlyRepoTopics,
+    updateRepo,
+    updateRepos,
 };

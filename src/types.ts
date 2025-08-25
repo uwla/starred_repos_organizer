@@ -23,6 +23,8 @@ type Repo = {
     created_at: string;
     last_push: string;
     last_update: string;
+    locally_created_at: string;
+    locally_updated_at: string;
     forked: boolean;
     forks: number;
     archived: boolean;
@@ -30,8 +32,8 @@ type Repo = {
     owner: string;
     owner_type: string;
     stars: number;
-    modified: boolean; // modified locally?
-    provider: ProviderSlug; // github, gitlab, gitea, ...
+    modified: boolean; // modified locally
+    provider: ProviderSlug;
 };
 
 type RepoKey = keyof Repo;
