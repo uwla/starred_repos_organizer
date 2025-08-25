@@ -14,6 +14,7 @@ import { SelectedFiles } from "use-file-picker/types";
 import type { JsonData, Repo, Topic, TopicAliases } from "../types";
 import "./Menu.css";
 import RepoSelect from "./RepoSelect";
+import { now } from "../utils";
 
 interface Props {
     repos: Repo[];
@@ -49,7 +50,7 @@ function Menu(props: Props) {
         onFilesSuccessfullySelected: (files: SelectedFiles<string>) => {
             const rawData = JSON.parse(files.filesContent[0].content);
             const data = {
-                date: rawData.date || new Date().toISOString(),
+                date: rawData.date || now(),
                 repos: rawData.repos || rawData.repo, // compability with older versions
                 topics_allowed: rawData.topics_allowed || [],
                 topic_aliases: rawData.topic_aliases || [],
@@ -63,13 +64,12 @@ function Menu(props: Props) {
         if (repos.length === 0) return;
         setToExport([]);
         const data: JsonData = {
-            date: new Date().toISOString(),
+            date: now(),
             repos: repos,
             topics_allowed: topicsAllowed,
             topic_aliases: topicAliases,
         };
-        const date = (new Date())
-            .toISOString()
+        const date = now()
             .replace('T', '_')
             .replace(/\..*$/, '');
         const fileName = "starred-repos_" + date;

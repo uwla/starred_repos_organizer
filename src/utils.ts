@@ -40,7 +40,7 @@ const uniqueRepos = (repos: Repo[]): Repo[] => {
 
 const randomId = () => Math.random().toString().slice(2, 12);
 
-const now = () => new Date().toUTCString();
+const now = () => new Date().toISOString();
 
 const assignId = (repo: Repo) => ({ ...repo, id: repo.id || randomId() });
 
@@ -183,6 +183,7 @@ export {
     extractDomain,
     extractTopics,
     keepOnlyRepoTopics,
+    now,
     optionsToTopics,
     randomId,
     topicsToOptions,
