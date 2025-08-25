@@ -12,7 +12,8 @@ import {
     addRepos,
     delRepo,
     delRepos,
-    randomId,
+    assignId,
+    assignTimestamp,
     updateRepo,
     updateRepos,
 } from "./utils";
@@ -64,7 +65,6 @@ app.post("/repo", async (request, response) => {
     } else {
         repo = data as Repo;
     }
-    repo.id = randomId();
     db.data.repo = addRepo(dbRepos(), repo as Repo);
     await db.write();
     response.send(repo);

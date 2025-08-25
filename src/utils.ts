@@ -40,30 +40,31 @@ const uniqueRepos = (repos: Repo[]): Repo[] => {
 
 const randomId = () => Math.random().toString().slice(2, 12);
 
-const now = () =>  (new Date()).toUTCString()
+const now = () => new Date().toUTCString();
 
-const assignId = (repo: Repo) => ({ ...repo, id: randomId() });
+const assignId = (repo: Repo) => ({ ...repo, id: repo.id || randomId() });
 
-const assignTimestamp = (repo: Repo) => {
-    return {
-        ...repo,
-        locally_created_at: repo.locally_created_at || now(),
-        locally_updated_at: now()
-    }
-}
+const assignTimestamp = (repo: Repo) => ({
+    ...repo,
+    locally_created_at: repo.locally_created_at || now(),
+    locally_updated_at: now(),
+});
 
 const extractDomain = (url: string) =>
     url.replace(/(https?:\/\/)?([\w\d.]+\.[\w\d]+)\/?.*/, "$2");
 
-const addRepo = (repos: Repo[], repo: Repo) => uniqueRepos([...repos, repo]);
+const addRepo = (repos: Repo[], repo: Repo) =>
+    uniqueRepos([...repos, assignTimestamp(assignId(repo))]);
 
 const addRepos = (repos: Repo[], reposToAdd: Repo[]) =>
     uniqueRepos([...repos, ...reposToAdd]);
 
 const updateRepo = (repos: Repo[], repo: Repo) => {
     const index = repos.findIndex((r: Repo) => r.id === repo.id);
-    if (index === -1) throw new Error("[UTILS] repo does not exist");
-    repos.splice(index, 1, repo);
+    if (index === -1) {
+        throw new Error(`[UTILS] repository ${repo.url} does not exist`);
+    }
+    repos.splice(index, 1, assignTimestamp(repo));
     return uniqueRepos(repos);
 };
 
@@ -77,7 +78,7 @@ const updateRepos = (repos: Repo[], reposToUpdate: Repo[]) => {
     repos.forEach((repo: Repo, index: number) => {
         const { id } = repo;
         if (id2repo[id] !== undefined) {
-            repos[index] = id2repo[id];
+            repos[index] = assignTimestamp(id2repo[id]);
         }
     });
 
@@ -122,7 +123,7 @@ function filterRepo(repo: Repo, normalizedQuery: string) {
         // Search array field by checking if any value includes the query.
         if (Array.isArray(field)) {
             hasMatch = field.some((val: string) =>
-                val.toLowerCase().includes(normalizedQuery)
+                val.toLowerCase().includes(normalizedQuery),
             );
         }
 
