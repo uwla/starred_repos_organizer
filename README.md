@@ -35,7 +35,7 @@ A live demo is available at <https://uwla.github.io/starred_repos_organizer>.
 - More privacy by not exposing your interests to the internet
 - Works offline (except when adding repositories, because it fetches remote data)
 - Can be downloaded as single HTML file to run locally
-- Sort by name, stars or forks
+- Sort by name, stars, forks, date added or random
 - Text search and topic filter
 - Display items in list
 - Display items in grid
