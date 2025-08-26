@@ -85,6 +85,10 @@ body div[id^="react-select"][id$="listbox"]  >div>div {
 /* ────────────────────────────────────────────────────────────────────── */
 /* UTILS */
 
+.flex {
+    display: flex
+}
+
 .flex-grow {
     flex-grow: 2;
 }

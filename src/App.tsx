@@ -2,6 +2,9 @@ import {
     Close as CloseIcon,
     Edit as EditIcon,
     Undo as UndoIcon,
+    Sort as SortIcon,
+    ArrowUpward as ArrowUpwardIcon,
+    ArrowDownward as ArrowDownwardIcon
 } from "@mui/icons-material";
 import { Checkbox } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -86,6 +89,7 @@ function App() {
     const [reposToAdd, setReposToAdd] = useState([] as Repo[]);
     const [searchQuery, setSearchQuery] = useState("");
     const [sortBy, setSortBy] = useState(savedSortBy);
+    const [sortDirection, setSortDirection] = useState<'ASC' | 'DESC'>('DESC')
     const [selectedTopics, setSelectedTopics] = useState([] as SelectOption[]);
     const [showDemoMsg, setShowDemoMsg] = useState(shouldShowDemoMsg);
     const [successMsg, setSuccessMsg] = useState("");
@@ -235,6 +239,10 @@ function App() {
                 break;
             default:
                 throw new Error(`Unknown sort option ${sortBy}`);
+        }
+        if (sortDirection === 'ASC') {
+            const originalFn = fn
+            fn = (a, b) => originalFn(b, a)
         }
         SettingsManager.set('sortBy', sortBy);
         return fn;
@@ -485,12 +493,29 @@ function App() {
                 >
 
                     {/* SORT BY */}
-                    <Select
-                        text="Sort by:"
-                        selected={sortBy}
-                        values={["", "stars", "name", "forks", "random"]}
-                        onSelect={handleSort}
-                    />
+                    <Stack direction="horizontal" gap={2}>
+                        <Select
+                            text="Sort by:"
+                            selected={sortBy}
+                            values={["", "stars", "name", "forks", "random"]}
+                            onSelect={handleSort}
+                        />
+                            <Button
+                                color="warning"
+                                onClick={() => {
+                                    setSortDirection(
+                                        sortDirection === 'ASC' ?
+                                        'DESC' : 'ASC'
+                                    )
+                                }}
+                            >
+                                <SortIcon />
+                                {sortDirection === 'DESC' ?
+                                    <ArrowDownwardIcon /> :
+                                    <ArrowUpwardIcon />
+                                }
+                            </Button>
+                    </Stack>
 
                     {/* LAYOUT */}
                     <Select
