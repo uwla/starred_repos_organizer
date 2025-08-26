@@ -232,6 +232,13 @@ function App() {
                     return (b.forks || 0) - (a.forks || 0);
                 };
                 break;
+            case "added at":
+                fn = function (a: Repo, b: Repo) {
+                    const dateA = new Date(a.locally_created_at || '2000')
+                    const dateB = new Date(b.locally_created_at || '2000')
+                    return Number(dateB) - Number(dateA)
+                };
+                break;
             case "random":
                 fn = function(_a: Repo, _b: Repo) {
                     return (Math.random() > 0.5) ? -1 : 1;
@@ -497,7 +504,7 @@ function App() {
                         <Select
                             text="Sort by:"
                             selected={sortBy}
-                            values={["", "stars", "name", "forks", "random"]}
+                            values={["", "stars", "name", "forks", "random", "added at"]}
                             onSelect={handleSort}
                         />
                             <Button
