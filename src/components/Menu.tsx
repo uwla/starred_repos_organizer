@@ -92,7 +92,7 @@ function Menu(props: Props) {
                     </Dropdown.Item>
                     {repos.length > 0 && (
                         <Dropdown.Item onClick={() => setToExport(repos)}>
-                            <IconDownload /> EXPORT
+                            <IconDownload /> EXPORT ALL
                         </Dropdown.Item>
                     )}
                     {filtered.length > 0 && filtered.length < repos.length && (
