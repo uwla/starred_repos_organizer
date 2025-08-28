@@ -12,8 +12,6 @@ import {
     addRepos,
     delRepo,
     delRepos,
-    assignId,
-    assignTimestamp,
     updateRepo,
     updateRepos,
 } from "./utils";
