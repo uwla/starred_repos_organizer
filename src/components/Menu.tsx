@@ -1,10 +1,11 @@
 import {
-    Settings as IconGear,
-    Download as IconDownload,
-    Upload as IconUpload,
-    Delete as IconDelete,
-    Fullscreen as IconFullscreen,
     DarkMode as IconDarkMode,
+    Delete as IconDelete,
+    Download as IconDownload,
+    Fullscreen as IconFullscreen,
+    Refresh as IconRefresh,
+    Settings as IconGear,
+    Upload as IconUpload,
 } from "@mui/icons-material";
 import { Dropdown } from "react-bootstrap";
 import { useState } from "react";
@@ -108,6 +109,16 @@ function Menu(props: Props) {
                     {filtered.length > 0 && filtered.length < repos.length && (
                         <Dropdown.Item onClick={() => setToDelete(filtered)}>
                             <IconDelete /> DELETE FILTERED
+                        </Dropdown.Item>
+                    )}
+                    {repos.length > 0 && (
+                        <Dropdown.Item>
+                            <IconRefresh /> REFRESH ALL
+                        </Dropdown.Item>
+                    )}
+                    {filtered.length > 0 && filtered.length < repos.length && (
+                        <Dropdown.Item>
+                            <IconRefresh /> REFRESH FILTERED
                         </Dropdown.Item>
                     )}
                     <Dropdown.Item onClick={onToggleTheme}>
