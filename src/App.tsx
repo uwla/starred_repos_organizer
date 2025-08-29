@@ -345,11 +345,36 @@ function App() {
             .then(() => setSuccessMsg(`${repos.length} repos deleted`));
     }
 
-    async function handleRefreshMany(repos: Repo[]) {
-        if (repos.length === 0) return;
+    async function handleRefreshMany(reposToRefresh: Repo[]) {
+        if (reposToRefresh.length === 0) return;
 
-        // TODO: implement refresh
-        setSuccessMsg(`${repos.length} refreshed`)
+        let updatedCount = 0
+
+        for (const repo of reposToRefresh) {
+            const updated = await RepoProvider.getRepo(repo.url)
+            if (repo.modified) {
+                updated.topics = repo.topics
+            }
+            updated.id = repo.id
+
+            // TODO: UPDATE ALL AT ONCE INSTEAD OF ONE BY ONE
+            try {
+                await updateSingleRepo(updated)
+                updatedCount += 1
+                console.log(updated.url)
+            } catch {
+                //
+            }
+        }
+
+        let successMsg = `${updatedCount} repos updated.`
+
+        if (updatedCount !== reposToRefresh.length) {
+            const missing = reposToRefresh.length - updatedCount
+            successMsg += ` ${missing} repos failed to update.`
+        }
+
+        setSuccessMsg(successMsg)
     }
 
     function closeUndoDeleteToast(repo: Repo) {
@@ -366,10 +391,7 @@ function App() {
         setEditing(true);
     }
 
-    async function handleUpdate(repo: Repo, modified = false) {
-        // this marks the repo to be updated as been locally modified.
-        repo.modified = modified;
-
+    async function updateSingleRepo(repo: Repo) {
         return StorageDriver
             .updateRepo(repo)
             .then((updated: Repo) => {
@@ -390,8 +412,15 @@ function App() {
 
                 // Finish editing
                 setEditing(false);
+            })
+    }
 
-                // indicates updated was successful
+    async function handleUpdate(repo: Repo, modified = false) {
+        // this marks the repo to be updated as been locally modified.
+        repo.modified = modified;
+
+        return updateSingleRepo(repo).
+            then(() => {
                 setSuccessMsg("Repo updated");
                 return true;
             })
