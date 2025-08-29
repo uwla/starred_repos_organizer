@@ -348,6 +348,7 @@ function App() {
     async function handleRefreshMany(reposToRefresh: Repo[]) {
         if (reposToRefresh.length === 0) return;
 
+        const freshRepos: Repo[] = []
         let updatedCount = 0
 
         for (const repo of reposToRefresh) {
@@ -356,25 +357,33 @@ function App() {
                 updated.topics = repo.topics
             }
             updated.id = repo.id
-
-            // TODO: UPDATE ALL AT ONCE INSTEAD OF ONE BY ONE
-            try {
-                await updateSingleRepo(updated)
-                updatedCount += 1
-                console.log(updated.url)
-            } catch {
-                //
-            }
+            freshRepos.push(updated)
+            updatedCount += 1
+            setSuccessMsg(`fetching ${updatedCount}/${reposToRefresh.length}`)
         }
 
-        let successMsg = `${updatedCount} repos updated.`
+        await StorageDriver
+            .updateMany(freshRepos)
+            .then((updatedRepos) => {
+                const newRepos = [...repos]
+                const newFiltered = [...filteredRepos]
+                for (const updated of updatedRepos) {
+                    let index: number
 
-        if (updatedCount !== reposToRefresh.length) {
-            const missing = reposToRefresh.length - updatedCount
-            successMsg += ` ${missing} repos failed to update.`
-        }
+                    index = newRepos.findIndex(r => r.id === updated.id)
+                    if (index !== -1) newRepos.splice(index, 1, updated)
 
-        setSuccessMsg(successMsg)
+                    index = newFiltered.findIndex(r => r.id === updated.id)
+                    if (index !== -1) newFiltered.splice(index, 1, updated)
+                }
+                setRepos(newRepos)
+                setFilteredRepos(newFiltered)
+                setTopics(extractTopics(newRepos))
+                setSuccessMsg(`Repos refreshed!`)
+            })
+            .catch(() => {
+                setErrorMsg(`Failed to save data.`)
+            })
     }
 
     function closeUndoDeleteToast(repo: Repo) {
