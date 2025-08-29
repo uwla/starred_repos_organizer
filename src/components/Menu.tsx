@@ -24,6 +24,7 @@ interface Props {
     filtered: Repo[];
     onImport: (data: JsonData) => void;
     onDelete: (repos: Repo[]) => Promise<void>;
+    onRefresh: (repos: Repo[]) => Promise<void>;
     onToggleExpand: () => void;
     onToggleTheme: () => void;
     sortFn: (a: Repo, b: Repo) => number;
@@ -37,6 +38,7 @@ function Menu(props: Props) {
         topicAliases,
         onImport,
         onDelete,
+        onRefresh,
         onToggleExpand,
         onToggleTheme,
         sortFn,
@@ -125,13 +127,13 @@ function Menu(props: Props) {
                         </Dropdown.Item>
                     )}
                     {repos.length > 0 && (
-                        <Dropdown.Item>
+                        <Dropdown.Item onClick={() => onRefresh(repos)}>
                             <IconRefresh />
                             <span>{hasFilters ? 'REFRESH ALL' : 'REFRESH'}</span>
                         </Dropdown.Item>
                     )}
                     {hasFilters && (
-                        <Dropdown.Item>
+                        <Dropdown.Item onClick={() => onRefresh(filtered)}>
                             <IconRefresh /> REFRESH FILTERED
                         </Dropdown.Item>
                     )}

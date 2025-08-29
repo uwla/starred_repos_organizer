@@ -345,6 +345,13 @@ function App() {
             .then(() => setSuccessMsg(`${repos.length} repos deleted`));
     }
 
+    async function handleRefreshMany(repos: Repo[]) {
+        if (repos.length === 0) return;
+
+        // TODO: implement refresh
+        setSuccessMsg(`${repos.length} refreshed`)
+    }
+
     function closeUndoDeleteToast(repo: Repo) {
         setDeletedRepos(deletedRepos.filter((r: Repo) => r.id !== repo.id));
     }
@@ -471,6 +478,7 @@ function App() {
                     sortFn={getSortFn(sortBy)}
                     onImport={importData}
                     onDelete={handleDeleteMany}
+                    onRefresh={handleRefreshMany}
                     onToggleExpand={toggleAppWidth}
                     onToggleTheme={toggleDarkMode}
                 />
