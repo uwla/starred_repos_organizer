@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { StorageDriver } from "../types";
 import localStorageDriver from "./localStorageDriver";
 import mockDriver from "./mockDriver";
