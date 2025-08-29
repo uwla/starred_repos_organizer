@@ -8,7 +8,7 @@ import {
     Upload as IconUpload,
 } from "@mui/icons-material";
 import { Dropdown } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import exportFromJSON from "export-from-json";
 import { useFilePicker } from "use-file-picker";
 import { SelectedFiles } from "use-file-picker/types";
@@ -41,8 +41,10 @@ function Menu(props: Props) {
         onToggleTheme,
         sortFn,
     } = props;
+
     const [toDelete, setToDelete] = useState([] as Repo[]);
     const [toExport, setToExport] = useState([] as Repo[]);
+    const [hasFilters, setHasFilters] = useState(false)
 
     // Handles importing files.
     const { openFilePicker } = useFilePicker({
@@ -61,7 +63,7 @@ function Menu(props: Props) {
     });
 
     // Handles exporting files.
-    const handleDownload = (repos: Repo[]) => {
+    function handleDownload(repos: Repo[]) {
         if (repos.length === 0) return;
         setToExport([]);
         const data: JsonData = {
@@ -76,10 +78,19 @@ function Menu(props: Props) {
         const fileName = "starred-repos_" + date;
         const exportType = exportFromJSON.types.json;
         exportFromJSON({ data, fileName, exportType });
-    };
+    }
 
-    const hideModal = () => setToDelete([]);
-    const handleDelete = (repos: Repo[]) => onDelete(repos).then(hideModal);
+    function hideModal() {
+        setToDelete([])
+    }
+
+    function handleDelete(repos: Repo[]) {
+        onDelete(repos).then(hideModal)
+    }
+
+    useEffect(() => {
+        setHasFilters(filtered.length > 0 && filtered.length < repos.length)
+    }, [filtered, repos])
 
     return (
         <>
@@ -93,30 +104,33 @@ function Menu(props: Props) {
                     </Dropdown.Item>
                     {repos.length > 0 && (
                         <Dropdown.Item onClick={() => setToExport(repos)}>
-                            <IconDownload /> EXPORT ALL
+                            <IconDownload />
+                            <span>{hasFilters ? 'EXPORT ALL' : 'EXPORT'}</span>
                         </Dropdown.Item>
                     )}
-                    {filtered.length > 0 && filtered.length < repos.length && (
+                    {hasFilters && (
                         <Dropdown.Item onClick={() => setToExport(filtered)}>
                             <IconDownload /> EXPORT FILTERED
                         </Dropdown.Item>
                     )}
                     {repos.length > 0 && (
                         <Dropdown.Item onClick={() => setToDelete(repos)}>
-                            <IconDelete /> DELETE ALL
+                            <IconDelete />
+                            <span>{hasFilters ? 'DELETE ALL' : 'DELETE'}</span>
                         </Dropdown.Item>
                     )}
-                    {filtered.length > 0 && filtered.length < repos.length && (
+                    {hasFilters && (
                         <Dropdown.Item onClick={() => setToDelete(filtered)}>
                             <IconDelete /> DELETE FILTERED
                         </Dropdown.Item>
                     )}
                     {repos.length > 0 && (
                         <Dropdown.Item>
-                            <IconRefresh /> REFRESH ALL
+                            <IconRefresh />
+                            <span>{hasFilters ? 'REFRESH ALL' : 'REFRESH'}</span>
                         </Dropdown.Item>
                     )}
-                    {filtered.length > 0 && filtered.length < repos.length && (
+                    {hasFilters && (
                         <Dropdown.Item>
                             <IconRefresh /> REFRESH FILTERED
                         </Dropdown.Item>
