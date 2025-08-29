@@ -102,7 +102,8 @@ function Menu(props: Props) {
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                     <Dropdown.Item onClick={openFilePicker}>
-                        <IconUpload /> IMPORT
+                        <IconUpload />
+                        <span>IMPORT</span>
                     </Dropdown.Item>
                     {repos.length > 0 && (
                         <Dropdown.Item onClick={() => setToExport(repos)}>
@@ -112,7 +113,8 @@ function Menu(props: Props) {
                     )}
                     {hasFilters && (
                         <Dropdown.Item onClick={() => setToExport(filtered)}>
-                            <IconDownload /> EXPORT FILTERED
+                            <IconDownload />
+                            <span>EXPORT FILTERED</span>
                         </Dropdown.Item>
                     )}
                     {repos.length > 0 && (
@@ -123,7 +125,8 @@ function Menu(props: Props) {
                     )}
                     {hasFilters && (
                         <Dropdown.Item onClick={() => setToDelete(filtered)}>
-                            <IconDelete /> DELETE FILTERED
+                            <IconDelete />
+                            <span>DELETE FILTERED</span>
                         </Dropdown.Item>
                     )}
                     {repos.length > 0 && (
@@ -134,14 +137,17 @@ function Menu(props: Props) {
                     )}
                     {hasFilters && (
                         <Dropdown.Item onClick={() => onRefresh(filtered)}>
-                            <IconRefresh /> REFRESH FILTERED
+                            <IconRefresh />
+                            <span>REFRESH FILTERED</span>
                         </Dropdown.Item>
                     )}
                     <Dropdown.Item onClick={onToggleTheme}>
-                        <IconDarkMode /> DARK / LIGHT
+                        <IconDarkMode />
+                        <span>DARK / LIGHT</span>
                     </Dropdown.Item>
                     <Dropdown.Item onClick={onToggleExpand}>
-                        <IconFullscreen /> EXPAND
+                        <IconFullscreen />
+                        <span>EXPAND</span>
                     </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>

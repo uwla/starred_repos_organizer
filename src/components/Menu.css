@@ -4,3 +4,7 @@
     position: absolute;
     margin-top: 0;
 }
+
+#menu .dropdown-item span {
+    margin-left: 5px;
+}
