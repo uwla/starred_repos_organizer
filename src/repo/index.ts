@@ -1,7 +1,7 @@
 import { Repo, RepoProvider } from "../types"
-import GiteaRepo from "./GiteaRepo"
 import GitHubRepo from "./GitHubRepo"
 import GitLabRepo from "./GitLabRepo"
+import GiteaRepo from "./GiteaRepo"
 
 const GitHub = new GitHubRepo()
 const GitLab = new GitLabRepo()

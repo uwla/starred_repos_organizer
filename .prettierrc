@@ -5,7 +5,17 @@
     "endOfLine": "lf",
     "experimentalOperatorPosition": "end",
     "htmlWhitespaceSensitivity": "ignore",
+    "importOrder": [
+        "^react$",
+        "^react-dom(.*)$",
+        "<THIRD_PARTY_MODULES>",
+        "^@/(.*)$",
+        "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true,
     "objectWrap": "collapse",
+    "plugins": ["@trivago/prettier-plugin-sort-imports"],
     "printWidth": 80,
     "proseWrap": "preserve",
     "quoteProps": "consistent",

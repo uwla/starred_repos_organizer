@@ -1,12 +1,15 @@
 import { App } from "@tinyhttp/app"
 import { cors } from "@tinyhttp/cors"
-import { Data } from "json-server/lib/service"
-import { json } from "milliparsec"
-import { JSONFile } from "lowdb/node"
-import { Low } from "lowdb"
-import { Observer } from "json-server/lib/observer"
-import { watch } from "chokidar"
 import chalk from "chalk"
+import { watch } from "chokidar"
+import { Observer } from "json-server/lib/observer"
+import { Data } from "json-server/lib/service"
+import { Low } from "lowdb"
+import { JSONFile } from "lowdb/node"
+import { json } from "milliparsec"
+
+import repoProvider from "./repo"
+import { Repo } from "./types"
 import {
     addRepo,
     addRepos,
@@ -15,8 +18,6 @@ import {
     updateRepo,
     updateRepos,
 } from "./utils"
-import { Repo } from "./types"
-import repoProvider from "./repo"
 
 /* -------------------------------------------------------------------------- */
 // Set up database

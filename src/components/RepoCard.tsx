@@ -1,14 +1,14 @@
 import {
-    IconType,
-    SiAwesomelists,
-    SiC,
     SiCodeberg as IconCodeberg,
-    SiCplusplus,
-    SiCsharp,
-    SiCss3,
     SiGithub as IconGitHub,
     SiGitlab as IconGitLab,
     SiGitea as IconGitea,
+    IconType,
+    SiAwesomelists,
+    SiC,
+    SiCplusplus,
+    SiCsharp,
+    SiCss3,
     SiGnubash,
     SiHtml5,
     SiJavascript,
@@ -27,17 +27,18 @@ import {
     SiVuedotjs,
 } from "@icons-pack/react-simple-icons"
 import {
-    AltRoute as IconForks,
     Delete as IconDelete,
     Edit as IconEdit,
+    AltRoute as IconForks,
+    Settings as IconGear,
     HomeOutlined as IconHome,
     Refresh as IconRefresh,
-    Settings as IconGear,
     Star as IconStar,
 } from "@mui/icons-material"
 import { Chip } from "@mui/material"
 import { orange } from "@mui/material/colors"
 import { Card, Dropdown, Stack } from "react-bootstrap"
+
 import { Repo } from "../types"
 import "./RepoCard.css"
 

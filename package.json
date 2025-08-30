@@ -30,6 +30,7 @@
         "use-file-picker": "^2.1.1"
     },
     "devDependencies": {
+        "@trivago/prettier-plugin-sort-imports": "^5.2.2",
         "@types/bootstrap": "^5.2.10",
         "@types/json-server": "^0.14.7",
         "@types/react": "^18.2.55",

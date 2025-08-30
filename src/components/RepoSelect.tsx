@@ -1,6 +1,8 @@
-import { Button, Modal, Form } from "react-bootstrap"
-import { Checkbox } from "@mui/material"
 import { useEffect, useState } from "react"
+
+import { Checkbox } from "@mui/material"
+import { Button, Form, Modal } from "react-bootstrap"
+
 import { Repo } from "../types"
 import "./RepoSelect.css"
 

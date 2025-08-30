@@ -1,21 +1,23 @@
+import { useEffect, useState } from "react"
+
 import {
     DarkMode as IconDarkMode,
     Delete as IconDelete,
     Download as IconDownload,
     Fullscreen as IconFullscreen,
-    Refresh as IconRefresh,
     Settings as IconGear,
+    Refresh as IconRefresh,
     Upload as IconUpload,
 } from "@mui/icons-material"
-import { Dropdown } from "react-bootstrap"
-import { useEffect, useState } from "react"
 import exportFromJSON from "export-from-json"
+import { Dropdown } from "react-bootstrap"
 import { useFilePicker } from "use-file-picker"
 import { SelectedFiles } from "use-file-picker/types"
+
 import type { JsonData, Repo, Topic, TopicAliases } from "../types"
+import { now } from "../utils"
 import "./Menu.css"
 import RepoSelect from "./RepoSelect"
-import { now } from "../utils"
 
 interface Props {
     repos: Repo[]

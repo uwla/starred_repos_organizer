@@ -1,6 +1,7 @@
-import { Button, Stack, Form } from "react-bootstrap"
-import { Search as IconSearch } from "@mui/icons-material"
 import { useState } from "react"
+
+import { Search as IconSearch } from "@mui/icons-material"
+import { Button, Form, Stack } from "react-bootstrap"
 
 interface Props {
     onSubmit: (query: string) => void

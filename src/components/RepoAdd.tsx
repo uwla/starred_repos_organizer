@@ -1,6 +1,8 @@
 import { useState } from "react"
+
 import { Button, Form, Modal } from "react-bootstrap"
-import RepoProvider, { GiteaRepo, GitLabRepo } from "../repo"
+
+import RepoProvider, { GitLabRepo, GiteaRepo } from "../repo"
 import { Repo } from "../types"
 import { extractDomain } from "../utils"
 import "./RepoAdd.css"

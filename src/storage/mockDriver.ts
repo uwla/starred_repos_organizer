@@ -1,5 +1,5 @@
-import type { StorageDriver, Repo, Topic, TopicAliases } from "../types"
 import data from "../../user-data-sample.json"
+import type { Repo, StorageDriver, Topic, TopicAliases } from "../types"
 
 const repos = data.repo as Repo[]
 

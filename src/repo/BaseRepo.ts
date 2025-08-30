@@ -1,5 +1,6 @@
-import { ProviderSlugs, Repo, ResponseData, ResponseKeyMapper } from "../types"
 import axios, { AxiosInstance } from "axios"
+
+import { ProviderSlugs, Repo, ResponseData, ResponseKeyMapper } from "../types"
 import { extractDomain } from "../utils"
 
 interface Props {

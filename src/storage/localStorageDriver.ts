@@ -1,15 +1,15 @@
-import type { StorageDriver, Repo, Topic, TopicAliases } from "../types"
+import sampleData from "../../user-data-sample.json"
+import type { Repo, StorageDriver, Topic, TopicAliases } from "../types"
 import {
     addRepo,
     addRepos,
     assignId,
     delRepo,
     delRepos,
+    keepOnlyRepoTopics,
     updateRepo,
     updateRepos,
-    keepOnlyRepoTopics,
 } from "../utils"
-import sampleData from "../../user-data-sample.json"
 
 const getAllowedTopics = () => {
     return JSON.parse(localStorage.getItem("allowed_topics") || "[]")

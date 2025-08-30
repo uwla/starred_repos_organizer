@@ -1,6 +1,7 @@
-import { ViewProps } from "../types"
-import SettingsManager from "../settings"
 import { useEffect, useState } from "react"
+
+import SettingsManager from "../settings"
+import { ViewProps } from "../types"
 import Pagination from "./Pagination"
 
 function ViewPagination(props: ViewProps) {

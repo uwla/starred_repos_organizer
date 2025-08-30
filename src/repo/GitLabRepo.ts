@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios"
+
 import { Repo, RepoProvider, ResponseData, ResponseKeyMapper } from "../types"
 import BaseRepo from "./BaseRepo"
 

@@ -1,13 +1,14 @@
+import { useEffect, useState } from "react"
+
 import {
+    ArrowDownward as ArrowDownwardIcon,
+    ArrowUpward as ArrowUpwardIcon,
     Close as CloseIcon,
     Edit as EditIcon,
-    Undo as UndoIcon,
     Sort as SortIcon,
-    ArrowUpward as ArrowUpwardIcon,
-    ArrowDownward as ArrowDownwardIcon,
+    Undo as UndoIcon,
 } from "@mui/icons-material"
 import { Checkbox } from "@mui/material"
-import { useEffect, useState } from "react"
 import {
     Alert,
     Button,
@@ -18,7 +19,7 @@ import {
 } from "react-bootstrap"
 import { MultiValue } from "react-select"
 
-import type { JsonData, Repo, SelectOption, Topic, TopicAliases } from "./types"
+import "./App.css"
 import {
     Footer,
     Menu,
@@ -38,15 +39,14 @@ import {
 import RepoProvider from "./repo"
 import SettingsManager from "./settings"
 import StorageDriver from "./storage"
+import type { JsonData, Repo, SelectOption, Topic, TopicAliases } from "./types"
 import {
     applyFilters,
     extractTopics,
-    optionsToTopics,
     keepOnlyRepoTopics,
+    optionsToTopics,
     uniqueRepos,
 } from "./utils"
-
-import "./App.css"
 
 /* -------------------------------------------------------------------------- */
 // Main

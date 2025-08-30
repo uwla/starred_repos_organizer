@@ -1,4 +1,5 @@
 import { GitHub as GitHubIcon } from "@mui/icons-material"
+
 import "./Footer.css"
 
 function Footer() {

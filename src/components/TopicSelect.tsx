@@ -1,6 +1,7 @@
-import { Button, Modal, Form, Nav } from "react-bootstrap"
-import { Checkbox } from "@mui/material"
 import { useEffect, useState } from "react"
+
+import { Checkbox } from "@mui/material"
+import { Button, Form, Modal, Nav } from "react-bootstrap"
 
 import type { Topic, TopicAliases } from "../types.ts"
 import "./TopicSelect.css"

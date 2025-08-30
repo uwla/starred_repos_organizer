@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios"
-import type { StorageDriver, Repo, Topic, TopicAliases } from "../types"
+
+import type { Repo, StorageDriver, Topic, TopicAliases } from "../types"
 
 const client = axios.create({ baseURL: "http://localhost:3000/" })
 

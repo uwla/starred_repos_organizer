@@ -1,4 +1,4 @@
-import { SettingsManager, SettingsKey, Settings } from "../types"
+import { Settings, SettingsKey, SettingsManager } from "../types"
 
 /******************************************************************************/
 // Local helper functions.

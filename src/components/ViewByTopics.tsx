@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
+
+import { Accordion } from "react-bootstrap"
+
 import { NoTopicsType, Repo, ViewProps } from "../types"
 import "./ViewByTopics.css"
-import { Accordion } from "react-bootstrap"
 
 function ViewByTopics(props: ViewProps) {
     const {

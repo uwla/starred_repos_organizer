@@ -1,6 +1,7 @@
-import CreatableSelect from "react-select/creatable"
-import makeAnimated from "react-select/animated"
 import Select, { MultiValue } from "react-select"
+import makeAnimated from "react-select/animated"
+import CreatableSelect from "react-select/creatable"
+
 import { NoTopicsType, SelectOption } from "../types"
 import { topicsToOptions } from "../utils"
 import "./TopicFilter.css"
