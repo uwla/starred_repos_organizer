@@ -1,7 +1,7 @@
-import { ViewProps } from "../types";
-import SettingsManager from "../settings";
-import { useEffect, useState } from "react";
-import Pagination from "./Pagination";
+import { ViewProps } from "../types"
+import SettingsManager from "../settings"
+import { useEffect, useState } from "react"
+import Pagination from "./Pagination"
 
 function ViewPagination(props: ViewProps) {
     const {
@@ -12,14 +12,14 @@ function ViewPagination(props: ViewProps) {
         onDelete,
         onTopicClicked,
         Display,
-    } = props;
+    } = props
 
-    const defaultPerPage = Number(SettingsManager.get('perPage')) || 20;
-    const [page, setPage] = useState(0);
-    const [perPage, setPerPage] = useState(defaultPerPage);
+    const defaultPerPage = Number(SettingsManager.get("perPage")) || 20
+    const [page, setPage] = useState(0)
+    const [perPage, setPerPage] = useState(defaultPerPage)
 
     function handlePageChange(page: number) {
-        setPage(page);
+        setPage(page)
     }
 
     function handlePerPageChange(newPerPage: number) {
@@ -27,13 +27,13 @@ function ViewPagination(props: ViewProps) {
             return
         }
 
-        const firstEntryIndex = 1 + (page ) * perPage
+        const firstEntryIndex = 1 + page * perPage
         let newPage = Math.ceil(firstEntryIndex / newPerPage)
         newPage = Math.max(0, newPage - 1) // because index starts from 0
 
-        setPage(newPage);
-        setPerPage(newPerPage);
-        SettingsManager.set('perPage', String(newPerPage));
+        setPage(newPage)
+        setPerPage(newPerPage)
+        SettingsManager.set("perPage", String(newPerPage))
     }
 
     useEffect(() => {
@@ -71,7 +71,7 @@ function ViewPagination(props: ViewProps) {
                 onPerPageChange={handlePerPageChange}
             />
         </>
-    );
+    )
 }
 
-export default ViewPagination;
+export default ViewPagination

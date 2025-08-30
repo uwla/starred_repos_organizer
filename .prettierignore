@@ -1,0 +1,10 @@
+assets/
+build/
+data/
+dist/
+node_modules/
+index.html
+.github/
+*.md
+*.min.js
+*.json

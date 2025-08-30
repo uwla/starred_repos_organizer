@@ -1,22 +1,22 @@
-import { StorageDriver } from "../types";
-import localStorageDriver from "./localStorageDriver";
-import mockDriver from "./mockDriver";
-import restApiDriver from "./restApiDriver";
+import { StorageDriver } from "../types"
+import localStorageDriver from "./localStorageDriver"
+import mockDriver from "./mockDriver"
+import restApiDriver from "./restApiDriver"
 
-const STORAGE_DRIVER = import.meta.env.VITE_STORAGE_DRIVER;
+const STORAGE_DRIVER = import.meta.env.VITE_STORAGE_DRIVER
 
-let storageDriver = {} as StorageDriver;
+let storageDriver = {} as StorageDriver
 
 switch (STORAGE_DRIVER) {
     case "mock":
-        storageDriver = mockDriver;
-        break;
+        storageDriver = mockDriver
+        break
     case "rest":
-        storageDriver = restApiDriver;
-        break;
+        storageDriver = restApiDriver
+        break
     case "local":
     default:
-        storageDriver = localStorageDriver;
+        storageDriver = localStorageDriver
 }
 
-export default storageDriver;
+export default storageDriver

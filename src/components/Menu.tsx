@@ -6,28 +6,28 @@ import {
     Refresh as IconRefresh,
     Settings as IconGear,
     Upload as IconUpload,
-} from "@mui/icons-material";
-import { Dropdown } from "react-bootstrap";
-import { useEffect, useState } from "react";
-import exportFromJSON from "export-from-json";
-import { useFilePicker } from "use-file-picker";
-import { SelectedFiles } from "use-file-picker/types";
-import type { JsonData, Repo, Topic, TopicAliases } from "../types";
-import "./Menu.css";
-import RepoSelect from "./RepoSelect";
-import { now } from "../utils";
+} from "@mui/icons-material"
+import { Dropdown } from "react-bootstrap"
+import { useEffect, useState } from "react"
+import exportFromJSON from "export-from-json"
+import { useFilePicker } from "use-file-picker"
+import { SelectedFiles } from "use-file-picker/types"
+import type { JsonData, Repo, Topic, TopicAliases } from "../types"
+import "./Menu.css"
+import RepoSelect from "./RepoSelect"
+import { now } from "../utils"
 
 interface Props {
-    repos: Repo[];
-    topicsAllowed: Topic[];
-    topicAliases: TopicAliases;
-    filtered: Repo[];
-    onImport: (data: JsonData) => void;
-    onDelete: (repos: Repo[]) => Promise<void>;
-    onRefresh: (repos: Repo[]) => Promise<void>;
-    onToggleExpand: () => void;
-    onToggleTheme: () => void;
-    sortFn: (a: Repo, b: Repo) => number;
+    repos: Repo[]
+    topicsAllowed: Topic[]
+    topicAliases: TopicAliases
+    filtered: Repo[]
+    onImport: (data: JsonData) => void
+    onDelete: (repos: Repo[]) => Promise<void>
+    onRefresh: (repos: Repo[]) => Promise<void>
+    onToggleExpand: () => void
+    onToggleTheme: () => void
+    sortFn: (a: Repo, b: Repo) => number
 }
 
 function Menu(props: Props) {
@@ -42,10 +42,10 @@ function Menu(props: Props) {
         onToggleExpand,
         onToggleTheme,
         sortFn,
-    } = props;
+    } = props
 
-    const [toDelete, setToDelete] = useState([] as Repo[]);
-    const [toExport, setToExport] = useState([] as Repo[]);
+    const [toDelete, setToDelete] = useState([] as Repo[])
+    const [toExport, setToExport] = useState([] as Repo[])
     const [hasFilters, setHasFilters] = useState(false)
 
     // Handles importing files.
@@ -53,33 +53,31 @@ function Menu(props: Props) {
         accept: ".json",
         multiple: false,
         onFilesSuccessfullySelected: (files: SelectedFiles<string>) => {
-            const rawData = JSON.parse(files.filesContent[0].content);
+            const rawData = JSON.parse(files.filesContent[0].content)
             const data = {
                 date: rawData.date || now(),
                 repos: rawData.repos || rawData.repo, // compability with older versions
                 topics_allowed: rawData.topics_allowed || [],
                 topic_aliases: rawData.topic_aliases || [],
             }
-            onImport(data);
+            onImport(data)
         },
-    });
+    })
 
     // Handles exporting files.
     function handleDownload(repos: Repo[]) {
-        if (repos.length === 0) return;
-        setToExport([]);
+        if (repos.length === 0) return
+        setToExport([])
         const data: JsonData = {
             date: now(),
             repos: repos,
             topics_allowed: topicsAllowed,
             topic_aliases: topicAliases,
-        };
-        const date = now()
-            .replace('T', '_')
-            .replace(/\..*$/, '');
-        const fileName = "starred-repos_" + date;
-        const exportType = exportFromJSON.types.json;
-        exportFromJSON({ data, fileName, exportType });
+        }
+        const date = now().replace("T", "_").replace(/\..*$/, "")
+        const fileName = "starred-repos_" + date
+        const exportType = exportFromJSON.types.json
+        exportFromJSON({ data, fileName, exportType })
     }
 
     function hideModal() {
@@ -96,7 +94,10 @@ function Menu(props: Props) {
 
     return (
         <>
-            <Dropdown id="menu" align="end">
+            <Dropdown
+                id="menu"
+                align="end"
+            >
                 <Dropdown.Toggle variant="light">
                     <IconGear />
                 </Dropdown.Toggle>
@@ -108,7 +109,7 @@ function Menu(props: Props) {
                     {repos.length > 0 && (
                         <Dropdown.Item onClick={() => setToExport(repos)}>
                             <IconDownload />
-                            <span>{hasFilters ? 'EXPORT ALL' : 'EXPORT'}</span>
+                            <span>{hasFilters ? "EXPORT ALL" : "EXPORT"}</span>
                         </Dropdown.Item>
                     )}
                     {hasFilters && (
@@ -120,7 +121,7 @@ function Menu(props: Props) {
                     {repos.length > 0 && (
                         <Dropdown.Item onClick={() => setToDelete(repos)}>
                             <IconDelete />
-                            <span>{hasFilters ? 'DELETE ALL' : 'DELETE'}</span>
+                            <span>{hasFilters ? "DELETE ALL" : "DELETE"}</span>
                         </Dropdown.Item>
                     )}
                     {hasFilters && (
@@ -132,7 +133,9 @@ function Menu(props: Props) {
                     {repos.length > 0 && (
                         <Dropdown.Item onClick={() => onRefresh(repos)}>
                             <IconRefresh />
-                            <span>{hasFilters ? 'REFRESH ALL' : 'REFRESH'}</span>
+                            <span>
+                                {hasFilters ? "REFRESH ALL" : "REFRESH"}
+                            </span>
                         </Dropdown.Item>
                     )}
                     {hasFilters && (
@@ -164,7 +167,7 @@ function Menu(props: Props) {
                 onSelect={handleDownload}
             />
         </>
-    );
+    )
 }
 
-export default Menu;
+export default Menu

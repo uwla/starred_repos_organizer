@@ -1,29 +1,29 @@
-import { ChangeEvent, MouseEvent } from "react";
-import TablePagination from "@mui/material/TablePagination";
-import "./Pagination.css";
+import { ChangeEvent, MouseEvent } from "react"
+import TablePagination from "@mui/material/TablePagination"
+import "./Pagination.css"
 
 interface Props {
-    count: number;
-    page: number;
-    perPage: number;
-    onPageChange: (page: number) => void;
-    onPerPageChange: (perPage: number) => void;
+    count: number
+    page: number
+    perPage: number
+    onPageChange: (page: number) => void
+    onPerPageChange: (perPage: number) => void
 }
 
 export default function Pagination(props: Props) {
-    const { count, perPage, page, onPageChange, onPerPageChange } = props;
+    const { count, perPage, page, onPageChange, onPerPageChange } = props
 
     function handleChangePage(
         _event: MouseEvent<HTMLButtonElement> | null,
         newPage: number
     ) {
-        onPageChange(newPage);
+        onPageChange(newPage)
     }
 
     function handleChangeRowsPerPage(event: ChangeEvent<HTMLInputElement>) {
-        const value = parseInt(event.target.value, 10);
-        onPageChange(0);
-        onPerPageChange(value);
+        const value = parseInt(event.target.value, 10)
+        onPageChange(0)
+        onPerPageChange(value)
     }
 
     return (
@@ -34,7 +34,7 @@ export default function Pagination(props: Props) {
                     component="div"
                     count={count}
                     page={page}
-                    rowsPerPageOptions={[10,20, 50, 100, 200]}
+                    rowsPerPageOptions={[10, 20, 50, 100, 200]}
                     onPageChange={handleChangePage}
                     labelRowsPerPage={`Showing ${perPage} items:`}
                     rowsPerPage={perPage}
@@ -42,5 +42,5 @@ export default function Pagination(props: Props) {
                 />
             )}
         </>
-    );
+    )
 }

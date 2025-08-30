@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { NoTopicsType, Repo, ViewProps } from "../types";
-import "./ViewByTopics.css";
-import { Accordion } from "react-bootstrap";
+import { useEffect, useState } from "react"
+import { NoTopicsType, Repo, ViewProps } from "../types"
+import "./ViewByTopics.css"
+import { Accordion } from "react-bootstrap"
 
 function ViewByTopics(props: ViewProps) {
     const {
@@ -13,42 +13,45 @@ function ViewByTopics(props: ViewProps) {
         onDelete,
         onTopicClicked,
         Display,
-    } = props;
+    } = props
 
-    const [map, setMap] = useState({} as { [key: string]: Repo[] });
-    const [currentTopic, setCurrentTopic] = useState("");
+    const [map, setMap] = useState({} as { [key: string]: Repo[] })
+    const [currentTopic, setCurrentTopic] = useState("")
 
     function updateMap() {
-        const newMap = {} as { [key: string]: Repo[] };
-        repos.forEach((repo) => {
-            let topics = repo.topics;
+        const newMap = {} as { [key: string]: Repo[] }
+        repos.forEach(repo => {
+            let topics = repo.topics
             if (topics.length === 0) {
-                topics = [NoTopicsType];
+                topics = [NoTopicsType]
             }
-            topics.forEach((topic) => {
+            topics.forEach(topic => {
                 if (!newMap[topic]) {
-                    newMap[topic] = [];
+                    newMap[topic] = []
                 }
-                newMap[topic].push(repo);
-            });
-        });
-        setMap(newMap);
+                newMap[topic].push(repo)
+            })
+        })
+        setMap(newMap)
     }
 
     useEffect(() => {
-        updateMap();
-    }, [repos]);
+        updateMap()
+    }, [repos])
 
     return (
         <Accordion
             className="topic-view"
-            onSelect={(t) => setCurrentTopic(t as string)}
+            onSelect={t => setCurrentTopic(t as string)}
         >
             {Object.keys(map)
-                .filter((t) => !(topics.length > 0 && !topics.includes(t)))
+                .filter(t => !(topics.length > 0 && !topics.includes(t)))
                 .sort()
-                .map((topic) => (
-                    <Accordion.Item key={topic} eventKey={topic}>
+                .map(topic => (
+                    <Accordion.Item
+                        key={topic}
+                        eventKey={topic}
+                    >
                         <Accordion.Header>
                             {topic} ({map[topic].length})
                         </Accordion.Header>
@@ -66,7 +69,7 @@ function ViewByTopics(props: ViewProps) {
                     </Accordion.Item>
                 ))}
         </Accordion>
-    );
+    )
 }
 
-export default ViewByTopics;
+export default ViewByTopics

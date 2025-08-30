@@ -15,7 +15,7 @@
 .select-menu label {
     display: block;
     width: 100%;
-    padding: .5em 0;
+    padding: 0.5em 0;
 }
 
 .select-menu > .select-checkbox:hover {
@@ -31,5 +31,5 @@ body.dark .select-menu > .select-checkbox:hover {
 }
 
 .select-menu-empty {
-    padding: .5em 0;
+    padding: 0.5em 0;
 }

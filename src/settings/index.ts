@@ -1,14 +1,14 @@
-import { SettingsManager, SettingsKey, Settings } from '../types';
+import { SettingsManager, SettingsKey, Settings } from "../types"
 
 /******************************************************************************/
 // Local helper functions.
 
 function getSettings(): Settings {
-    return JSON.parse(localStorage.getItem("settings") || "{}") as Settings;
+    return JSON.parse(localStorage.getItem("settings") || "{}") as Settings
 }
 
 function setSettings(settings: Settings): void {
-    localStorage.setItem("settings", JSON.stringify(settings));
+    localStorage.setItem("settings", JSON.stringify(settings))
 }
 
 /*
@@ -24,13 +24,13 @@ function setSettings(settings: Settings): void {
  */
 const localStorageSettingsManager: SettingsManager = {
     set(key: SettingsKey, value: string) {
-        const settings = getSettings();
-        settings[key] = value;
-        setSettings(settings);
+        const settings = getSettings()
+        settings[key] = value
+        setSettings(settings)
     },
     get(key: SettingsKey): string {
-        return getSettings()[key] || "";
-    }
+        return getSettings()[key] || ""
+    },
 }
 
-export default localStorageSettingsManager;
+export default localStorageSettingsManager

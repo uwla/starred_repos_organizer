@@ -13,12 +13,23 @@ body.dark .topic-filter > div:first-of-type {
     background-color: #000;
 }
 
-body.dark .topic-filter > div:first-of-type > div > div:not(:last-of-type) > div {
+body.dark
+    .topic-filter
+    > div:first-of-type
+    > div
+    > div:not(:last-of-type)
+    > div {
     background-color: #ccc;
     color: #000;
 }
 
-body.dark .topic-filter > div:first-of-type > div > div:not(:last-of-type) > div > div {
+body.dark
+    .topic-filter
+    > div:first-of-type
+    > div
+    > div:not(:last-of-type)
+    > div
+    > div {
     color: #000;
 }
 

@@ -1,68 +1,68 @@
-import { ProviderSlugs, Repo, ResponseData, ResponseKeyMapper } from "../types";
-import axios, { AxiosInstance } from "axios";
-import { extractDomain } from "../utils";
+import { ProviderSlugs, Repo, ResponseData, ResponseKeyMapper } from "../types"
+import axios, { AxiosInstance } from "axios"
+import { extractDomain } from "../utils"
 
 interface Props {
-    baseURL: string,
-    domain?: string,
-    providerSlug?: ProviderSlugs,
+    baseURL: string
+    domain?: string
+    providerSlug?: ProviderSlugs
 }
 
 abstract class BaseRepo {
-    apiClient: AxiosInstance;
-    domain: string;
-    providerSlug: ProviderSlugs;
+    apiClient: AxiosInstance
+    domain: string
+    providerSlug: ProviderSlugs
 
-    constructor({baseURL, domain, providerSlug} : Props) {
-        this.apiClient = axios.create({ baseURL });
-        this.domain = domain || extractDomain(baseURL);
-        this.providerSlug = providerSlug || "url";
+    constructor({ baseURL, domain, providerSlug }: Props) {
+        this.apiClient = axios.create({ baseURL })
+        this.domain = domain || extractDomain(baseURL)
+        this.providerSlug = providerSlug || "url"
 
         // Sometimes the `this` keyword becomes undefined in class methods  when
         // the method is passed as an argument to a high-order function. In that
         // case, we need to bind `this`.
-        this.parseResponse = this.parseResponse.bind(this);
+        this.parseResponse = this.parseResponse.bind(this)
     }
 
-    abstract responseDataMapper(): ResponseKeyMapper;
+    abstract responseDataMapper(): ResponseKeyMapper
 
     parseResponse(data: ResponseData): Repo {
-        const map = this.responseDataMapper();
-        const repo = {} as Repo;
+        const map = this.responseDataMapper()
+        const repo = {} as Repo
         for (const key in map) {
-            let val: never = data[key];
+            let val: never = data[key]
 
             if (key.includes(".")) {
-                val = data as never;
+                val = data as never
                 for (const k of key.split(".")) {
-                    val = val[k];
-                    if (val == null) break;
+                    val = val[k]
+                    if (val == null) break
                 }
             }
 
-            repo[map[key]] = val as never;
+            repo[map[key]] = val as never
         }
 
         // Some providers: GitHub, GitLab, Codeberg, Gitea, Gogs, ...
-        repo.provider = this.providerSlug;
+        repo.provider = this.providerSlug
 
-        return repo;
+        return repo
     }
 
     extractRepoFullNameFromUrl(url: string): string[] {
-        const match = url.match(/[\d\w.]+\.[\d\w]+\/([^/]+)\/([^/?#]+)/i);
+        const match = url.match(/[\d\w.]+\.[\d\w]+\/([^/]+)\/([^/?#]+)/i)
         if (match == null) {
-            throw new Error("Repository URL is ill-formed.");
+            throw new Error("Repository URL is ill-formed.")
         }
 
-        const userName = match[1];
-        const repoName = match[2];
-        return [userName, repoName];
+        const userName = match[1]
+        const repoName = match[2]
+        return [userName, repoName]
     }
 
     matchURL(url: string): boolean {
-        return url.match(RegExp(`^(https?://)?${this.domain}/`)) != null;
+        return url.match(RegExp(`^(https?://)?${this.domain}/`)) != null
     }
 }
 
-export default BaseRepo;
+export default BaseRepo

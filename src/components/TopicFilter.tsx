@@ -1,23 +1,23 @@
 import CreatableSelect from "react-select/creatable"
-import makeAnimated from "react-select/animated";
-import Select, { MultiValue } from "react-select";
-import { NoTopicsType, SelectOption } from "../types";
-import { topicsToOptions } from "../utils";
-import './TopicFilter.css'
+import makeAnimated from "react-select/animated"
+import Select, { MultiValue } from "react-select"
+import { NoTopicsType, SelectOption } from "../types"
+import { topicsToOptions } from "../utils"
+import "./TopicFilter.css"
 
-const animatedComponents = makeAnimated();
+const animatedComponents = makeAnimated()
 
 interface Props {
-    topics: string[];
-    selected: SelectOption[];
-    creatable?: boolean;
-    onSelect: (val: MultiValue<SelectOption>) => void;
+    topics: string[]
+    selected: SelectOption[]
+    creatable?: boolean
+    onSelect: (val: MultiValue<SelectOption>) => void
 }
 
 function TopicFilter(props: Props) {
-    const { creatable, topics, selected, onSelect } = props;
-    const options = topicsToOptions([...topics, NoTopicsType]);
-    const SelectComponent = creatable ? CreatableSelect : Select;
+    const { creatable, topics, selected, onSelect } = props
+    const options = topicsToOptions([...topics, NoTopicsType])
+    const SelectComponent = creatable ? CreatableSelect : Select
 
     return (
         <SelectComponent
@@ -32,7 +32,7 @@ function TopicFilter(props: Props) {
             closeMenuOnScroll={false}
             components={animatedComponents}
         />
-    );
+    )
 }
 
-export default TopicFilter;
+export default TopicFilter

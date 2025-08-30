@@ -1,9 +1,9 @@
-import { DisplayProps, Repo } from "../types";
-import RepoCard from "./RepoCard";
-import './RepoGrid.css'
+import { DisplayProps, Repo } from "../types"
+import RepoCard from "./RepoCard"
+import "./RepoGrid.css"
 
 function RepoGrid(props: DisplayProps) {
-    const { repos, onEdit, onDelete, onRefresh, onTopicClicked } = props;
+    const { repos, onEdit, onDelete, onRefresh, onTopicClicked } = props
     return (
         <div className="repo-grid">
             {repos.map((repo: Repo) => {
@@ -16,10 +16,10 @@ function RepoGrid(props: DisplayProps) {
                         onEdit={onEdit}
                         onDelete={onDelete}
                     />
-                );
+                )
             })}
         </div>
-    );
+    )
 }
 
-export default RepoGrid;
+export default RepoGrid

@@ -12,7 +12,10 @@ html {
     width: 100%;
 }
 
-label, button, [type=button], a[href] {
+label,
+button,
+[type="button"],
+a[href] {
     cursor: pointer;
 }
 
@@ -35,7 +38,7 @@ label, button, [type=button], a[href] {
     margin-right: 5%;
 }
 
-#app>* {
+#app > * {
     margin-top: 1em;
 }
 
@@ -47,8 +50,8 @@ label, button, [type=button], a[href] {
 
 #display-options {
     flex-wrap: wrap;
-    column-gap: .75rem;
-    row-gap: .5rem;
+    column-gap: 0.75rem;
+    row-gap: 0.5rem;
 }
 
 /* ────────────────────────────────────────────────────────────────────── */
@@ -70,7 +73,7 @@ label, button, [type=button], a[href] {
     flex-direction: row;
 }
 
-#app .stack-filter> :first-child {
+#app .stack-filter > :first-child {
     flex-grow: 1;
 }
 
@@ -78,7 +81,7 @@ body .MuiChip-label:hover {
     text-decoration: underline;
 }
 
-body div[id^="react-select"][id$="listbox"]  >div>div {
+body div[id^="react-select"][id$="listbox"] > div > div {
     cursor: pointer;
 }
 
@@ -86,7 +89,7 @@ body div[id^="react-select"][id$="listbox"]  >div>div {
 /* UTILS */
 
 .flex {
-    display: flex
+    display: flex;
 }
 
 .flex-grow {
@@ -98,7 +101,7 @@ body div[id^="react-select"][id$="listbox"]  >div>div {
 }
 
 .ml-auto {
-    margin-left: auto
+    margin-left: auto;
 }
 
 /* ────────────────────────────────────────────────────────────────────── */
@@ -118,13 +121,13 @@ body div[id^="react-select"][id$="listbox"]  >div>div {
     gap: 0.3em;
 }
 
-.toasts .toast>button {
+.toasts .toast > button {
     display: flex;
     border-radius: 0;
     padding: 0 0.25em;
 }
 
-.toasts .toast>button.close {
+.toasts .toast > button.close {
     padding: 0;
 }
 
@@ -143,8 +146,7 @@ body.dark {
     --dark-menu-border-color: #2b296c;
     --dark-menu-chip-bg: #2b296c;
     --dark-accordion-btn-bg: #198754;
-    --dark-accordion-btn-color: #000
-    --dark-btn-dark-color: #aaa;
+    --dark-accordion-btn-color: #000 --dark-btn-dark-color: #aaa;
     --dark-btn-dark-color-hover: #fff;
     background: var(--dark-bg);
     color: var(--dark-color);
@@ -252,13 +254,12 @@ body.dark div[id^="react-select"][id$="listbox"] {
     background-color: var(--dark-menu-bg);
 }
 
-body.dark div[id^="react-select"][id$="listbox"]>div>div {
+body.dark div[id^="react-select"][id$="listbox"] > div > div {
     border: 1px solid var(--dark-menu-border-color);
     background-color: var(--dark-bg);
     color: var(--dark-color);
 }
 
-body.dark div[id^="react-select"][id$="listbox"]>div>div:hover {
+body.dark div[id^="react-select"][id$="listbox"] > div > div:hover {
     background-color: var(--dark-menu-chip-bg);
 }
-

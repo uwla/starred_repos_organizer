@@ -1,6 +1,6 @@
 .tablist {
     display: flex;
-    gap: .5em;
+    gap: 0.5em;
     margin-bottom: 1em;
 }
 
@@ -8,8 +8,9 @@
     background-color: green;
 }
 
-#allowed-topics p, #alias-list p {
-    margin-bottom: .5em;
+#allowed-topics p,
+#alias-list p {
+    margin-bottom: 0.5em;
 }
 
 #allowed-topics textarea {
