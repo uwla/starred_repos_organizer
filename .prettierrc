@@ -15,7 +15,10 @@
     "importOrderSeparation": true,
     "importOrderSortSpecifiers": true,
     "objectWrap": "collapse",
-    "plugins": ["@trivago/prettier-plugin-sort-imports"],
+    "plugins": [
+        "@trivago/prettier-plugin-sort-imports",
+        "prettier-plugin-css-order"
+    ],
     "printWidth": 80,
     "proseWrap": "preserve",
     "quoteProps": "consistent",

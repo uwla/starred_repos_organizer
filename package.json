@@ -46,6 +46,7 @@
         "eslint": "^8.56.0",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-react-refresh": "^0.4.5",
+        "prettier-plugin-css-order": "^2.1.2",
         "react-compiler-runtime": "^19.0.0-beta-e1e972c-20250221",
         "typescript": "^5.2.2",
         "vite": "^5.1.0",
