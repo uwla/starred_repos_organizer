@@ -532,8 +532,8 @@ function App() {
 
                 {/* DISPLAY OPTIONS */}
                 <Stack
-                    direction="horizontal"
                     id="display-options"
+                    direction="horizontal"
                 >
                     {/* SORT BY */}
                     <Stack

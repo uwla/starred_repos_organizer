@@ -111,8 +111,8 @@ function RepoAdd(props: Props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Control
-                        autoFocus
                         id="repo_url"
+                        autoFocus
                         required
                         type="url"
                         value={url}

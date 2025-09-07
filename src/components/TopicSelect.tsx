@@ -194,11 +194,11 @@ function TopicSelect(props: Props) {
                                                 className="select-checkbox"
                                             >
                                                 <Checkbox
+                                                    id={cssId}
                                                     checked={checked}
                                                     onChange={() =>
                                                         toggleChecked(topic)
                                                     }
-                                                    id={cssId}
                                                 />
                                                 <label htmlFor={cssId}>
                                                     {topic}

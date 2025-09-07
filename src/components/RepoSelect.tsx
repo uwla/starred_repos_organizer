@@ -85,9 +85,9 @@ function RepoSelect(props: Props) {
                                     className="select-checkbox"
                                 >
                                     <Checkbox
+                                        id={cssId}
                                         checked={checked}
                                         onChange={() => toggleChecked(repo.url)}
-                                        id={cssId}
                                     />
                                     <label htmlFor={cssId}>
                                         <a href={url}>{full_name}</a>

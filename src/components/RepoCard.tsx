@@ -96,8 +96,8 @@ function RepoCard(props: Props) {
                     align="end"
                 >
                     <Dropdown.Toggle
-                        variant="light"
                         id="dropdown-basic"
+                        variant="light"
                     >
                         <IconGear fontSize="small" />
                     </Dropdown.Toggle>
