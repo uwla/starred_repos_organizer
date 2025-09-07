@@ -1,5 +1,6 @@
 {
     "arrowParens": "avoid",
+    "attributeGroups": ["^(id|name)$", "^class$", "$DEFAULT", "^aria-"],
     "bracketSameLine": false,
     "bracketSpacing": true,
     "endOfLine": "lf",
@@ -17,6 +18,7 @@
     "objectWrap": "collapse",
     "plugins": [
         "@trivago/prettier-plugin-sort-imports",
+        "@xeonlink/prettier-plugin-organize-attributes",
         "prettier-plugin-css-order"
     ],
     "printWidth": 80,
