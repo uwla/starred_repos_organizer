@@ -14,8 +14,8 @@
 
 .select-menu label {
     display: block;
-    width: 100%;
     padding: 0.5em 0;
+    width: 100%;
 }
 
 .select-menu > .select-checkbox:hover {

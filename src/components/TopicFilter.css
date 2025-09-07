@@ -1,8 +1,8 @@
 #app .topic-filter {
     display: flex;
     flex-direction: row;
-    width: 100%;
     align-items: stretch;
+    width: 100%;
 }
 
 #app .topic-filter > div {

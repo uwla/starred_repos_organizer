@@ -5,6 +5,6 @@
 }
 
 .custom-provider > * {
-    width: auto !important;
     margin: 0;
+    width: auto !important;
 }

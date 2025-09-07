@@ -6,9 +6,9 @@
 }
 
 .repo-details {
-    flex-wrap: wrap;
     column-gap: 0.5rem;
     row-gap: 0.25rem;
+    flex-wrap: wrap;
 }
 
 .repo-details > a {

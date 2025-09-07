@@ -23,19 +23,19 @@ a[href] {
 /* APP */
 
 #app {
+    /* 2.5em = 1.5em (footer line-height) + 1em (footer padding) */
+    position: relative;
     padding-top: 2rem;
     padding-bottom: 3rem;
     max-width: 900px;
     min-height: calc(100vh - 2.5rem);
-    /* 2.5em = 1.5em (footer line-height) + 1em (footer padding) */
-    position: relative;
 }
 
 #app.full-width {
+    margin-right: 5%;
+    margin-left: 5%;
     width: 90%;
     max-width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
 }
 
 #app > * {
@@ -49,9 +49,9 @@ a[href] {
 }
 
 #display-options {
-    flex-wrap: wrap;
     column-gap: 0.75rem;
     row-gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
 /* ────────────────────────────────────────────────────────────────────── */
@@ -69,8 +69,8 @@ a[href] {
 /* FIXES */
 
 #app .stack-filter {
-    gap: 0.5em;
     flex-direction: row;
+    gap: 0.5em;
 }
 
 #app .stack-filter > :first-child {
@@ -201,15 +201,15 @@ body.dark input.form-control {
 }
 
 body.dark input.form-control::-webkit-input-placeholder {
-    color: var(--dark-color);
     opacity: 1 !important;
+    color: var(--dark-color);
 }
 
 /* MATERIAL UI */
 
 body.dark .MuiChip-label {
-    color: var(--dark-chip-bg);
     border: 1px solid var(--dark-chip-bg);
+    color: var(--dark-chip-bg);
 }
 
 body.dark .MuiCheckbox-root {
@@ -217,8 +217,8 @@ body.dark .MuiCheckbox-root {
 }
 
 body.dark .MuiTablePagination-toolbar {
-    color: var(--dark-color);
     background-color: var(--dark-bg);
+    color: var(--dark-color);
 }
 
 body.dark .MuiTablePagination-toolbar svg {
@@ -226,10 +226,10 @@ body.dark .MuiTablePagination-toolbar svg {
 }
 
 body.dark .MuiList-root {
-    color: var(--dark-color);
-    background-color: var(--dark-bg);
     border: 1px solid var(--dark-color);
     border-radius: 5px;
+    background-color: var(--dark-bg);
+    color: var(--dark-color);
 }
 
 body.dark .MuiTablePagination-input {
