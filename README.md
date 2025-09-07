@@ -130,7 +130,7 @@ The server can run remotely or locally.
 - [x] Group items by topic
 - [x] Filter topics by allowed-list
 - [x] Prevent duplicated topics using aliases
-- [ ] Refresh all repositories at once
+- [-] Refresh all repositories at once
 - [x] Support for GitHub
 - [x] Support for GitLab
 - [x] Support for CodeBerg
@@ -139,7 +139,7 @@ The server can run remotely or locally.
 - [ ] Support for self-hosted Gogs instance
 - [x] Option to specify provider type
 - [ ] Option to set auth tokens
-- [ ] Self-host with Docker
+- [-] Self-host with Docker
 - [ ] Rest API documentation
 
 ## Credits
