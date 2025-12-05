@@ -50,7 +50,7 @@ interface Props {
     onTopicClicked: (topic: string) => void
 }
 
-const languageIcons = {
+const languageIcons: Record<string, IconType> = {
     "bash": SiGnubash,
     "c": SiC,
     "c#": SiCsharp,
@@ -71,7 +71,7 @@ const languageIcons = {
     "typescript": SiTypescript,
     "vim": SiVim,
     "vue": SiVuedotjs,
-} as { [key: string]: IconType }
+}
 
 function RepoCard(props: Props) {
     const {

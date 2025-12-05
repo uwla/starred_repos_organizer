@@ -107,7 +107,9 @@ function RepoSelect(props: Props) {
                 >
                     CANCEL
                 </Button>
-                <Button onClick={handleSubmit}>CONFIRM</Button>
+                <Button onClick={handleSubmit}>
+                    CONFIRM
+                </Button>
             </Modal.Footer>
         </Modal>
     )
