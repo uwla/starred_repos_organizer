@@ -95,7 +95,9 @@ function RepoSelect(props: Props) {
                                 </div>
                             )
                         })}
-                    <div className="select-menu-empty">No topic found.</div>
+                    <div className="select-menu-empty">
+                        No repositories found.
+                    </div>
                 </div>
             </Modal.Body>
             <Modal.Footer>
