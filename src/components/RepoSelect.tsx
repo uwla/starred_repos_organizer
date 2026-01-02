@@ -6,20 +6,20 @@ import { Button, Form, Modal } from "react-bootstrap"
 import { Repo } from "../types"
 import "./RepoSelect.css"
 
-interface Props {
+type RepoSelectProps = {
     repos: Repo[]
     onSelect: (repos: Repo[]) => void
     title: string
 }
 
-interface RepoCheckbox {
+type RepoCheckbox = {
     repo: Repo
     checked: boolean
 }
 
 const mapChecked = (r: Repo) => ({ repo: r, checked: true }) as RepoCheckbox
 
-function RepoSelect(props: Props) {
+function RepoSelect(props: RepoSelectProps) {
     const { repos, onSelect, title } = props
     const [checkboxes, setCheckboxes] = useState(repos.map(mapChecked))
     const [search, setSearch] = useState("")
