@@ -302,7 +302,7 @@ function App() {
         return await StorageDriver.createMany(manyRepos)
             .then(created => {
                 updateStateRepos(uniqueRepos([...created, ...repos]))
-                setSuccessMsg("Repositories added")
+                setSuccessMsg(`${manyRepos.length} repositories added.`)
                 return true
             })
             .catch(() => {
@@ -335,7 +335,7 @@ function App() {
         if (repos.length === 0) return
         await StorageDriver.deleteMany(repos)
             .then(fetchData)
-            .then(() => setSuccessMsg(`${repos.length} repos deleted`))
+            .then(() => setSuccessMsg(`${repos.length} repositories deleted.`))
     }
 
     async function handleRefreshMany(reposToRefresh: Repo[]) {
@@ -352,7 +352,7 @@ function App() {
             updated.id = repo.id
             freshRepos.push(updated)
             updatedCount += 1
-            setSuccessMsg(`fetching ${updatedCount}/${reposToRefresh.length}`)
+            setSuccessMsg(`Fetching ${updatedCount}/${reposToRefresh.length}`)
         }
 
         await StorageDriver.updateMany(freshRepos)
@@ -371,7 +371,7 @@ function App() {
                 setRepos(newRepos)
                 setFilteredRepos(newFiltered)
                 setTopics(extractTopics(newRepos))
-                setSuccessMsg(`Repos refreshed!`)
+                setSuccessMsg(`${freshRepos.length} repositories refreshed!`)
             })
             .catch(() => {
                 setErrorMsg(`Failed to save data.`)
@@ -418,7 +418,7 @@ function App() {
 
         return updateSingleRepo(repo)
             .then(() => {
-                setSuccessMsg("Repo updated")
+                setSuccessMsg("Repository updated")
                 return true
             })
             .catch(() => {
