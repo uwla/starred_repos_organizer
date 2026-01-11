@@ -2,13 +2,14 @@ name: starred-repos-organizer
 
 services:
     app:
-        image: starred-repos-organizer
+        image: node:24
         container_name: sro
-        build:
-            context: .
-        volumes:
-            - ./user-data.json:/home/node/app/user-data.json
         ports:
             - 3000:3000
             - 5173:5173
+        volumes:
+            - .:/home/node/app
+        user: "1000"
+        working_dir: /home/node/app
+        command: ["npm", "run", "dev:rest"]
         restart: unless-stopped

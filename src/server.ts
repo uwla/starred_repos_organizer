@@ -1,12 +1,13 @@
+import chalk from "chalk"
 import { App } from "@tinyhttp/app"
 import { cors } from "@tinyhttp/cors"
-import chalk from "chalk"
-import { watch } from "chokidar"
-import { Observer } from "json-server/lib/observer"
 import { Data } from "json-server/lib/service"
-import { Low } from "lowdb"
-import { JSONFile } from "lowdb/node"
+import { existsSync, writeFileSync } from 'fs'
 import { json } from "milliparsec"
+import { JSONFile } from "lowdb/node"
+import { Low } from "lowdb"
+import { Observer } from "json-server/lib/observer"
+import { watch } from "chokidar"
 
 import repoProvider from "./repo"
 import { Repo } from "./types"
@@ -140,6 +141,14 @@ app.post("/topics/aliases", async (request, response) => {
 
 // ──────────────────────────────────────────────────────────────────────
 
+// INFO: edge case fix: LowDB library fails to create temp file before writing
+// to data file when running inside a container.
+const tmpFile = `.${file}.tmp`
+if (!existsSync(tmpFile)) {
+    writeFileSync(tmpFile, '{}', 'utf8')
+}
+
+// ──────────────────────────────────────────────────────────────────────
 // Start server
 const port = 3000
 const host = "0.0.0.0"
