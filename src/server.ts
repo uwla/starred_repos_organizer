@@ -31,7 +31,7 @@ await db.read()
 /* -------------------------------------------------------------------------- */
 // Database helpers
 
-const dbRepos = () => db.data.repo as Repo[]
+const dbRepos = () => db.data.repos as Repo[]
 const findRepo = (id: string) => dbRepos().find((r: Repo) => r.id === id)
 
 /* -------------------------------------------------------------------------- */
@@ -64,14 +64,14 @@ app.post("/repo", async (request, response) => {
     } else {
         repo = data as Repo
     }
-    db.data.repo = addRepo(dbRepos(), repo as Repo)
+    db.data.repos = addRepo(dbRepos(), repo as Repo)
     await db.write()
     response.send(repo)
 })
 
 // Update single repository
 app.post("/repo/:id", async (request, response) => {
-    db.data.repo = updateRepo(dbRepos(), request.body as Repo)
+    db.data.repos = updateRepo(dbRepos(), request.body as Repo)
     await db.write()
     response.send(request.body)
 })
@@ -80,9 +80,9 @@ app.post("/repo/:id", async (request, response) => {
 app.delete("/repo/:id", async (request, response) => {
     const { id = "" } = request.params
     const repos = dbRepos()
-    db.data.repo = delRepo(repos, id)
+    db.data.repos = delRepo(repos, id)
     db.write()
-    const success = repos.length - 1 === db.data.repo.length
+    const success = repos.length - 1 === db.data.repos.length
     response.send({ success })
 })
 
@@ -90,27 +90,27 @@ app.delete("/repo/:id", async (request, response) => {
 app.post("/repos", async (request, response) => {
     const data = request.body
     const repos = dbRepos()
-    db.data.repo = addRepos(repos, data as Repo[])
+    db.data.repos = addRepos(repos, data as Repo[])
     await db.write()
-    response.send(db.data.repo)
+    response.send(db.data.repos)
 })
 
 // Update many repositories
 app.put("/repos", async (request, response) => {
     const data = request.body
     const repos = dbRepos()
-    db.data.repo = updateRepos(repos, data as Repo[])
+    db.data.repos = updateRepos(repos, data as Repo[])
     await db.write()
-    response.send(db.data.repo)
+    response.send(db.data.repos)
 })
 
 // Delete multiple repositories
 app.patch("/repos", async (request, response) => {
     const { ids } = request.body
     const repos = dbRepos()
-    db.data.repo = delRepos(repos, ids)
+    db.data.repos = delRepos(repos, ids)
     await db.write()
-    const success = repos.length - ids.length === db.data.repo.length
+    const success = repos.length - ids.length === db.data.repos.length
     response.send({ success })
 })
 
