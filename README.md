@@ -46,26 +46,30 @@ A live demo is available at <https://uwla.github.io/starred_repos_organizer>.
 
 ## Usage
 
-There are few options. The easiest one is to go to the static demo app which is
-hosted via 'github' pages and saves data in your web browser's local storage.
+There are many options to use this application. The easiest one is to go to the
+static demo app which is hosted via 'github' pages and saves data in your web
+browser's local storage.
 
 ### Local Storage
 
-The data is saved in the web browser's local storage. Available options are:
+Any of the following ways will save data locally:
 
 - Go to the [demo page](https://uwla.github.io/starred_repos_organizer) to use the app.
 - Download `app.html` from the [latest release](https://github.com/uwla/starred_repos_organizer/releases/tag/v0.0.1-beta).
 - Download `app.html` from the demo page.
 - Build `app.html` locally.
 
+The data is saved in the web browser's local storage.
+
 ### Server
 
 The data is saved in a remote server. Available options are:
 
 - Run the server via npm script: `npm run dev:rest`
-- Run the server via docker (TODO)
+- Run the server via docker: `docker compose up --detach`
 
-The server can run remotely or locally.
+The server can run remotely or locally. Clone the repository and run one of
+the commands above.
 
 ## Development
 
@@ -110,6 +114,10 @@ The server can run remotely or locally.
     npm run build
     ```
 
+### API docs
+
+TODO: Documentation about API server.
+
 ## Roadmap
 
 - [x] Search filter
@@ -139,7 +147,7 @@ The server can run remotely or locally.
 - [ ] Support for self-hosted Gogs instance
 - [x] Option to specify provider type
 - [ ] Option to set auth tokens
-- [-] Self-host with Docker
+- [x] Self-host with Docker
 - [ ] Rest API documentation
 
 ## Credits
