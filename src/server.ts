@@ -8,7 +8,6 @@ import { JSONFile } from "lowdb/node"
 import { Low } from "lowdb"
 import { Observer } from "json-server/lib/observer"
 import { watch } from "chokidar"
-
 import repoProvider from "./repo"
 import { Repo } from "./types"
 import {
@@ -19,6 +18,9 @@ import {
     updateRepo,
     updateRepos,
 } from "./utils"
+
+// TODO: add dev plugin to sort imports
+// TODO: filter repository by topics before saving
 
 /* -------------------------------------------------------------------------- */
 // Set up database

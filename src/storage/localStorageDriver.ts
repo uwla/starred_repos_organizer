@@ -27,6 +27,7 @@ const setTopicAliases = (aliases: TopicAliases) => {
     localStorage.setItem("topic_aliases", JSON.stringify(aliases))
 }
 
+// TODO: refactor this
 const filterRepoTopics = (repos: Repo[]) => {
     const allowedTopics = getAllowedTopics()
     const aliases = getTopicAliases()

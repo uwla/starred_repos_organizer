@@ -138,7 +138,7 @@ TODO: Documentation about API server.
 - [x] Group items by topic
 - [x] Filter topics by allowed-list
 - [x] Prevent duplicated topics using aliases
-- [-] Refresh all repositories at once
+- [x] Refresh all repositories at once
 - [x] Support for GitHub
 - [x] Support for GitLab
 - [x] Support for CodeBerg
@@ -146,8 +146,10 @@ TODO: Documentation about API server.
 - [x] Support for self-hosted Gitea instance
 - [ ] Support for self-hosted Gogs instance
 - [x] Option to specify provider type
-- [ ] Option to set auth tokens
-- [x] Self-host with Docker
+- [ ] Option to set auth tokens for providers
+- [x] Self-host instance using static HTML
+- [x] Self-host instance running server (manually)
+- [x] Self-host instance running server (Docker)
 - [ ] Rest API documentation
 
 ## Credits
