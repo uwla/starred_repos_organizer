@@ -43,8 +43,8 @@ import type { JsonData, Repo, SelectOption, Topic, TopicAliases } from "./types"
 import {
     applySearchFilters,
     extractTopics,
-    keepOnlyRepoTopics,
     optionsToTopics,
+    removeNonAllowedTopics,
     uniqueRepos,
 } from "./utils"
 
@@ -456,7 +456,7 @@ function App() {
             return
         }
 
-        const updatedRepos = keepOnlyRepoTopics(repos, selectedTopics)
+        const updatedRepos = removeNonAllowedTopics(repos, selectedTopics)
 
         StorageDriver.updateMany(updatedRepos)
             .then((repos) => updateStateRepos(repos))
