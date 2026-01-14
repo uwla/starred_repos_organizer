@@ -92,19 +92,19 @@ const updateRepos = (repos: Repo[], reposToUpdate: Repo[]) => {
     return uniqueRepos(repos)
 }
 
-const delRepo = (repos: Repo[], repo: Repo | string) => {
-    const id = typeof repo === "string" ? (repo as string) : (repo as Repo).id
+const delRepo = (repos: Repo[], repo: Repo | Repo['id']) => {
+    const id = typeof repo === "string" ? (repo as Repo['id']) : (repo as Repo).id
     return repos.filter((r: Repo) => r.id !== id)
 }
 
-const delRepos = (repos: Repo[], reposToDel: Repo[] | string[]) => {
+const delRepos = (repos: Repo[], reposToDel: Repo[] | Repo['id'][]) => {
     if (reposToDel.length < 0) return repos
-    const ids = {} as { [key: string]: boolean }
+    const ids: Record<Repo['id'], boolean> = {}
     const idsToDel =
         typeof reposToDel[0] === "string"
-            ? (reposToDel as string[])
+            ? (reposToDel as Repo['id'][])
             : (reposToDel as Repo[]).map(r => r.id)
-    idsToDel.forEach((id: string) => (ids[id] = true))
+    idsToDel.forEach((id: Repo['id']) => (ids[id] = true))
     return repos.filter((r: Repo) => !ids[r.id])
 }
 
