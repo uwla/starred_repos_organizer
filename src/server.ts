@@ -9,7 +9,7 @@ import { Low } from "lowdb"
 import { Observer } from "json-server/lib/observer"
 import { watch } from "chokidar"
 import repoProvider from "./repo"
-import { Repo } from "./types"
+import { Repo, Topic, TopicAliases } from "./types"
 import {
     addRepo,
     addRepos,
@@ -17,10 +17,8 @@ import {
     delRepos,
     updateRepo,
     updateRepos,
+    enforceTopicRestrictions
 } from "./utils"
-
-// TODO: add dev plugin to sort imports
-// TODO: filter repository by topics before saving
 
 /* -------------------------------------------------------------------------- */
 // Set up database
@@ -31,11 +29,26 @@ const observer = new Observer(adapter)
 const db = new Low(observer, {}) as Low<Data>
 await db.read()
 
+// INFO: Edge case fix: LowDB library fails to create temp file before writing
+// to data file when running inside a container.
+const tmpFile = `.${file}.tmp`
+if (!existsSync(tmpFile)) {
+    writeFileSync(tmpFile, '{}', 'utf8')
+}
+
 /* -------------------------------------------------------------------------- */
 // Database helpers
 
-const dbRepos = () => db.data.repos as Repo[]
-const findRepo = (id: string) => dbRepos().find((r: Repo) => r.id === id)
+const getDbRepos = () => db.data.repos as Repo[]
+
+const setDbRepos = async (repos: Repo[]) => {
+    const allowedTopics = (db.data.topics_allowed || []) as Topic[]
+    const topicAliases = (db.data.topic_aliases || []) as TopicAliases
+    db.data.repos = enforceTopicRestrictions(repos, allowedTopics, topicAliases)
+    await db.write()
+}
+
+const findRepo = (id: string) => getDbRepos().find((r: Repo) => r.id === id)
 
 /* -------------------------------------------------------------------------- */
 // Set up http app.
@@ -49,7 +62,7 @@ app.use(cors())
 
 // Get repos
 app.get("/repo", async (_request, response) => {
-    response.send(dbRepos())
+    response.send(getDbRepos())
 })
 
 // Get repo
@@ -67,24 +80,21 @@ app.post("/repo", async (request, response) => {
     } else {
         repo = data as Repo
     }
-    db.data.repos = addRepo(dbRepos(), repo as Repo)
-    await db.write()
+    await setDbRepos(addRepo(getDbRepos(), repo as Repo))
     response.send(repo)
 })
 
 // Update single repository
 app.post("/repo/:id", async (request, response) => {
-    db.data.repos = updateRepo(dbRepos(), request.body as Repo)
-    await db.write()
+    await setDbRepos(updateRepo(getDbRepos(), request.body as Repo))
     response.send(request.body)
 })
 
 // Delete single repository
 app.delete("/repo/:id", async (request, response) => {
     const { id = "" } = request.params
-    const repos = dbRepos()
-    db.data.repos = delRepo(repos, id)
-    db.write()
+    const repos = getDbRepos()
+    await setDbRepos(delRepo(repos, id))
     const success = repos.length - 1 === db.data.repos.length
     response.send({ success })
 })
@@ -92,27 +102,22 @@ app.delete("/repo/:id", async (request, response) => {
 // Create many repositories
 app.post("/repos", async (request, response) => {
     const data = request.body
-    const repos = dbRepos()
-    db.data.repos = addRepos(repos, data as Repo[])
-    await db.write()
+    await setDbRepos(addRepos(getDbRepos(), data as Repo[]))
     response.send(db.data.repos)
 })
 
 // Update many repositories
 app.put("/repos", async (request, response) => {
     const data = request.body
-    const repos = dbRepos()
-    db.data.repos = updateRepos(repos, data as Repo[])
-    await db.write()
+    await setDbRepos(updateRepos(getDbRepos(), data as Repo[]))
     response.send(db.data.repos)
 })
 
 // Delete multiple repositories
 app.patch("/repos", async (request, response) => {
     const { ids } = request.body
-    const repos = dbRepos()
-    db.data.repos = delRepos(repos, ids)
-    await db.write()
+    const repos = getDbRepos()
+    await setDbRepos(delRepos(getDbRepos(), ids))
     const success = repos.length - ids.length === db.data.repos.length
     response.send({ success })
 })
@@ -130,25 +135,16 @@ app.get("/topics/aliases", async (_request, response) => {
 // Set allowed topics
 app.post("/topics/allowed", async (request, response) => {
     db.data["topics_allowed"] = request.body.topics
-    db.write()
+    await db.write()
     response.send(db.data["topics_allowed"])
 })
 
 // Set topic aliases
 app.post("/topics/aliases", async (request, response) => {
     db.data["topic_aliases"] = request.body.topics
-    db.write()
+    await db.write()
     response.send(db.data["topic_aliases"])
 })
-
-// ──────────────────────────────────────────────────────────────────────
-
-// INFO: edge case fix: LowDB library fails to create temp file before writing
-// to data file when running inside a container.
-const tmpFile = `.${file}.tmp`
-if (!existsSync(tmpFile)) {
-    writeFileSync(tmpFile, '{}', 'utf8')
-}
 
 // ──────────────────────────────────────────────────────────────────────
 // Start server
