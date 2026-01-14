@@ -1,13 +1,14 @@
-import chalk from "chalk"
 import { App } from "@tinyhttp/app"
 import { cors } from "@tinyhttp/cors"
-import { Data } from "json-server/lib/service"
-import { existsSync, writeFileSync } from 'fs'
-import { json } from "milliparsec"
-import { JSONFile } from "lowdb/node"
-import { Low } from "lowdb"
-import { Observer } from "json-server/lib/observer"
+import chalk from "chalk"
 import { watch } from "chokidar"
+import { existsSync, writeFileSync } from "fs"
+import { Observer } from "json-server/lib/observer"
+import { Data } from "json-server/lib/service"
+import { Low } from "lowdb"
+import { JSONFile } from "lowdb/node"
+import { json } from "milliparsec"
+
 import repoProvider from "./repo"
 import { Repo, Topic, TopicAliases } from "./types"
 import {
@@ -15,9 +16,9 @@ import {
     addRepos,
     delRepo,
     delRepos,
+    enforceTopicRestrictions,
     updateRepo,
     updateRepos,
-    enforceTopicRestrictions
 } from "./utils"
 
 /* -------------------------------------------------------------------------- */
@@ -29,26 +30,52 @@ const observer = new Observer(adapter)
 const db = new Low(observer, {}) as Low<Data>
 await db.read()
 
-// INFO: Edge case fix: LowDB library fails to create temp file before writing
+// INFO: [Edge case fix] LowDB library fails to create temp file before writing
 // to data file when running inside a container.
 const tmpFile = `.${file}.tmp`
 if (!existsSync(tmpFile)) {
-    writeFileSync(tmpFile, '{}', 'utf8')
+    writeFileSync(tmpFile, "{}", "utf8")
 }
 
 /* -------------------------------------------------------------------------- */
 // Database helpers
 
-const getDbRepos = () => db.data.repos as Repo[]
+const dbGetRepos = () => {
+    return db.data.repos as Repo[]
+}
 
-const setDbRepos = async (repos: Repo[]) => {
+const dbSetRepos = async (repos: Repo[]) => {
     const allowedTopics = (db.data.topics_allowed || []) as Topic[]
     const topicAliases = (db.data.topic_aliases || []) as TopicAliases
     db.data.repos = enforceTopicRestrictions(repos, allowedTopics, topicAliases)
     await db.write()
 }
 
-const findRepo = (id: string) => getDbRepos().find((r: Repo) => r.id === id)
+const dbAddRepo = async (repo: Repo) => {
+    return dbSetRepos(addRepo(dbGetRepos(), repo))
+}
+
+const dbAddRepos = async (repos: Repo[]) => {
+    return dbSetRepos(addRepos(dbGetRepos(), repos))
+}
+
+const dbDelRepo = async (repo: Repo | Repo['id']) => {
+    return dbSetRepos(delRepo(dbGetRepos(), repo))
+}
+
+const dbDelRepos = async (repos: Repo[] | Repo['id'][]) => {
+    return dbSetRepos(delRepos(dbGetRepos(), repos))
+}
+
+const dbUpdateRepo = async (repo: Repo) => {
+    return dbSetRepos(updateRepo(dbGetRepos(), repo))
+}
+
+const dbUpdateRepos = async (repos: Repo[]) => {
+    return dbSetRepos(updateRepos(dbGetRepos(), repos))
+}
+
+const dbFindRepo = (id: string) => dbGetRepos().find((r: Repo) => r.id === id)
 
 /* -------------------------------------------------------------------------- */
 // Set up http app.
@@ -62,13 +89,13 @@ app.use(cors())
 
 // Get repos
 app.get("/repo", async (_request, response) => {
-    response.send(getDbRepos())
+    response.send(dbGetRepos())
 })
 
 // Get repo
 app.get("/repo/:id", (request, response) => {
-    const { id = "" } = request.params
-    response.send(findRepo(id))
+    const { id } = request.params
+    response.send(dbFindRepo(id))
 })
 
 // Create single repository
@@ -80,45 +107,49 @@ app.post("/repo", async (request, response) => {
     } else {
         repo = data as Repo
     }
-    await setDbRepos(addRepo(getDbRepos(), repo as Repo))
-    response.send(repo)
+    await dbAddRepo(repo)
+    response.send(dbFindRepo(repo['id']) || repo)
 })
 
 // Update single repository
 app.post("/repo/:id", async (request, response) => {
-    await setDbRepos(updateRepo(getDbRepos(), request.body as Repo))
-    response.send(request.body)
+    const repo = request.body as Repo
+    const { id } = request.params
+    await dbUpdateRepo(repo)
+    response.send(dbFindRepo(id))
 })
 
 // Delete single repository
 app.delete("/repo/:id", async (request, response) => {
     const { id = "" } = request.params
-    const repos = getDbRepos()
-    await setDbRepos(delRepo(repos, id))
-    const success = repos.length - 1 === db.data.repos.length
+    const prevRepoCount = dbGetRepos().length
+    await dbDelRepo(id)
+    const currRepoCount = dbGetRepos().length
+    const success = prevRepoCount - 1 === currRepoCount
     response.send({ success })
 })
 
 // Create many repositories
 app.post("/repos", async (request, response) => {
     const data = request.body
-    await setDbRepos(addRepos(getDbRepos(), data as Repo[]))
-    response.send(db.data.repos)
+    await dbAddRepos(data)
+    response.send(dbGetRepos())
 })
 
 // Update many repositories
 app.put("/repos", async (request, response) => {
     const data = request.body
-    await setDbRepos(updateRepos(getDbRepos(), data as Repo[]))
-    response.send(db.data.repos)
+    await dbUpdateRepos(data)
+    response.send(dbGetRepos())
 })
 
 // Delete multiple repositories
 app.patch("/repos", async (request, response) => {
     const { ids } = request.body
-    const repos = getDbRepos()
-    await setDbRepos(delRepos(getDbRepos(), ids))
-    const success = repos.length - ids.length === db.data.repos.length
+    const prevRepoCount = dbGetRepos().length
+    await dbDelRepos(ids)
+    const currRepoCount = dbGetRepos().length
+    const success = prevRepoCount - ids.length === currRepoCount
     response.send({ success })
 })
 
