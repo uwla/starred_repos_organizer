@@ -1,4 +1,11 @@
-import { NoTopicsType, Repo, RepoKey, SelectOption } from "./types"
+import {
+    NoTopicsType,
+    Repo,
+    RepoKey,
+    SelectOption,
+    Topic,
+    TopicAliases,
+} from "./types"
 
 const optionsToTopics = (topics: SelectOption[]): string[] =>
     topics.map((topic: SelectOption) => topic.value)
@@ -103,7 +110,7 @@ const delRepos = (repos: Repo[], reposToDel: Repo[] | string[]) => {
 
 /* -------------------------------------------------------------------------- */
 // filter
-function filterRepo(repo: Repo, normalizedQuery: string) {
+function repoHasText(repo: Repo, normalizedQuery: string) {
     const searchableKeys = [
         "full_name",
         "description",
@@ -132,10 +139,10 @@ function filterRepo(repo: Repo, normalizedQuery: string) {
     return false
 }
 
-function filterBySearch(repos: Repo[], search: string) {
+function filterByText(repos: Repo[], search: string) {
     if (search == "") return repos
     const normalizedQuery = search.toLowerCase()
-    return repos.filter((repo: Repo) => filterRepo(repo, normalizedQuery))
+    return repos.filter((repo: Repo) => repoHasText(repo, normalizedQuery))
 }
 
 function filterByTopics(repos: Repo[], topics: string[]) {
@@ -154,13 +161,13 @@ function filterByTopics(repos: Repo[], topics: string[]) {
     })
 }
 
-function applyFilters(repos: Repo[], search: string, topics: string[]) {
-    return filterByTopics(filterBySearch(repos, search), topics)
+function applySearchFilters(repos: Repo[], search: string, topics: string[]) {
+    return filterByTopics(filterByText(repos, search), topics)
 }
 
-function keepOnlyRepoTopics(repos: Repo[], topics: string[]) {
-    const topicsDict = {} as { [key: string]: boolean }
-    topics.forEach((t: string) => (topicsDict[t] = true))
+function removeNonAllowedTopics(repos: Repo[], allowedTopics: string[]) {
+    const topicsDict: Record<string, boolean> = {}
+    allowedTopics.forEach((t: string) => (topicsDict[t] = true))
     const filterTopics = (topic: string) => topicsDict[topic]
     repos.forEach((r: Repo) => {
         const newTopics = r.topics.filter(filterTopics)
@@ -172,17 +179,65 @@ function keepOnlyRepoTopics(repos: Repo[], topics: string[]) {
     return repos
 }
 
+function mapTopicsToAliases(repos: Repo[], aliases: TopicAliases) {
+    return repos.map(repo => {
+        // create a copy
+        const copy = { ...repo }
+        if (!copy.topics) {
+            return copy
+        }
+
+        // map the topics to their aliases
+        copy.topics = [...repo.topics]
+        for (const index in copy.topics) {
+            const topic = copy.topics[index]
+            if (aliases[topic] !== undefined) {
+                copy.topics[index] = aliases[topic]
+            }
+        }
+        copy.topics = [...new Set(copy.topics)]
+        return copy
+    })
+}
+
+function enforceTopicRestrictions(
+    repos: Repo[],
+    allowedTopics: Topic[],
+    aliases: TopicAliases
+) {
+    const emptyAliases = Object.keys(aliases).length === 0
+    const emptyTopics = allowedTopics.length === 0
+
+    if (emptyAliases && emptyTopics) {
+        return repos
+    }
+
+    if (emptyAliases) {
+        return removeNonAllowedTopics(repos, allowedTopics)
+    }
+
+    if (emptyTopics) {
+        return mapTopicsToAliases(repos, aliases)
+    }
+
+    return removeNonAllowedTopics(
+        mapTopicsToAliases(repos, aliases),
+        allowedTopics
+    )
+}
+
 export {
     addRepo,
     addRepos,
-    applyFilters,
+    applySearchFilters,
     assignId,
     assignTimestamp,
     delRepo,
     delRepos,
     extractDomain,
     extractTopics,
-    keepOnlyRepoTopics,
+    enforceTopicRestrictions,
+    removeNonAllowedTopics,
     now,
     optionsToTopics,
     randomId,

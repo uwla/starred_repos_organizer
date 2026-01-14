@@ -41,7 +41,7 @@ import SettingsManager from "./settings"
 import StorageDriver from "./storage"
 import type { JsonData, Repo, SelectOption, Topic, TopicAliases } from "./types"
 import {
-    applyFilters,
+    applySearchFilters,
     extractTopics,
     keepOnlyRepoTopics,
     optionsToTopics,
@@ -95,7 +95,7 @@ function App() {
     useEffect(() => {
         toggleDarkMode(savedTheme)
         fetchData()
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     async function fetchData() {
         await StorageDriver.fetchRepos().then((repos: Repo[]) => {
@@ -156,13 +156,13 @@ function App() {
     function handleSearch(text: string) {
         setSearchQuery(text)
         const plainTopics = optionsToTopics(selectedTopics)
-        setFilteredRepos(applyFilters(repos, text, plainTopics))
+        setFilteredRepos(applySearchFilters(repos, text, plainTopics))
     }
 
     function handleSelect(topics: SelectOption[]) {
         setSelectedTopics(topics)
         const plainTopics = optionsToTopics(topics)
-        setFilteredRepos(applyFilters(repos, searchQuery, plainTopics))
+        setFilteredRepos(applySearchFilters(repos, searchQuery, plainTopics))
     }
 
     function handleSelectLayout(value: string) {

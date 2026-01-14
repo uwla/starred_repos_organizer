@@ -39,7 +39,7 @@ function ViewByTopics(props: ViewProps) {
 
     useEffect(() => {
         updateMap()
-    }, [repos])
+    }, [repos]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <Accordion

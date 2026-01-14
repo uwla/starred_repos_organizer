@@ -6,16 +6,16 @@ import {
     assignId,
     delRepo,
     delRepos,
-    keepOnlyRepoTopics,
+    enforceTopicRestrictions,
     updateRepo,
     updateRepos,
 } from "../utils"
 
-const getAllowedTopics = () => {
+function getAllowedTopics(): Topic[] {
     return JSON.parse(localStorage.getItem("allowed_topics") || "[]")
 }
 
-const getTopicAliases = () => {
+function getTopicAliases(): TopicAliases {
     return JSON.parse(localStorage.getItem("topic_aliases") || "{}")
 }
 
@@ -27,45 +27,15 @@ const setTopicAliases = (aliases: TopicAliases) => {
     localStorage.setItem("topic_aliases", JSON.stringify(aliases))
 }
 
-// TODO: refactor this
-const filterRepoTopics = (repos: Repo[]) => {
-    const allowedTopics = getAllowedTopics()
-    const aliases = getTopicAliases()
-    const emptyAliases = Object.keys(aliases).length === 0
-
-    const reposFiltered = emptyAliases
-        ? repos
-        : repos.map(repo => {
-              // create a copy
-              const copy = { ...repo }
-              if (!copy.topics) {
-                  return copy
-              }
-
-              // map the topics to their aliases
-              copy.topics = [...repo.topics]
-              for (const index in copy.topics) {
-                  const topic = copy.topics[index]
-                  if (aliases[topic] !== undefined) {
-                      copy.topics[index] = aliases[topic]
-                  }
-              }
-              copy.topics = [...new Set(copy.topics)]
-              return copy
-          })
-
-    if (allowedTopics.length == 0) {
-        return reposFiltered
-    }
-
-    return keepOnlyRepoTopics(reposFiltered, allowedTopics)
-}
-
 const getRepos = () =>
     JSON.parse(localStorage.getItem("repos") || "[]") as Repo[]
 
 const setRepos = (repos: Repo[]) => {
-    const filteredRepos = filterRepoTopics(repos)
+    const filteredRepos = enforceTopicRestrictions(
+        repos,
+        getAllowedTopics(),
+        getTopicAliases()
+    )
     localStorage.setItem("repos", JSON.stringify(filteredRepos))
 }
 
