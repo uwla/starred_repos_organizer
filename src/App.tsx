@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 
 import {
     ArrowDownward as ArrowDownwardIcon,
@@ -153,17 +153,17 @@ function App() {
         }
     }
 
-    function handleSearch(text: string) {
+    const handleSearch = useCallback((text: string) => {
         setSearchQuery(text)
         const plainTopics = optionsToTopics(selectedTopics)
         setFilteredRepos(applySearchFilters(repos, text, plainTopics))
-    }
+    }, [repos, selectedTopics]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    function handleSelect(topics: SelectOption[]) {
+    const handleSelect = useCallback((topics: SelectOption[]) => {
         setSelectedTopics(topics)
         const plainTopics = optionsToTopics(topics)
         setFilteredRepos(applySearchFilters(repos, searchQuery, plainTopics))
-    }
+    }, [repos, searchQuery]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function handleSelectLayout(value: string) {
         switch (value) {
@@ -193,11 +193,16 @@ function App() {
         SettingsManager.set("view", value)
     }
 
-    function handleTopicClicked(topic: string) {
+    const handleTopicClicked = useCallback((topic: string) => {
         const plainTopics = optionsToTopics(selectedTopics)
         if (plainTopics.includes(topic)) return
-        handleSelect([...selectedTopics, { label: topic, value: topic }])
-    }
+        handleSelect(
+            [...selectedTopics, {
+                label: topic,
+                value: topic,
+            }]
+        )
+    }, [selectedTopics]) // eslint-disable-line react-hooks/exhaustive-deps
 
     function handleSort(value: string) {
         setSortBy(value)
@@ -249,11 +254,23 @@ function App() {
         return fn
     }
 
-    function updateStateRepos(newRepos: Repo[]) {
+    function updateStateRepos(newRepos: Repo[], clearFilters = true) {
         setRepos(newRepos)
-        setFilteredRepos(newRepos)
         setTopics(extractTopics(newRepos))
-        setSearchQuery("")
+
+        if (clearFilters) {
+            setFilteredRepos(newRepos)
+            setSearchQuery("")
+            setSelectedTopics([])
+        } else {
+            setFilteredRepos(
+                applySearchFilters(
+                    newRepos,
+                    searchQuery,
+                    optionsToTopics(selectedTopics)
+                )
+            )
+        }
     }
 
     async function handleAddItem(repo: Repo) {
@@ -264,7 +281,7 @@ function App() {
 
         return await StorageDriver.createRepo(repo)
             .then(repo => {
-                updateStateRepos([repo, ...repos])
+                updateStateRepos([repo, ...repos], false)
                 setSuccessMsg("Repository added")
                 return true
             })
@@ -357,24 +374,11 @@ function App() {
 
         await StorageDriver.updateMany(freshRepos)
             .then(updatedRepos => {
-                const newRepos = [...repos]
-                const newFiltered = [...filteredRepos]
-                for (const updated of updatedRepos) {
-                    let index: number
-
-                    index = newRepos.findIndex(r => r.id === updated.id)
-                    if (index !== -1) newRepos.splice(index, 1, updated)
-
-                    index = newFiltered.findIndex(r => r.id === updated.id)
-                    if (index !== -1) newFiltered.splice(index, 1, updated)
-                }
-                setRepos(newRepos)
-                setFilteredRepos(newFiltered)
-                setTopics(extractTopics(newRepos))
+                updateStateRepos(updatedRepos, false)
                 setSuccessMsg(`${freshRepos.length} repositories refreshed!`)
             })
             .catch(() => {
-                setErrorMsg(`Failed to save data.`)
+                setErrorMsg('Failed to save refreshed repositories.')
             })
     }
 
@@ -455,7 +459,7 @@ function App() {
         const updatedRepos = keepOnlyRepoTopics(repos, selectedTopics)
 
         StorageDriver.updateMany(updatedRepos)
-            .then(updateStateRepos)
+            .then((repos) => updateStateRepos(repos))
             .then(() => setPickingTopics(false))
     }
 
