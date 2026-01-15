@@ -10,7 +10,7 @@ export default typescriptEslint.config(
             eslint.configs.recommended,
             ...typescriptEslint.configs.recommended,
         ],
-        files: ["**/*.ts"],
+        files: ["**/*.ts", "**/*.tsx"],
         languageOptions: {
             ecmaVersion: "latest",
             sourceType: "module",
