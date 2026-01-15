@@ -44,8 +44,6 @@
         "@types/react": "^18.2.55",
         "@types/react-bootstrap": "^0.32.35",
         "@types/react-dom": "^18.2.19",
-        "@typescript-eslint/eslint-plugin": "^6.21.0",
-        "@typescript-eslint/parser": "^6.21.0",
         "@vitejs/plugin-react": "^4.3.4",
         "@xeonlink/prettier-plugin-organize-attributes": "^1.1.0",
         "babel-plugin-react-compiler": "^19.0.0-beta-e1e972c-20250221",
