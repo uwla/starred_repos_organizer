@@ -45,7 +45,7 @@ const dbGetRepos = () => {
 }
 
 const dbSetRepos = async (repos: Repo[]) => {
-    const allowedTopics = (db.data.topics_allowed || []) as Topic[]
+    const allowedTopics = (db.data.topics_allowed || []) as unknown[] as Topic[]
     const topicAliases = (db.data.topic_aliases || []) as TopicAliases
     db.data.repos = enforceTopicRestrictions(repos, allowedTopics, topicAliases)
     await db.write()
