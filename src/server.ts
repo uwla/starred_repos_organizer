@@ -59,11 +59,11 @@ const dbAddRepos = async (repos: Repo[]) => {
     return dbSetRepos(addRepos(dbGetRepos(), repos))
 }
 
-const dbDelRepo = async (repo: Repo | Repo['id']) => {
+const dbDelRepo = async (repo: Repo | Repo["id"]) => {
     return dbSetRepos(delRepo(dbGetRepos(), repo))
 }
 
-const dbDelRepos = async (repos: Repo[] | Repo['id'][]) => {
+const dbDelRepos = async (repos: Repo[] | Repo["id"][]) => {
     return dbSetRepos(delRepos(dbGetRepos(), repos))
 }
 
@@ -108,7 +108,7 @@ app.post("/repo", async (request, response) => {
         repo = data as Repo
     }
     await dbAddRepo(repo)
-    response.send(dbFindRepo(repo['id']) || repo)
+    response.send(dbFindRepo(repo["id"]) || repo)
 })
 
 // Update single repository

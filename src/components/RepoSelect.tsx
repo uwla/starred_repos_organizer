@@ -12,10 +12,7 @@ type RepoSelectProps = {
     title: string
 }
 
-type RepoCheckbox = {
-    repo: Repo
-    checked: boolean
-}
+type RepoCheckbox = { repo: Repo; checked: boolean }
 
 const mapChecked = (r: Repo) => ({ repo: r, checked: true }) as RepoCheckbox
 
@@ -107,9 +104,7 @@ function RepoSelect(props: RepoSelectProps) {
                 >
                     CANCEL
                 </Button>
-                <Button onClick={handleSubmit}>
-                    CONFIRM
-                </Button>
+                <Button onClick={handleSubmit}>CONFIRM</Button>
             </Modal.Footer>
         </Modal>
     )

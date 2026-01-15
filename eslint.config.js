@@ -4,15 +4,7 @@ import globals from "globals"
 import typescriptEslint from "typescript-eslint"
 
 export default typescriptEslint.config(
-    {
-        ignores: [
-            "*.d.ts",
-            "**/coverage",
-            "**/dist",
-            "assets/",
-            "public/",
-        ],
-    },
+    { ignores: ["*.d.ts", "**/coverage", "**/dist", "assets/", "public/"] },
     {
         extends: [
             eslint.configs.recommended,
@@ -35,7 +27,7 @@ export default typescriptEslint.config(
                     varsIgnorePattern: "^_",
                     caughtErrorsIgnorePattern: "^_",
                 },
-            ]
+            ],
         },
     },
     eslintConfigPrettier

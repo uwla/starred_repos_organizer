@@ -153,17 +153,25 @@ function App() {
         }
     }
 
-    const handleSearch = useCallback((text: string) => {
-        setSearchQuery(text)
-        const plainTopics = optionsToTopics(selectedTopics)
-        setFilteredRepos(applySearchFilters(repos, text, plainTopics))
-    }, [repos, selectedTopics]) // eslint-disable-line react-hooks/exhaustive-deps
+    const handleSearch = useCallback(
+        (text: string) => {
+            setSearchQuery(text)
+            const plainTopics = optionsToTopics(selectedTopics)
+            setFilteredRepos(applySearchFilters(repos, text, plainTopics))
+        },
+        [repos, selectedTopics]
+    ) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const handleSelect = useCallback((topics: SelectOption[]) => {
-        setSelectedTopics(topics)
-        const plainTopics = optionsToTopics(topics)
-        setFilteredRepos(applySearchFilters(repos, searchQuery, plainTopics))
-    }, [repos, searchQuery]) // eslint-disable-line react-hooks/exhaustive-deps
+    const handleSelect = useCallback(
+        (topics: SelectOption[]) => {
+            setSelectedTopics(topics)
+            const plainTopics = optionsToTopics(topics)
+            setFilteredRepos(
+                applySearchFilters(repos, searchQuery, plainTopics)
+            )
+        },
+        [repos, searchQuery]
+    ) // eslint-disable-line react-hooks/exhaustive-deps
 
     function handleSelectLayout(value: string) {
         switch (value) {
@@ -193,16 +201,14 @@ function App() {
         SettingsManager.set("view", value)
     }
 
-    const handleTopicClicked = useCallback((topic: string) => {
-        const plainTopics = optionsToTopics(selectedTopics)
-        if (plainTopics.includes(topic)) return
-        handleSelect(
-            [...selectedTopics, {
-                label: topic,
-                value: topic,
-            }]
-        )
-    }, [selectedTopics]) // eslint-disable-line react-hooks/exhaustive-deps
+    const handleTopicClicked = useCallback(
+        (topic: string) => {
+            const plainTopics = optionsToTopics(selectedTopics)
+            if (plainTopics.includes(topic)) return
+            handleSelect([...selectedTopics, { label: topic, value: topic }])
+        },
+        [selectedTopics]
+    ) // eslint-disable-line react-hooks/exhaustive-deps
 
     function handleSort(value: string) {
         setSortBy(value)
@@ -378,7 +384,7 @@ function App() {
                 setSuccessMsg(`${freshRepos.length} repositories refreshed!`)
             })
             .catch(() => {
-                setErrorMsg('Failed to save refreshed repositories.')
+                setErrorMsg("Failed to save refreshed repositories.")
             })
     }
 
@@ -459,7 +465,7 @@ function App() {
         const updatedRepos = removeNonAllowedTopics(repos, selectedTopics)
 
         StorageDriver.updateMany(updatedRepos)
-            .then((repos) => updateStateRepos(repos))
+            .then(repos => updateStateRepos(repos))
             .then(() => setPickingTopics(false))
     }
 
