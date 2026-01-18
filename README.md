@@ -151,6 +151,8 @@ TODO: Documentation about API server.
 - [x] Self-host instance running server (manually)
 - [x] Self-host instance running server (Docker)
 - [ ] Rest API documentation
+- [ ] Add repo from clipboard url
+- [ ] Add repo manually
 
 ## Credits
 
