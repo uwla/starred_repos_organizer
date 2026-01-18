@@ -2,7 +2,14 @@ import axios, { AxiosResponse } from "axios"
 
 import type { Repo, StorageDriver, Topic, TopicAliases } from "../types"
 
-const client = axios.create({ baseURL: "http://localhost:3000/" })
+const ENV = import.meta.env
+const protocol = ENV['VITE_API_PROTO'] || "http"
+const host = ENV['VITE_API_HOST'] || "localhost"
+const port =ENV['VITE_API_PORT'] || "3000"
+
+const client = axios.create({
+    baseURL: `${protocol}://${host}:${port}`,
+})
 
 const restApiDriver: StorageDriver = {
     async fetchRepos() {
