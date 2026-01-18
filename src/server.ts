@@ -90,6 +90,7 @@ app.use(cors())
 // Get repos
 app.get("/repo", async (_request, response) => {
     response.send(dbGetRepos())
+
 })
 
 // Get repo
@@ -108,6 +109,8 @@ app.post("/repo", async (request, response) => {
         repo = data as Repo
     }
     await dbAddRepo(repo)
+
+    console.log(chalk.green(`[DB] Added ${repo.url}`))
     response.send(dbFindRepo(repo["id"]) || repo)
 })
 
@@ -116,6 +119,7 @@ app.post("/repo/:id", async (request, response) => {
     const repo = request.body as Repo
     const { id } = request.params
     await dbUpdateRepo(repo)
+    console.log(chalk.green(`[DB] Updated ${repo.url}`))
     response.send(dbFindRepo(id))
 })
 
@@ -126,6 +130,7 @@ app.delete("/repo/:id", async (request, response) => {
     await dbDelRepo(id)
     const currRepoCount = dbGetRepos().length
     const success = prevRepoCount - 1 === currRepoCount
+    console.log(chalk.green(`[DB] Deleted ${dbFindRepo(id)?.url}`))
     response.send({ success })
 })
 
