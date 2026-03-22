@@ -523,6 +523,9 @@ function App() {
                     onToggleTheme={toggleDarkMode}
                 />
 
+                {/* <!-- SEARCH --> */}
+                <SearchFilter onSubmit={handleSearch} />
+
                 {/* <!-- TOPIC FILTER & TOPIC EDITOR --> */}
                 <Stack className="stack-filter">
                     <TopicFilter
@@ -536,9 +539,6 @@ function App() {
                         <EditIcon />
                     </Button>
                 </Stack>
-
-                {/* <!-- SEARCH --> */}
-                <SearchFilter onSubmit={handleSearch} />
 
                 {/* DISPLAY OPTIONS */}
                 <Stack
